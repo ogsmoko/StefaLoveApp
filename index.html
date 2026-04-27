@@ -619,7 +619,7 @@
     bottom: 24px; left: 50%;
     transform: translateX(-50%) translateY(100px);
     background: var(--dark);
-    color: white;
+    color: var(--cream);
     padding: 12px 24px;
     border-radius: 50px;
     font-size: 0.9rem;
@@ -629,6 +629,11 @@
     white-space: nowrap;
   }
   .toast.show { transform: translateX(-50%) translateY(0); }
+  body.dark .toast {
+    background: var(--rose);
+    color: var(--cream);
+    box-shadow: 0 4px 20px rgba(255,122,146,0.4);
+  }
 
   .progress-wrap { margin: 12px 0 4px; }
   .progress-label { display: flex; justify-content: space-between; font-size: 0.78rem; color: var(--soft); margin-bottom: 6px; }
