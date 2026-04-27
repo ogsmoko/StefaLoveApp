@@ -578,10 +578,10 @@
 </div>
 
 <nav>
-  <button class="active" onclick="showSection('compliments')">💬 Комплименты</button>
-  <button onclick="showSection('wishes')">✨ Хотелки</button>
-  <button onclick="showSection('games')">🎮 Игры</button>
-  <button onclick="showSection('prizes')">🎁 Призы</button>
+  <button class="active" onclick="showSection('compliments', this)">💬 Комплименты</button>
+  <button onclick="showSection('wishes', this)">✨ Хотелки</button>
+  <button onclick="showSection('games', this)">🎮 Игры</button>
+  <button onclick="showSection('prizes', this)">🎁 Призы</button>
 </nav>
 
 <main>
@@ -696,7 +696,7 @@ const SUPABASE_URL = 'https://bzeublyracwozknwwzfi.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ6ZXVibHlyYWN3b3prbnd3emZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyNjE2NDksImV4cCI6MjA5MjgzNzY0OX0.OJmzdGlD5la0voQHHZtYOqoxJXscwmQo0vUP7QLPXRU';
 const GEMINI_KEY = 'AIzaSyDYuL7a8JJ82oe57OCQeKcmuDCG8Zznl1M';
 
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // ========== PRIZES CONFIG ==========
 const PRIZES = [
@@ -722,22 +722,22 @@ async function init() {
 }
 
 // ========== NAVIGATION ==========
-function showSection(id) {
+function showSection(id, btn) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
   document.getElementById('sec-' + id).classList.add('active');
-  event.target.classList.add('active');
+  if (btn) btn.classList.add('active');
 }
 
 // ========== SCORE ==========
 async function loadScore() {
-  const { data } = await supabase.from('scores').select('points');
+  const { data } = await db.from('scores').select('points');
   totalScore = data ? data.reduce((s, r) => s + r.points, 0) : 0;
   updateScoreUI();
 }
 
 async function addScore(game, pts) {
-  await supabase.from('scores').insert({ game, points: pts });
+  await db.from('scores').insert({ game, points: pts });
   totalScore += pts;
   updateScoreUI();
   await loadScoreHistory();
@@ -762,7 +762,7 @@ function updateScoreUI() {
 }
 
 async function loadScoreHistory() {
-  const { data } = await supabase.from('scores').select('*').order('created_at', { ascending: false }).limit(10);
+  const { data } = await db.from('scores').select('*').order('created_at', { ascending: false }).limit(10);
   const el = document.getElementById('scoreHistory');
   if (!data || !data.length) {
     el.innerHTML = '<div class="empty-state"><span class="empty-icon">🎮</span>Ещё нет игровой истории</div>';
@@ -834,7 +834,7 @@ async function getCompliment() {
 
 // ========== WISHES ==========
 async function loadWishes() {
-  const { data } = await supabase.from('wishes').select('*').order('created_at', { ascending: false });
+  const { data } = await db.from('wishes').select('*').order('created_at', { ascending: false });
   renderWishes(data || []);
 }
 
@@ -856,19 +856,19 @@ async function addWish() {
   const input = document.getElementById('wishInput');
   const text = input.value.trim();
   if (!text) return;
-  await supabase.from('wishes').insert({ text });
+  await db.from('wishes').insert({ text });
   input.value = '';
   await loadWishes();
   showToast('Хотелка добавлена! ✨');
 }
 
 async function toggleWish(id, isDone) {
-  await supabase.from('wishes').update({ is_done: !isDone }).eq('id', id);
+  await db.from('wishes').update({ is_done: !isDone }).eq('id', id);
   await loadWishes();
 }
 
 async function deleteWish(id) {
-  await supabase.from('wishes').delete().eq('id', id);
+  await db.from('wishes').delete().eq('id', id);
   await loadWishes();
 }
 
