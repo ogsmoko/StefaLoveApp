@@ -669,6 +669,86 @@
   }
   .empty-state .empty-icon { font-size: 2.5rem; margin-bottom: 10px; display: block; }
 
+  /* Love Messages */
+  .msg-form { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+  .msg-form input, .msg-form textarea {
+    padding: 12px 18px;
+    border: 2px solid var(--rose-pale);
+    border-radius: 16px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.95rem;
+    color: var(--dark);
+    background: var(--cream);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .msg-form input:focus, .msg-form textarea:focus { border-color: var(--rose-light); }
+  .msg-form textarea { resize: vertical; min-height: 80px; }
+  .msg-form-row { display: flex; gap: 10px; }
+  .msg-form-row input { flex: 1; }
+
+  .love-msg {
+    background: linear-gradient(135deg, var(--rose-pale) 0%, #fff0f5 100%);
+    border-radius: 20px;
+    padding: 24px;
+    margin-bottom: 14px;
+    position: relative;
+    transition: all 0.2s;
+  }
+  body.dark .love-msg {
+    background: linear-gradient(135deg, #2d1820 0%, #251520 100%);
+  }
+  .love-msg.unread {
+    border-left: 4px solid var(--rose);
+    box-shadow: 0 4px 20px rgba(232,99,122,0.2);
+  }
+  .love-msg-emoji {
+    font-size: 2rem;
+    position: absolute;
+    top: 16px; right: 20px;
+  }
+  .love-msg-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    color: var(--dark);
+    margin-bottom: 8px;
+    padding-right: 40px;
+  }
+  .love-msg-text {
+    color: var(--mid);
+    font-size: 0.92rem;
+    line-height: 1.6;
+    margin-bottom: 10px;
+  }
+  .love-msg-date {
+    font-size: 0.75rem;
+    color: var(--soft);
+  }
+  .love-msg-new {
+    display: inline-block;
+    background: var(--rose);
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 50px;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+  .nav-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--rose);
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 700;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    margin-left: 4px;
+    vertical-align: middle;
+  }
+
   @media (max-width: 480px) {
     .games-grid { grid-template-columns: 1fr 1fr; }
     .prizes-grid { grid-template-columns: 1fr 1fr; }
@@ -721,6 +801,7 @@
   <button onclick="showSection('wishes', this)">✨ Хотелки</button>
   <button onclick="showSection('games', this)">🎮 Игры</button>
   <button onclick="showSection('prizes', this)">🎁 Призы</button>
+  <button onclick="showSection('messages', this)" id="navMessages">💌 Письма</button>
 </nav>
 
 <main>
@@ -810,6 +891,36 @@
       </div>
     </div>
     <div class="prizes-grid" id="prizesGrid"></div>
+  </div>
+
+  <!-- MESSAGES -->
+  <div class="section" id="sec-messages">
+    <!-- Admin: create message form -->
+    <div class="card" id="msgAdminCard" style="display:none">
+      <h2>💝 Создать сообщение для Стефы</h2>
+      <div class="msg-form">
+        <div class="msg-form-row">
+          <input type="text" id="msgEmoji" placeholder="Эмодзи 💌" maxlength="4" style="max-width:80px;text-align:center">
+          <input type="text" id="msgTitle" placeholder="Заголовок" maxlength="100">
+        </div>
+        <textarea id="msgContent" placeholder="Напиши что-то тёплое и красивое..." maxlength="2000"></textarea>
+        <div class="msg-form-row">
+          <input type="datetime-local" id="msgDate" title="Когда показать">
+          <button class="btn btn-primary" onclick="sendLoveMsg()">💌 Отправить</button>
+        </div>
+        <p style="color:var(--soft);font-size:0.78rem">Оставь дату пустой — сообщение появится сразу. Или выбери дату и оно появится в нужный день.</p>
+      </div>
+      <div id="adminMsgList"></div>
+    </div>
+
+    <!-- Stefia: read messages -->
+    <div class="card" id="msgStefaCard">
+      <h2>💌 Письма от любимого</h2>
+      <p style="color:var(--soft);font-size:0.88rem;margin-bottom:16px;">Здесь появляются сообщения специально для тебя 💕</p>
+      <div id="msgList">
+        <div class="empty-state"><span class="empty-icon">💌</span>Пока нет писем.<br>Но они обязательно появятся!</div>
+      </div>
+    </div>
   </div>
 
 </main>
@@ -948,6 +1059,7 @@ async function init() {
   await loadScore();
   await loadWishes();
   await loadScoreHistory();
+  await loadMessages();
   renderPrizes();
 }
 
@@ -1457,6 +1569,145 @@ function showToast(msg) {
   t.textContent = msg;
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ========== LOVE MESSAGES ==========
+async function loadMessages() {
+  if (isAdmin()) {
+    document.getElementById('msgAdminCard').style.display = 'block';
+    document.getElementById('msgStefaCard').style.display = 'none';
+    await loadAdminMessages();
+  } else {
+    document.getElementById('msgAdminCard').style.display = 'none';
+    document.getElementById('msgStefaCard').style.display = 'block';
+    await loadStefaMessages();
+  }
+}
+
+async function sendLoveMsg() {
+  const emoji = document.getElementById('msgEmoji').value.trim() || '💌';
+  const title = document.getElementById('msgTitle').value.trim();
+  const content = document.getElementById('msgContent').value.trim();
+  const dateVal = document.getElementById('msgDate').value;
+
+  if (!title || !content) {
+    showToast('Заполни заголовок и текст 💔');
+    return;
+  }
+
+  // Get Stefia's user id (the non-admin user)
+  const { data: users } = await db.from('scores').select('user_id').neq('user_id', currentUser.id).limit(1);
+  let recipientId = users?.[0]?.user_id;
+
+  // If no other user found in scores, try wishes
+  if (!recipientId) {
+    const { data: wishUsers } = await db.from('wishes').select('user_id').neq('user_id', currentUser.id).limit(1);
+    recipientId = wishUsers?.[0]?.user_id;
+  }
+
+  // If still no recipient, use a placeholder (admin can be recipient for testing)
+  if (!recipientId) recipientId = currentUser.id;
+
+  const showAfter = dateVal ? new Date(dateVal).toISOString() : new Date().toISOString();
+
+  await db.from('love_messages').insert({
+    recipient_id: recipientId,
+    title, content, emoji,
+    show_after: showAfter
+  });
+
+  document.getElementById('msgEmoji').value = '';
+  document.getElementById('msgTitle').value = '';
+  document.getElementById('msgContent').value = '';
+  document.getElementById('msgDate').value = '';
+
+  showToast('Сообщение отправлено! 💌');
+  await loadAdminMessages();
+}
+
+async function loadAdminMessages() {
+  const { data } = await db.from('love_messages').select('*')
+    .order('show_after', { ascending: false });
+  const el = document.getElementById('adminMsgList');
+  if (!data || !data.length) {
+    el.innerHTML = '<div class="empty-state"><span class="empty-icon">📝</span>Ещё нет отправленных сообщений</div>';
+    return;
+  }
+  el.innerHTML = '<h3 style="font-family:Playfair Display,serif;font-size:1.1rem;color:var(--dark);margin:20px 0 12px">📋 Отправленные</h3>' +
+    data.map(m => {
+      const showDate = new Date(m.show_after);
+      const isFuture = showDate > new Date();
+      const isRead = m.is_read;
+      return `<div class="love-msg" style="opacity:${isFuture?'0.6':'1'}">
+        <span class="love-msg-emoji">${m.emoji}</span>
+        <div class="love-msg-title">${escapeHtml(m.title)}
+          ${isFuture ? '<span class="love-msg-new" style="background:var(--gold)">⏰ Ждёт</span>' : ''}
+          ${isRead ? '<span class="love-msg-new" style="background:#4caf50">✓ Прочитано</span>' : (!isFuture ? '<span class="love-msg-new">Не прочитано</span>' : '')}
+        </div>
+        <div class="love-msg-text">${escapeHtml(m.content)}</div>
+        <div class="love-msg-date">${isFuture ? '📅 Покажется: ' : '📅 '}${showDate.toLocaleDateString('ru', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+          <span style="float:right;cursor:pointer;color:var(--rose-light)" onclick="deleteLoveMsg('${m.id}')">🗑 Удалить</span>
+        </div>
+      </div>`;
+    }).join('');
+}
+
+async function deleteLoveMsg(id) {
+  await db.from('love_messages').delete().eq('id', id);
+  showToast('Сообщение удалено');
+  await loadAdminMessages();
+}
+
+async function loadStefaMessages() {
+  const now = new Date().toISOString();
+  const { data } = await db.from('love_messages').select('*')
+    .eq('recipient_id', currentUser.id)
+    .lte('show_after', now)
+    .order('show_after', { ascending: false });
+
+  const el = document.getElementById('msgList');
+  if (!data || !data.length) {
+    el.innerHTML = '<div class="empty-state"><span class="empty-icon">💌</span>Пока нет писем.<br>Но они обязательно появятся!</div>';
+    updateMsgBadge(0);
+    return;
+  }
+
+  const unread = data.filter(m => !m.is_read).length;
+  updateMsgBadge(unread);
+
+  el.innerHTML = data.map(m => `
+    <div class="love-msg ${m.is_read ? '' : 'unread'}" onclick="markMsgRead('${m.id}', this)">
+      <span class="love-msg-emoji">${m.emoji}</span>
+      <div class="love-msg-title">${escapeHtml(m.title)} ${m.is_read ? '' : '<span class="love-msg-new">Новое!</span>'}</div>
+      <div class="love-msg-text">${escapeHtml(m.content)}</div>
+      <div class="love-msg-date">💕 ${new Date(m.show_after).toLocaleDateString('ru', { day: 'numeric', month: 'long', year: 'numeric' })}</div>
+    </div>`).join('');
+}
+
+async function markMsgRead(id, el) {
+  if (el.classList.contains('unread')) {
+    await db.from('love_messages').update({ is_read: true }).eq('id', id);
+    el.classList.remove('unread');
+    const badge = el.querySelector('.love-msg-new');
+    if (badge) badge.remove();
+
+    // Update badge count
+    const remaining = document.querySelectorAll('.love-msg.unread').length;
+    updateMsgBadge(remaining);
+  }
+}
+
+function updateMsgBadge(count) {
+  const navBtn = document.getElementById('navMessages');
+  // Remove old badge
+  const old = navBtn.querySelector('.nav-badge');
+  if (old) old.remove();
+
+  if (count > 0) {
+    navBtn.innerHTML = `💌 Письма <span class="nav-badge">${count}</span>`;
+  } else {
+    navBtn.textContent = '💌 Письма';
+  }
 }
 
 checkAuth();
