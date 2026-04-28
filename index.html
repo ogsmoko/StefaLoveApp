@@ -561,35 +561,50 @@
   }
   .wish-item:hover .wish-delete { opacity: 1; }
 
-  .prizes-grid {
+  /* ===== SHOP ===== */
+  .shop-cats {
+    display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px;
+  }
+  .shop-cat-btn {
+    padding: 8px 16px;
+    border: 2px solid var(--rose-pale);
+    border-radius: 50px;
+    background: var(--cream);
+    color: var(--mid);
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.85rem; font-weight: 600;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .shop-cat-btn.active { background: var(--rose); border-color: var(--rose); color: white; }
+  .shop-cat-btn:hover:not(.active) { border-color: var(--rose-light); color: var(--rose); }
+  .shop-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
     gap: 14px;
   }
-  .prize-item {
+  .shop-item {
     background: var(--cream);
     border-radius: 18px;
-    padding: 20px 16px;
+    padding: 18px 12px;
     text-align: center;
-    position: relative;
-    overflow: hidden;
-    transition: transform 0.2s;
+    border: 2px solid transparent;
+    transition: transform 0.2s, border-color 0.2s;
   }
-  .prize-item:hover { transform: translateY(-3px); }
-  .prize-item.unlocked {
-    background: linear-gradient(135deg, #fff9e6 0%, #ffefc0 100%);
-    border: 2px solid var(--gold);
+  .shop-item.can-afford:hover { transform: translateY(-2px); border-color: var(--rose-light); }
+  .shop-item.cant-afford { opacity: 0.5; }
+  .shop-emoji { font-size: 2rem; margin-bottom: 8px; display: block; }
+  .shop-name { font-size: 0.85rem; font-weight: 700; color: var(--dark); margin-bottom: 4px; }
+  .shop-desc { font-size: 0.72rem; color: var(--soft); margin-bottom: 10px; line-height: 1.4; }
+  .shop-cost { font-size: 0.88rem; font-weight: 700; color: var(--rose); margin-bottom: 10px; }
+  .shop-btn {
+    width: 100%; padding: 8px; border: none; border-radius: 12px;
+    background: var(--rose); color: white;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.8rem; font-weight: 700;
+    cursor: pointer; transition: opacity 0.2s;
   }
-  .prize-item.locked { opacity: 0.65; }
-  .prize-emoji { font-size: 2.2rem; margin-bottom: 8px; display: block; }
-  .prize-name { font-size: 0.85rem; font-weight: 700; color: var(--dark); margin-bottom: 4px; }
-  .prize-pts { font-size: 0.75rem; color: var(--soft); }
-  .prize-badge {
-    position: absolute; top: 8px; right: 8px;
-    background: var(--gold); color: white;
-    font-size: 0.65rem; font-weight: 700;
-    padding: 3px 7px; border-radius: 50px;
-  }
+  .shop-btn:disabled { background: var(--rose-pale); color: var(--soft); cursor: not-allowed; }
+  .shop-btn:not(:disabled):hover { opacity: 0.82; }
 
   .games-grid {
     display: grid;
@@ -995,7 +1010,7 @@
   <button class="active" onclick="showSection('compliments', this)">💬 Комплименты</button>
   <button onclick="showSection('wishes', this)">✨ Хотелки</button>
   <button onclick="showSection('games', this)">🎮 Игры</button>
-  <button onclick="showSection('prizes', this)">🎁 Призы</button>
+  <button onclick="showSection('prizes', this)">🛍️ Магазин</button>
   <button onclick="showSection('messages', this)" id="navMessages">💌 Письма</button>
   <button onclick="showSection('achievements', this)" id="navAchievements">🏅 Достижения</button>
 </nav>
@@ -1046,22 +1061,22 @@
         <div class="game-card" onclick="openGame('victoria')">
           <span class="game-icon">🧠</span>
           <div class="game-name">Викторина</div>
-          <div class="game-pts">+10 очков за ответ</div>
+          <div class="game-pts">+5 очков за ответ</div>
         </div>
         <div class="game-card" onclick="openGame('word')">
           <span class="game-icon">🔤</span>
           <div class="game-name">Угадай слово</div>
-          <div class="game-pts">+15 очков за слово</div>
+          <div class="game-pts">+8 очков за слово</div>
         </div>
         <div class="game-card" onclick="openGame('clicker')">
           <span class="game-icon">💗</span>
           <div class="game-name">Тапалка</div>
-          <div class="game-pts">+1 очко за 10 тапов</div>
+          <div class="game-pts">+1 очко за 15 тапов</div>
         </div>
         <div class="game-card" onclick="openGame('memory')">
           <span class="game-icon">🃏</span>
           <div class="game-name">Мемори</div>
-          <div class="game-pts">+20 очков за победу</div>
+          <div class="game-pts">+10 очков за победу</div>
         </div>
       </div>
     </div>
@@ -1076,17 +1091,15 @@
 
   <div class="section" id="sec-prizes">
     <div class="card">
-      <h2>🎁 Твои призы</h2>
-      <p style="color:var(--soft);font-size:0.88rem;margin-bottom:6px;">Набирай очки в играх и получай подарки от меня 💕</p>
-      <div class="progress-wrap">
-        <div class="progress-label">
-          <span id="progressFrom">0 очков</span>
-          <span id="progressTo">следующий приз: — очков</span>
-        </div>
-        <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
-      </div>
+      <h2>🛍️ Магазин подарков</h2>
+      <p style="color:var(--soft);font-size:0.88rem;margin-bottom:16px;">Трать очки на то, что хочешь — ты заслужила! 💕</p>
+      <div class="shop-cats" id="shopCats"></div>
+      <div class="shop-grid" id="shopGrid"></div>
     </div>
-    <div class="prizes-grid" id="prizesGrid"></div>
+    <div class="card" id="shopHistoryCard" style="display:none">
+      <h2>🧾 История покупок</h2>
+      <div id="shopHistory"></div>
+    </div>
   </div>
 
   <!-- MESSAGES -->
@@ -1221,16 +1234,39 @@ function isAdmin() {
   return currentUser && currentUser.email && currentUser.email.toLowerCase() === ADMIN_EMAIL.toLowerCase();
 }
 
-const PRIZES = [
-  { pts: 50,  emoji: '🍫', name: 'Шоколадка', desc: 'Вкусняшка!' },
-  { pts: 100, emoji: '💐', name: 'Цветочки', desc: 'Букет от меня' },
-  { pts: 200, emoji: '🍕', name: 'Пицца-вечер', desc: 'Вместе смотрим кино' },
-  { pts: 300, emoji: '🎬', name: 'Поход в кино', desc: 'Любой фильм по твоему выбору' },
-  { pts: 500, emoji: '🛍️', name: 'Шоппинг', desc: 'Маленький шоппинг вместе' },
-  { pts: 750, emoji: '🍽️', name: 'Ресторан', desc: 'Ужин в ресторане' },
-  { pts: 1000,emoji: '💆', name: 'СПА день', desc: 'День полного расслабления' },
-  { pts: 1500,emoji: '✈️', name: 'Путешествие', desc: 'Мини-путешествие вместе' },
+const SHOP_CATEGORIES = [
+  { id: 'kisses',     name: '💋 Нежность' },
+  { id: 'sweets',     name: '🍬 Вкусняшки' },
+  { id: 'activities', name: '🎉 Активности' },
+  { id: 'special',    name: '✨ Особые' },
 ];
+
+const SHOP_ITEMS = [
+  // Нежность
+  { id: 'kiss',      cat: 'kisses',     emoji: '💋',  name: 'Поцелуйчик',         desc: 'Один сладкий поцелуй',              pts: 10 },
+  { id: 'hug',       cat: 'kisses',     emoji: '🤗',  name: 'Обнимашки',           desc: 'Долгие крепкие объятия',            pts: 15 },
+  { id: 'walk',      cat: 'kisses',     emoji: '🌙',  name: 'Вечерняя прогулка',   desc: 'Романтическая прогулка за ручку',   pts: 30 },
+  { id: 'massage15', cat: 'kisses',     emoji: '💆',  name: 'Массаж 15 мин',       desc: 'Приятный расслабляющий массаж',     pts: 55 },
+  { id: 'massage30', cat: 'kisses',     emoji: '💆‍♀️', name: 'Массаж 30 мин',       desc: 'Долгий расслабляющий массаж',       pts: 95 },
+  // Вкусняшки
+  { id: 'choco',     cat: 'sweets',     emoji: '🍫',  name: 'Шоколадка',           desc: 'Любимая шоколадка',                 pts: 25 },
+  { id: 'icecream',  cat: 'sweets',     emoji: '🍦',  name: 'Мороженое',           desc: 'Шарик любого вкуса',                pts: 30 },
+  { id: 'cupcake',   cat: 'sweets',     emoji: '🧁',  name: 'Капкейки',            desc: 'Два капкейка из кофейни',           pts: 45 },
+  { id: 'cake',      cat: 'sweets',     emoji: '🎂',  name: 'Торт',                desc: 'Торт на заказ',                     pts: 120 },
+  // Активности
+  { id: 'cafe',      cat: 'activities', emoji: '☕',  name: 'Свидание в кафе',     desc: 'Кофе и вкусняшка вместе',           pts: 90 },
+  { id: 'cinema',    cat: 'activities', emoji: '🎬',  name: 'Кино',                desc: 'Любой фильм по твоему выбору',      pts: 160 },
+  { id: 'bowling',   cat: 'activities', emoji: '🎳',  name: 'Боулинг',             desc: 'Весёлый вечер в боулинге',          pts: 210 },
+  { id: 'shopping',  cat: 'activities', emoji: '🛍️',  name: 'Шоппинг',             desc: 'Мини-шоппинг вместе',               pts: 270 },
+  // Особые
+  { id: 'flowers',   cat: 'special',    emoji: '🌹',  name: 'Букет цветов',        desc: 'Красивый букет от меня',            pts: 85 },
+  { id: 'bigflowers',cat: 'special',    emoji: '💐',  name: 'Большой букет',       desc: 'Шикарный большой букет',            pts: 200 },
+  { id: 'restaurant',cat: 'special',    emoji: '🍽️',  name: 'Ужин в ресторане',   desc: 'Романтический ужин вдвоём',         pts: 370 },
+  { id: 'spa',       cat: 'special',    emoji: '🧖‍♀️', name: 'СПА день',           desc: 'День полного расслабления',         pts: 520 },
+  { id: 'trip',      cat: 'special',    emoji: '✈️',  name: 'Путешествие',         desc: 'Мини-путешествие вдвоём',           pts: 1000 },
+];
+
+let shopCategory = 'kisses';
 
 const BADGES = [
   { key: 'first_compliment', emoji: '💌', name: 'Первый комплимент', desc: 'Получила первый комплимент' },
@@ -1374,7 +1410,8 @@ async function init() {
   await loadScoreHistory();
   await loadMessages();
   await loadAchievements();
-  renderPrizes();
+  await loadShopHistory();
+  initShop();
 }
 
 function showSection(id, btn) {
@@ -1425,23 +1462,16 @@ async function addScore(game, pts) {
 
 function updateScoreUI() {
   document.getElementById('totalScore').textContent = totalScore;
-  const next = PRIZES.find(p => p.pts > totalScore);
-  document.getElementById('nextPrizeLabel').textContent = next ? `${next.emoji} ${next.pts}` : '🏆 Всё!';
-
-  const prev = [...PRIZES].reverse().find(p => p.pts <= totalScore);
-  const prevPts = prev ? prev.pts : 0;
-  const nextPts = next ? next.pts : PRIZES[PRIZES.length-1].pts;
-  const pct = Math.min(100, ((totalScore - prevPts) / (nextPts - prevPts)) * 100);
-  document.getElementById('progressFill').style.width = pct + '%';
-  document.getElementById('progressFrom').textContent = totalScore + ' очков';
-  document.getElementById('progressTo').textContent = next ? `до приза: ${next.pts} очков` : '🏆 Все призы открыты!';
-
-  renderPrizes();
+  const affordable = SHOP_ITEMS.filter(i => totalScore >= i.pts).sort((a, b) => b.pts - a.pts);
+  const best = affordable[0];
+  document.getElementById('nextPrizeLabel').textContent = best ? `${best.emoji} ${best.name}` : '🎮 Играй!';
+  renderShopItems();
 }
 
 async function loadScoreHistory() {
   const { data } = await db.from('scores').select('*')
     .eq('user_id', currentUser.id)
+    .not('game', 'ilike', 'Магазин:%')
     .order('created_at', { ascending: false }).limit(10);
   const el = document.getElementById('scoreHistory');
   if (!data || !data.length) {
@@ -1456,17 +1486,65 @@ async function loadScoreHistory() {
     </div>`).join('');
 }
 
-function renderPrizes() {
-  const grid = document.getElementById('prizesGrid');
-  grid.innerHTML = PRIZES.map(p => {
-    const unlocked = totalScore >= p.pts;
-    return `<div class="prize-item ${unlocked ? 'unlocked' : 'locked'}">
-      ${unlocked ? '<span class="prize-badge">Открыт!</span>' : ''}
-      <span class="prize-emoji">${p.emoji}</span>
-      <div class="prize-name">${p.name}</div>
-      <div class="prize-pts">${unlocked ? '✅ Получено!' : p.pts + ' очков'}</div>
+function initShop() {
+  const cats = document.getElementById('shopCats');
+  if (!cats) return;
+  cats.innerHTML = SHOP_CATEGORIES.map(c =>
+    `<button class="shop-cat-btn ${c.id === shopCategory ? 'active' : ''}" onclick="selectShopCat('${c.id}')">${c.name}</button>`
+  ).join('');
+  renderShopItems();
+}
+
+function selectShopCat(catId) {
+  shopCategory = catId;
+  initShop();
+}
+
+function renderShopItems() {
+  const grid = document.getElementById('shopGrid');
+  if (!grid) return;
+  const items = SHOP_ITEMS.filter(i => i.cat === shopCategory);
+  grid.innerHTML = items.map(item => {
+    const canAfford = totalScore >= item.pts;
+    return `<div class="shop-item ${canAfford ? 'can-afford' : 'cant-afford'}">
+      <span class="shop-emoji">${item.emoji}</span>
+      <div class="shop-name">${item.name}</div>
+      <div class="shop-desc">${item.desc}</div>
+      <div class="shop-cost">💰 ${item.pts} очков</div>
+      <button class="shop-btn" ${canAfford ? '' : 'disabled'} onclick="buyItem('${item.id}')">
+        ${canAfford ? '🎁 Получить' : '🔒 Мало очков'}
+      </button>
     </div>`;
   }).join('');
+}
+
+async function buyItem(itemId) {
+  const item = SHOP_ITEMS.find(i => i.id === itemId);
+  if (!item || totalScore < item.pts) return;
+  await db.from('scores').insert({ game: `Магазин: ${item.name}`, points: -item.pts, user_id: currentUser.id });
+  totalScore -= item.pts;
+  updateScoreUI();
+  showToast(`${item.emoji} ${item.name} — наслаждайся! 💕`);
+  await loadShopHistory();
+}
+
+async function loadShopHistory() {
+  const { data } = await db.from('scores').select('*')
+    .eq('user_id', currentUser.id)
+    .ilike('game', 'Магазин:%')
+    .order('created_at', { ascending: false })
+    .limit(8);
+  const card = document.getElementById('shopHistoryCard');
+  const el = document.getElementById('shopHistory');
+  if (!el) return;
+  if (!data || !data.length) { if (card) card.style.display = 'none'; return; }
+  if (card) card.style.display = 'block';
+  el.innerHTML = data.map(r => `
+    <div class="history-item">
+      <span class="history-game">${r.game.replace('Магазин: ', '')}</span>
+      <span class="history-date">${new Date(r.created_at).toLocaleDateString('ru')}</span>
+      <span class="history-pts" style="color:var(--gold)">${r.points} ★</span>
+    </div>`).join('');
 }
 
 function selectMood(btn) {
@@ -1645,7 +1723,7 @@ async function answerTrivia(idx) {
   setTimeout(async () => {
     if (idx === q.ans) {
       unlockBadge('trivia_correct');
-      await addScore('Викторина 🧠', 10);
+      await addScore('Викторина 🧠', 5);
       document.getElementById('gameContent').innerHTML += `
         <div style="text-align:center;margin-top:16px">
           <div style="font-size:1.1rem;font-weight:700;color:var(--rose);margin-bottom:12px">Правильно! +10 очков 🎉</div>
@@ -1739,7 +1817,7 @@ async function guessLetter(letter) {
 
   if (allGuessed) {
     unlockBadge('word_win');
-    await addScore('Угадай слово 🔤', 15);
+    await addScore('Угадай слово 🔤', 8);
     document.getElementById('gameContent').innerHTML = `
       <h3>🔤 Угадай слово</h3>
       <div style="text-align:center;padding:24px 0">
@@ -1810,7 +1888,7 @@ function doClick(e) {
 
 async function finishClicker() {
   if (clickCount >= 50) unlockBadge('clicker_master');
-  const pts = Math.floor(clickCount / 10);
+  const pts = Math.floor(clickCount / 15);
   if (pts > 0) await addScore('Тапалка 💗', pts);
   document.getElementById('gameContent').innerHTML = `
     <h3>💗 Тапалка</h3>
@@ -1869,7 +1947,7 @@ async function flipCard(id) {
       renderMemory();
       if (memSolved === memEmojis.length) {
         unlockBadge('memory_win');
-        await addScore('Мемори 🃏', 20);
+        await addScore('Мемори 🃏', 10);
         setTimeout(() => {
           document.getElementById('gameContent').innerHTML = `
             <h3>🃏 Мемори</h3>
