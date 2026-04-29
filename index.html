@@ -149,6 +149,14 @@
   }
   body { transition: background-color 0.3s ease, color 0.3s ease; }
 
+  .scroll-styled {
+    scrollbar-width: thin;
+    scrollbar-color: var(--rose) transparent;
+  }
+  .scroll-styled::-webkit-scrollbar { width: 4px; }
+  .scroll-styled::-webkit-scrollbar-track { background: transparent; }
+  .scroll-styled::-webkit-scrollbar-thumb { background: var(--rose); border-radius: 4px; }
+
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   body {
@@ -987,52 +995,53 @@
       <button class="palette-swatch" data-palette="sunset" style="background:#e8795f" title="Закат" onclick="setPalette('sunset')"></button>
     </div>
   </div>
-  <button class="logout-btn" onclick="doLogout()">↪ Выйти</button>
+  <button class="theme-btn" onclick="toggleLang()" id="langBtn" title="Switch language" style="font-size:0.75rem;font-weight:700;letter-spacing:0.5px">RU</button>
+  <button class="logout-btn" onclick="doLogout()" data-i18n="logout">↪ Выйти</button>
   <div class="header-hearts">💖 ✨ 💖</div>
-  <h1>Привет, <span id="userGreeting">Стефания</span>!</h1>
-  <p>Твоё личное пространство с любовью 🌸</p>
+  <h1><span data-i18n="greeting_prefix">Привет, </span><span id="userGreeting">Стефания</span>!</h1>
+  <p data-i18n="header_sub">Твоё личное пространство с любовью 🌸</p>
 </header>
 
 <div class="score-bar">
   <span class="trophy">🏆</span>
   <div>
     <div class="score-num" id="totalScore">0</div>
-    <div class="score-label">очков собрано</div>
+    <div class="score-label" data-i18n="score_collected">очков собрано</div>
   </div>
   <div style="width:1px;height:36px;background:var(--rose-pale)"></div>
   <div>
     <div style="font-size:1rem;font-weight:700;color:var(--gold)" id="nextPrizeLabel">🎁 —</div>
-    <div class="score-label">следующий приз</div>
+    <div class="score-label" data-i18n="score_next">следующий приз</div>
   </div>
 </div>
 
 <nav>
-  <button class="active" onclick="showSection('compliments', this)">💬 Комплименты</button>
-  <button onclick="showSection('wishes', this)">✨ Хотелки</button>
-  <button onclick="showSection('games', this)">🎮 Игры</button>
-  <button onclick="showSection('prizes', this)">🛍️ Магазин</button>
-  <button onclick="showSection('messages', this)" id="navMessages">💌 Письма</button>
-  <button onclick="showSection('achievements', this)" id="navAchievements">🏅 Достижения</button>
+  <button class="active" onclick="showSection('compliments', this)" data-i18n="nav_compliments">💬 Комплименты</button>
+  <button onclick="showSection('wishes', this)" data-i18n="nav_wishes">✨ Хотелки</button>
+  <button onclick="showSection('games', this)" data-i18n="nav_games">🎮 Игры</button>
+  <button onclick="showSection('prizes', this)" data-i18n="nav_shop">🛍️ Магазин</button>
+  <button onclick="showSection('messages', this)" id="navMessages" data-i18n="nav_letters">💌 Письма</button>
+  <button onclick="showSection('achievements', this)" id="navAchievements" data-i18n="nav_achievements">🏅 Достижения</button>
 </nav>
 
 <main>
 
   <div class="section active" id="sec-compliments">
     <div class="card">
-      <h2>💌 Комплимент для тебя</h2>
-      <p style="color:var(--soft);font-size:0.88rem;margin-bottom:14px;">Выбери настроение и получи персональный комплимент</p>
+      <h2 data-i18n="sec_compliments">💌 Комплимент для тебя</h2>
+      <p style="color:var(--soft);font-size:0.88rem;margin-bottom:14px;" data-i18n="compliments_desc">Выбери настроение и получи персональный комплимент</p>
       <div class="mood-row" id="moodRow">
-        <button class="mood-btn selected" data-mood="нежное" onclick="selectMood(this)">🌸 Нежное</button>
-        <button class="mood-btn" data-mood="весёлое" onclick="selectMood(this)">😄 Весёлое</button>
-        <button class="mood-btn" data-mood="страстное" onclick="selectMood(this)">🔥 Страстное</button>
-        <button class="mood-btn" data-mood="вдохновляющее" onclick="selectMood(this)">⭐ Вдохновляющее</button>
-        <button class="mood-btn" data-mood="игривое" onclick="selectMood(this)">🎉 Игривое</button>
+        <button class="mood-btn selected" data-mood="нежное" onclick="selectMood(this)" data-i18n="mood_tender">🌸 Нежное</button>
+        <button class="mood-btn" data-mood="весёлое" onclick="selectMood(this)" data-i18n="mood_fun">😄 Весёлое</button>
+        <button class="mood-btn" data-mood="страстное" onclick="selectMood(this)" data-i18n="mood_passionate">🔥 Страстное</button>
+        <button class="mood-btn" data-mood="вдохновляющее" onclick="selectMood(this)" data-i18n="mood_inspiring">⭐ Вдохновляющее</button>
+        <button class="mood-btn" data-mood="игривое" onclick="selectMood(this)" data-i18n="mood_playful">🎉 Игривое</button>
       </div>
       <div class="compliment-box" id="complimentBox">
-        <p class="compliment-text" id="complimentText">Нажми кнопку ниже, чтобы получить комплимент 💕</p>
+        <p class="compliment-text" id="complimentText" data-i18n="compliments_initial">Нажми кнопку ниже, чтобы получить комплимент 💕</p>
       </div>
       <div style="text-align:center">
-        <button class="btn btn-primary" onclick="getCompliment()" id="complimentBtn">
+        <button class="btn btn-primary" onclick="getCompliment()" id="complimentBtn" data-i18n="compliments_btn">
           💖 Получить комплимент
         </button>
       </div>
@@ -1041,22 +1050,22 @@
 
   <div class="section" id="sec-wishes">
     <div class="card">
-      <h2>✨ Мои хотелки</h2>
+      <h2 data-i18n="sec_wishes">✨ Мои хотелки</h2>
       <div class="wish-input-row">
-        <input type="text" id="wishInput" placeholder="Чего ты хочешь? 🌟" maxlength="200"
+        <input type="text" id="wishInput" data-i18n-placeholder="wishes_placeholder" placeholder="Чего ты хочешь? 🌟" maxlength="200"
           onkeypress="if(event.key==='Enter') addWish()">
-        <button class="btn btn-primary" onclick="addWish()">+ Добавить</button>
+        <button class="btn btn-primary" onclick="addWish()" data-i18n="wishes_add">+ Добавить</button>
       </div>
-      <div id="wishesList">
-        <div class="empty-state"><span class="empty-icon">🌸</span>Пока нет хотелок.<br>Добавь первую!</div>
+      <div id="wishesList" class="scroll-styled" style="max-height:360px;overflow-y:auto;">
+        <div class="empty-state"><span class="empty-icon">🌸</span><span data-i18n="wishes_empty">Пока нет хотелок.<br>Добавь первую!</span></div>
       </div>
     </div>
   </div>
 
   <div class="section" id="sec-games">
     <div class="card">
-      <h2>🎮 Мини-игры</h2>
-      <p style="color:var(--soft);font-size:0.88rem;margin-bottom:18px;">Играй и зарабатывай очки для призов! 🏆</p>
+      <h2 data-i18n="sec_games">🎮 Мини-игры</h2>
+      <p style="color:var(--soft);font-size:0.88rem;margin-bottom:18px;" data-i18n="games_desc">Играй и зарабатывай очки для призов! 🏆</p>
       <div class="games-grid">
         <div class="game-card" onclick="openGame('victoria')">
           <span class="game-icon">🧠</span>
@@ -1102,23 +1111,23 @@
     </div>
 
     <div class="card">
-      <h2>📊 История игр</h2>
-      <div id="scoreHistory" style="max-height:320px;overflow-y:auto;">
-        <div class="empty-state"><span class="empty-icon">🎮</span>Ещё нет игровой истории</div>
+      <h2 data-i18n="games_history">📊 История игр</h2>
+      <div id="scoreHistory" class="scroll-styled" style="max-height:320px;overflow-y:auto;">
+        <div class="empty-state"><span class="empty-icon">🎮</span><span data-i18n="games_history_empty">Ещё нет игровой истории</span></div>
       </div>
     </div>
   </div>
 
   <div class="section" id="sec-prizes">
     <div class="card">
-      <h2>🛍️ Магазин подарков</h2>
-      <p style="color:var(--soft);font-size:0.88rem;margin-bottom:16px;">Трать очки на то, что хочешь — ты заслужила! 💕</p>
+      <h2 data-i18n="sec_shop">🛍️ Магазин подарков</h2>
+      <p style="color:var(--soft);font-size:0.88rem;margin-bottom:16px;" data-i18n="shop_desc">Трать очки на то, что хочешь — ты заслужила! 💕</p>
       <div class="shop-cats" id="shopCats"></div>
       <div class="shop-grid" id="shopGrid"></div>
     </div>
     <div class="card" id="shopHistoryCard" style="display:none">
-      <h2>🧾 История покупок</h2>
-      <div id="shopHistory"></div>
+      <h2 data-i18n="shop_history">🧾 История покупок</h2>
+      <div id="shopHistory" class="scroll-styled" style="max-height:300px;overflow-y:auto;"></div>
     </div>
   </div>
 
@@ -1144,10 +1153,10 @@
 
     <!-- Stefia: read messages -->
     <div class="card" id="msgStefaCard">
-      <h2>💌 Письма от любимого</h2>
-      <p style="color:var(--soft);font-size:0.88rem;margin-bottom:16px;">Здесь появляются сообщения специально для тебя 💕</p>
-      <div id="msgList">
-        <div class="empty-state"><span class="empty-icon">💌</span>Пока нет писем.<br>Но они обязательно появятся!</div>
+      <h2 data-i18n="sec_letters">💌 Письма от любимого</h2>
+      <p style="color:var(--soft);font-size:0.88rem;margin-bottom:16px;" data-i18n="letters_desc">Здесь появляются сообщения специально для тебя 💕</p>
+      <div id="msgList" class="scroll-styled" style="max-height:500px;overflow-y:auto;">
+        <div class="empty-state"><span class="empty-icon">💌</span><span data-i18n="letters_empty">Пока нет писем.<br>Но они обязательно появятся!</span></div>
       </div>
     </div>
   </div>
@@ -1155,8 +1164,8 @@
   <!-- ACHIEVEMENTS -->
   <div class="section" id="sec-achievements">
     <div class="card">
-      <h2>🏅 Достижения</h2>
-      <p style="color:var(--soft);font-size:0.88rem;margin-bottom:12px;">Открывай бейджи — они отражают всё лучшее в тебе! ✨</p>
+      <h2 data-i18n="sec_achievements">🏅 Достижения</h2>
+      <p style="color:var(--soft);font-size:0.88rem;margin-bottom:12px;" data-i18n="achievements_desc">Открывай бейджи — они отражают всё лучшее в тебе! ✨</p>
       <div id="achievementStats" style="text-align:center;margin-bottom:16px;font-size:0.88rem;color:var(--soft)"></div>
       <div class="achievement-grid" id="achievementGrid"></div>
     </div>
@@ -1384,6 +1393,7 @@ function showApp() {
   // Sync theme button icon
   document.getElementById('themeBtn').textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
   updatePaletteSelection();
+  applyLang();
   init();
 }
 
@@ -1718,9 +1728,9 @@ ${usedList.length ? usedList.map((q, i) => `${i+1}. ${q}`).join('\n') : '(пок
       <h3>🧠 Викторина</h3>
       <div style="text-align:center;padding:24px 0">
         <div style="font-size:2.5rem;margin-bottom:12px">😢</div>
-        <div style="color:var(--soft);margin-bottom:20px">Не удалось придумать вопрос. Попробуй ещё раз!</div>
-        <button class="btn btn-primary" onclick="startVictoria()">🔄 Попробовать снова</button>
-        <button class="btn btn-secondary" style="margin-left:8px" onclick="closeGame()">Закрыть</button>
+        <div style="color:var(--soft);margin-bottom:20px">${t('trivia_fail')}</div>
+        <button class="btn btn-primary" onclick="startVictoria()">${t('retry')}</button>
+        <button class="btn btn-secondary" style="margin-left:8px" onclick="closeGame()">${t('close')}</button>
       </div>`;
   }
 }
@@ -1729,7 +1739,7 @@ function renderTriviaQ() {
   const q = triviaCurrent;
   document.getElementById('gameContent').innerHTML = `
     <h3>🧠 Викторина</h3>
-    <p class="game-desc">Ответь правильно и получи очки!</p>
+    <p class="game-desc">${t('trivia_desc')}</p>
     <div class="trivia-question">${escapeHtml(q.q)}</div>
     <div class="trivia-options">
       ${q.opts.map((o, i) => `<button class="trivia-opt" onclick="answerTrivia(${i})">${escapeHtml(o)}</button>`).join('')}
@@ -1750,16 +1760,16 @@ async function answerTrivia(idx) {
       await addScore('Викторина 🧠', 5);
       document.getElementById('gameContent').innerHTML += `
         <div style="text-align:center;margin-top:16px">
-          <div style="font-size:1.1rem;font-weight:700;color:var(--rose);margin-bottom:12px">Правильно! +5 очков 🎉</div>
-          <button class="btn btn-primary" onclick="startVictoria()">Ещё вопрос</button>
-          <button class="btn btn-secondary" style="margin-left:8px" onclick="closeGame()">Закрыть</button>
+          <div style="font-size:1.1rem;font-weight:700;color:var(--rose);margin-bottom:12px">${t('trivia_correct')}</div>
+          <button class="btn btn-primary" onclick="startVictoria()">${t('trivia_next')}</button>
+          <button class="btn btn-secondary" style="margin-left:8px" onclick="closeGame()">${t('close')}</button>
         </div>`;
     } else {
       document.getElementById('gameContent').innerHTML += `
         <div style="text-align:center;margin-top:16px">
-          <div style="font-size:1rem;color:var(--soft);margin-bottom:12px">Не беда! Правильный ответ выделен 💕</div>
-          <button class="btn btn-primary" onclick="startVictoria()">Новый вопрос</button>
-          <button class="btn btn-secondary" style="margin-left:8px" onclick="closeGame()">Закрыть</button>
+          <div style="font-size:1rem;color:var(--soft);margin-bottom:12px">${t('trivia_wrong')}</div>
+          <button class="btn btn-primary" onclick="startVictoria()">${t('trivia_new')}</button>
+          <button class="btn btn-secondary" style="margin-left:8px" onclick="closeGame()">${t('close')}</button>
         </div>`;
     }
   }, 1000);
@@ -1808,9 +1818,9 @@ ${usedList.length ? usedList.join(', ') : '(пока нет)'}
       <h3>🔤 Угадай слово</h3>
       <div style="text-align:center;padding:24px 0">
         <div style="font-size:2.5rem;margin-bottom:12px">😢</div>
-        <div style="color:var(--soft);margin-bottom:20px">Не удалось придумать слово. Попробуй ещё раз!</div>
-        <button class="btn btn-primary" onclick="startWord()">🔄 Попробовать снова</button>
-        <button class="btn btn-secondary" style="margin-left:8px" onclick="closeGame()">Закрыть</button>
+        <div style="color:var(--soft);margin-bottom:20px">${t('word_fail')}</div>
+        <button class="btn btn-primary" onclick="startWord()">${t('retry')}</button>
+        <button class="btn btn-secondary" style="margin-left:8px" onclick="closeGame()">${t('close')}</button>
       </div>`;
   }
 }
@@ -1821,10 +1831,10 @@ function renderWord() {
   const alphabet = 'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ'.split('');
   document.getElementById('gameContent').innerHTML = `
     <h3>🔤 Угадай слово</h3>
-    <p class="game-desc">Угадывай буквы и открой слово!</p>
+    <p class="game-desc">${t('word_desc')}</p>
     <div class="hangman-lives">${'❤️'.repeat(lives)}${'🖤'.repeat(6-lives)}</div>
     <div class="word-display">${display}</div>
-    <div class="word-hint">Подсказка: ${escapeHtml(hint)}</div>
+    <div class="word-hint">${t('word_hint')}${escapeHtml(hint)}</div>
     <div class="letter-input">${alphabet.map(l => `
       <button class="letter-btn" ${guessed.includes(l)?'disabled':''} onclick="guessLetter('${l}')">${l}</button>`).join('')}
     </div>`;
@@ -1847,9 +1857,9 @@ async function guessLetter(letter) {
       <div style="text-align:center;padding:24px 0">
         <div style="font-size:3rem;margin-bottom:12px">🎉</div>
         <div style="font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--rose);letter-spacing:8px;margin-bottom:8px">${word}</div>
-        <div style="color:var(--soft);margin-bottom:20px">Молодец! +8 очков</div>
-        <button class="btn btn-primary" onclick="startWord()">Новое слово</button>
-        <button class="btn btn-secondary" style="margin-left:8px" onclick="closeGame()">Закрыть</button>
+        <div style="color:var(--soft);margin-bottom:20px">${t('word_win_msg')}</div>
+        <button class="btn btn-primary" onclick="startWord()">${t('word_new')}</button>
+        <button class="btn btn-secondary" style="margin-left:8px" onclick="closeGame()">${t('close')}</button>
       </div>`;
     return;
   }
@@ -1859,10 +1869,10 @@ async function guessLetter(letter) {
       <h3>🔤 Угадай слово</h3>
       <div style="text-align:center;padding:24px 0">
         <div style="font-size:3rem;margin-bottom:12px">😢</div>
-        <div style="color:var(--soft);margin-bottom:8px">Слово было:</div>
+        <div style="color:var(--soft);margin-bottom:8px">${t('word_was')}</div>
         <div style="font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--dark);letter-spacing:8px;margin-bottom:20px">${word}</div>
-        <button class="btn btn-primary" onclick="startWord()">Попробовать снова</button>
-        <button class="btn btn-secondary" style="margin-left:8px" onclick="closeGame()">Закрыть</button>
+        <button class="btn btn-primary" onclick="startWord()">${t('try_again')}</button>
+        <button class="btn btn-secondary" style="margin-left:8px" onclick="closeGame()">${t('close')}</button>
       </div>`;
     return;
   }
@@ -1890,11 +1900,11 @@ function startClicker() {
 function renderClicker() {
   document.getElementById('gameContent').innerHTML = `
     <h3>💗 Тапалка</h3>
-    <p class="game-desc">Тапай по сердечку 15 секунд!</p>
+    <p class="game-desc">${t('clicker_desc')}</p>
     <div class="clicker-area" style="position:relative">
       <div class="clicker-heart" id="clickerHeart" onclick="doClick(event)">💗</div>
       <div class="clicker-count" id="clickerCount">0</div>
-      <div class="clicker-sub">тапов | <span id="clickerTimer">15с</span> осталось</div>
+      <div class="clicker-sub">${t('clicker_sub')}<span id="clickerTimer">15с</span>${t('clicker_sub2')}</div>
     </div>`;
 }
 
@@ -1918,10 +1928,10 @@ async function finishClicker() {
     <h3>💗 Тапалка</h3>
     <div style="text-align:center;padding:24px 0">
       <div style="font-size:3rem;margin-bottom:12px">⏰</div>
-      <div style="font-family:'Playfair Display',serif;font-size:2rem;color:var(--rose);margin-bottom:4px">${clickCount} тапов!</div>
-      <div style="color:var(--soft);margin-bottom:20px">+${pts} очков заработано</div>
-      <button class="btn btn-primary" onclick="startClicker()">Ещё раз!</button>
-      <button class="btn btn-secondary" style="margin-left:8px" onclick="closeGame()">Закрыть</button>
+      <div style="font-family:'Playfair Display',serif;font-size:2rem;color:var(--rose);margin-bottom:4px">${clickCount} ${t('clicker_taps')}</div>
+      <div style="color:var(--soft);margin-bottom:20px">+${pts} ${t('clicker_pts')}</div>
+      <button class="btn btn-primary" onclick="startClicker()">${t('clicker_again')}</button>
+      <button class="btn btn-secondary" style="margin-left:8px" onclick="closeGame()">${t('close')}</button>
     </div>`;
 }
 
@@ -1939,7 +1949,7 @@ function startMemory() {
 function renderMemory() {
   document.getElementById('gameContent').innerHTML = `
     <h3>🃏 Мемори</h3>
-    <p class="game-desc">Найди все пары!</p>
+    <p class="game-desc">${t('memory_desc')}</p>
     <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px" id="memGrid">
       ${memCards.map(c => `
         <div onclick="flipCard(${c.id})" style="
@@ -1978,9 +1988,9 @@ async function flipCard(id) {
             <div style="text-align:center;padding:24px 0">
               <div style="font-size:3rem;margin-bottom:12px">🏆</div>
               <div style="font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--rose);margin-bottom:4px">Все пары найдены!</div>
-              <div style="color:var(--soft);margin-bottom:20px">+10 очков 🎉</div>
-              <button class="btn btn-primary" onclick="startMemory()">Играть снова</button>
-              <button class="btn btn-secondary" style="margin-left:8px" onclick="closeGame()">Закрыть</button>
+              <div style="color:var(--soft);margin-bottom:20px">${t('memory_win')}</div>
+              <button class="btn btn-primary" onclick="startMemory()">${t('memory_again')}</button>
+              <button class="btn btn-secondary" style="margin-left:8px" onclick="closeGame()">${t('close')}</button>
             </div>`;
         }, 500);
       }
@@ -1992,6 +2002,114 @@ async function flipCard(id) {
       }, 900);
     }
   }
+}
+
+// ========== LANGUAGE ==========
+let currentLang = localStorage.getItem('lang') || 'ru';
+const T = {
+  ru: {
+    logout:'↪ Выйти', greeting_prefix:'Привет, ', header_sub:'Твоё личное пространство с любовью 🌸',
+    nav_compliments:'💬 Комплименты', nav_wishes:'✨ Хотелки', nav_games:'🎮 Игры',
+    nav_shop:'🛍️ Магазин', nav_letters:'💌 Письма', nav_achievements:'🏅 Достижения',
+    score_collected:'очков собрано', score_next:'следующий приз',
+    sec_compliments:'💌 Комплимент для тебя',
+    compliments_desc:'Выбери настроение и получи персональный комплимент',
+    mood_tender:'🌸 Нежное', mood_fun:'😄 Весёлое', mood_passionate:'🔥 Страстное',
+    mood_inspiring:'⭐ Вдохновляющее', mood_playful:'🎉 Игривое',
+    compliments_initial:'Нажми кнопку ниже, чтобы получить комплимент 💕',
+    compliments_btn:'💖 Получить комплимент',
+    sec_wishes:'✨ Мои хотелки', wishes_placeholder:'Чего ты хочешь? 🌟',
+    wishes_add:'+ Добавить', wishes_empty:'Пока нет хотелок.<br>Добавь первую!',
+    sec_games:'🎮 Мини-игры', games_desc:'Играй и зарабатывай очки для призов! 🏆',
+    games_history:'📊 История игр', games_history_empty:'Ещё нет игровой истории',
+    sec_shop:'🛍️ Магазин подарков', shop_desc:'Трать очки на то, что хочешь — ты заслужила! 💕',
+    shop_history:'🧾 История покупок',
+    sec_letters:'💌 Письма от любимого',
+    letters_desc:'Здесь появляются сообщения специально для тебя 💕',
+    letters_empty:'Пока нет писем.<br>Но они обязательно появятся!',
+    sec_achievements:'🏅 Достижения',
+    achievements_desc:'Открывай бейджи — они отражают всё лучшее в тебе! ✨',
+    close:'Закрыть', try_again:'Попробовать снова', retry:'🔄 Попробовать снова',
+    trivia_desc:'Ответь правильно и получи очки!',
+    trivia_correct:'Правильно! +5 очков 🎉', trivia_wrong:'Не беда! Правильный ответ выделен 💕',
+    trivia_next:'Ещё вопрос', trivia_new:'Новый вопрос',
+    trivia_fail:'Не удалось придумать вопрос. Попробуй ещё раз!',
+    word_desc:'Угадывай буквы и открой слово!', word_hint:'Подсказка: ',
+    word_win_msg:'Молодец! +8 очков', word_new:'Новое слово', word_was:'Слово было:',
+    word_fail:'Не удалось придумать слово. Попробуй ещё раз!',
+    clicker_desc:'Тапай по сердечку 15 секунд!',
+    clicker_sub:'тапов | ', clicker_sub2:' осталось', clicker_taps:'тапов!',
+    clicker_pts:'очков заработано', clicker_again:'Ещё раз!',
+    memory_desc:'Найди все пары!', memory_win:'+10 очков 🎉', memory_again:'Играть снова',
+    colors_correct:'Правильно! +4 очка 🎉', colors_next:'Ещё вопрос',
+    colors_wrong:'Не беда! Правильный ответ: ',
+    anagram_desc:'Составь слово из букв!', anagram_hint:'Подсказка: ',
+    anagram_placeholder:'Введи слово...', anagram_submit:'Ответить',
+    anagram_correct:'Правильно! +9 очков 🎉', anagram_next:'Ещё слово',
+    anagram_wrong:'Не беда! Правильное слово: ',
+    anagram_fail:'Ошибка при загрузке слова',
+    pairs_default:'Найди подходящую пару',
+    pairs_correct:'Правильно! +7 очков 🎉', pairs_next:'Ещё пару',
+    pairs_wrong:'Не беда! Правильно: ', pairs_fail:'Ошибка при загрузке вопроса',
+    ttt_desc:'Ты - X, ИИ - O', ttt_win:'🎉 Ты выиграл!', ttt_lose:'🤖 ИИ выиграла!',
+    ttt_draw:'🤝 Ничья!', ttt_again:'Ещё раз',
+  },
+  en: {
+    logout:'↪ Logout', greeting_prefix:'Hi, ', header_sub:'Your personal space with love 🌸',
+    nav_compliments:'💬 Compliments', nav_wishes:'✨ Wishlist', nav_games:'🎮 Games',
+    nav_shop:'🛍️ Shop', nav_letters:'💌 Letters', nav_achievements:'🏅 Achievements',
+    score_collected:'points collected', score_next:'next prize',
+    sec_compliments:'💌 A compliment for you',
+    compliments_desc:'Choose a mood and get a personal compliment',
+    mood_tender:'🌸 Tender', mood_fun:'😄 Fun', mood_passionate:'🔥 Passionate',
+    mood_inspiring:'⭐ Inspiring', mood_playful:'🎉 Playful',
+    compliments_initial:'Press the button below to get a compliment 💕',
+    compliments_btn:'💖 Get compliment',
+    sec_wishes:'✨ My wishlist', wishes_placeholder:'What do you want? 🌟',
+    wishes_add:'+ Add', wishes_empty:'No wishes yet.<br>Add the first one!',
+    sec_games:'🎮 Mini-games', games_desc:'Play and earn points for prizes! 🏆',
+    games_history:'📊 Game history', games_history_empty:'No game history yet',
+    sec_shop:'🛍️ Gift shop', shop_desc:'Spend points on what you want — you deserve it! 💕',
+    shop_history:'🧾 Purchase history',
+    sec_letters:'💌 Letters from your love',
+    letters_desc:'Messages just for you appear here 💕',
+    letters_empty:'No letters yet.<br>But they will come!',
+    sec_achievements:'🏅 Achievements',
+    achievements_desc:'Unlock badges — they reflect the best in you! ✨',
+    close:'Close', try_again:'Try again', retry:'🔄 Try again',
+    trivia_desc:'Answer correctly and earn points!',
+    trivia_correct:'Correct! +5 points 🎉', trivia_wrong:'No worries! Correct answer is highlighted 💕',
+    trivia_next:'Next question', trivia_new:'New question',
+    trivia_fail:'Failed to generate question. Try again!',
+    word_desc:'Guess letters to reveal the word!', word_hint:'Hint: ',
+    word_win_msg:'Great job! +8 points', word_new:'New word', word_was:'The word was:',
+    word_fail:'Failed to generate word. Try again!',
+    clicker_desc:'Tap the heart for 15 seconds!',
+    clicker_sub:'taps | ', clicker_sub2:' left', clicker_taps:'taps!',
+    clicker_pts:'points earned', clicker_again:'Again!',
+    memory_desc:'Find all the pairs!', memory_win:'+10 points 🎉', memory_again:'Play again',
+    colors_correct:'Correct! +4 points 🎉', colors_next:'Next question',
+    colors_wrong:'No worries! Correct answer: ',
+    anagram_desc:'Form a word from the letters!', anagram_hint:'Hint: ',
+    anagram_placeholder:'Type the word...', anagram_submit:'Submit',
+    anagram_correct:'Correct! +9 points 🎉', anagram_next:'Another word',
+    anagram_wrong:'No worries! The word was: ',
+    anagram_fail:'Failed to load word',
+    pairs_default:'Find the right match',
+    pairs_correct:'Correct! +7 points 🎉', pairs_next:'Another pair',
+    pairs_wrong:'No worries! Correct: ', pairs_fail:'Failed to load question',
+    ttt_desc:'You - X, AI - O', ttt_win:'🎉 You won!', ttt_lose:'🤖 AI won!',
+    ttt_draw:'🤝 Draw!', ttt_again:'Play again',
+  }
+};
+function t(key) { return (T[currentLang] || T.ru)[key] || T.ru[key] || key; }
+function toggleLang() { setLang(currentLang === 'ru' ? 'en' : 'ru'); }
+function setLang(lang) { currentLang = lang; localStorage.setItem('lang', lang); applyLang(); }
+function applyLang() {
+  document.querySelectorAll('[data-i18n]').forEach(el => { el.innerHTML = t(el.dataset.i18n); });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => { el.placeholder = t(el.dataset.i18nPlaceholder); });
+  const btn = document.getElementById('langBtn');
+  if (btn) btn.textContent = currentLang === 'ru' ? 'EN' : 'RU';
 }
 
 // ---- COLORS (AI generated) ----
@@ -2088,16 +2206,16 @@ async function answerColor(idx) {
     await addScore('Цветовая игра 🌈', 4);
     document.getElementById('gameContent').innerHTML += `
       <div style="text-align:center;margin-top:16px">
-        <div style="font-size:1.1rem;font-weight:700;color:var(--rose);margin-bottom:12px">Правильно! +4 очка 🎉</div>
-        <button class="btn btn-primary" onclick="startColors()">Ещё вопрос</button>
-        <button class="btn btn-secondary" style="margin-left:8px" onclick="closeGame()">Закрыть</button>
+        <div style="font-size:1.1rem;font-weight:700;color:var(--rose);margin-bottom:12px">${t('colors_correct')}</div>
+        <button class="btn btn-primary" onclick="startColors()">${t('colors_next')}</button>
+        <button class="btn btn-secondary" style="margin-left:8px" onclick="closeGame()">${t('close')}</button>
       </div>`;
   } else {
     document.getElementById('gameContent').innerHTML += `
       <div style="text-align:center;margin-top:16px">
-        <div style="font-size:1rem;color:var(--soft);margin-bottom:12px">Не беда! Правильный ответ: ${escapeHtml(q.colors[q.correct])} 💕</div>
-        <button class="btn btn-primary" onclick="startColors()">Попробовать снова</button>
-        <button class="btn btn-secondary" style="margin-left:8px" onclick="closeGame()">Закрыть</button>
+        <div style="font-size:1rem;color:var(--soft);margin-bottom:12px">${t('colors_wrong')}${escapeHtml(q.colors[q.correct])} 💕</div>
+        <button class="btn btn-primary" onclick="startColors()">${t('try_again')}</button>
+        <button class="btn btn-secondary" style="margin-left:8px" onclick="closeGame()">${t('close')}</button>
       </div>`;
   }
 }
@@ -2130,7 +2248,7 @@ async function startAnagram() {
     renderAnagram(shuffled);
   } catch(e) {
     console.error('Anagram error:', e);
-    showToast('Ошибка при загрузке слова');
+    showToast(t('anagram_fail'));
   }
 }
 
@@ -2138,17 +2256,17 @@ function renderAnagram(shuffled) {
   const s = anagramState;
   document.getElementById('gameContent').innerHTML = `
     <h3>📝 Слова из букв</h3>
-    <p class="game-desc">Составь слово из букв!</p>
+    <p class="game-desc">${t('anagram_desc')}</p>
     <div style="text-align:center;margin-top:16px">
       <div style="font-size:1.5rem;letter-spacing:4px;font-weight:700;margin-bottom:12px;color:var(--rose);font-family:monospace">${escapeHtml(shuffled)}</div>
-      <div style="color:var(--soft);margin-bottom:16px;font-style:italic">Подсказка: ${escapeHtml(s.hint)}</div>
-      <input type="text" id="anagramInput" placeholder="Введи слово..." maxlength="20" style="
+      <div style="color:var(--soft);margin-bottom:16px;font-style:italic">${t('anagram_hint')}${escapeHtml(s.hint)}</div>
+      <input type="text" id="anagramInput" placeholder="${t('anagram_placeholder')}" maxlength="20" style="
         padding:12px;font-size:1.1rem;border-radius:8px;border:2px solid var(--rose-light);
         width:100%;max-width:300px;box-sizing:border-box;margin-bottom:12px;text-transform:uppercase;
       " onkeypress="if(event.key==='Enter') submitAnagram()">
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-        <button class="btn btn-primary" onclick="submitAnagram()">Ответить</button>
-        <button class="btn btn-secondary" onclick="closeGame()">Закрыть</button>
+        <button class="btn btn-primary" onclick="submitAnagram()">${t('anagram_submit')}</button>
+        <button class="btn btn-secondary" onclick="closeGame()">${t('close')}</button>
       </div>
     </div>`;
   document.getElementById('anagramInput').focus();
@@ -2170,16 +2288,16 @@ async function submitAnagram() {
     await addScore('Слова из букв 📝', 9);
     document.getElementById('gameContent').innerHTML += `
       <div style="text-align:center;margin-top:16px">
-        <div style="font-size:1.1rem;font-weight:700;color:var(--rose);margin-bottom:12px">Правильно! +9 очков 🎉</div>
-        <button class="btn btn-primary" onclick="startAnagram()">Ещё слово</button>
-        <button class="btn btn-secondary" style="margin-left:8px" onclick="closeGame()">Закрыть</button>
+        <div style="font-size:1.1rem;font-weight:700;color:var(--rose);margin-bottom:12px">${t('anagram_correct')}</div>
+        <button class="btn btn-primary" onclick="startAnagram()">${t('anagram_next')}</button>
+        <button class="btn btn-secondary" style="margin-left:8px" onclick="closeGame()">${t('close')}</button>
       </div>`;
   } else {
     document.getElementById('gameContent').innerHTML += `
       <div style="text-align:center;margin-top:16px">
-        <div style="font-size:1rem;color:var(--soft);margin-bottom:12px">Не беда! Правильное слово: ${escapeHtml(s.word)} 💕</div>
-        <button class="btn btn-primary" onclick="startAnagram()">Попробовать снова</button>
-        <button class="btn btn-secondary" style="margin-left:8px" onclick="closeGame()">Закрыть</button>
+        <div style="font-size:1rem;color:var(--soft);margin-bottom:12px">${t('anagram_wrong')}${escapeHtml(s.word)} 💕</div>
+        <button class="btn btn-primary" onclick="startAnagram()">${t('try_again')}</button>
+        <button class="btn btn-secondary" style="margin-left:8px" onclick="closeGame()">${t('close')}</button>
       </div>`;
   }
 }
@@ -2217,7 +2335,7 @@ async function startPairs() {
     renderPairs();
   } catch(e) {
     console.error('Pairs game error:', e);
-    showToast('Ошибка при загрузке вопроса');
+    showToast(t('pairs_fail'));
   }
 }
 
@@ -2225,7 +2343,7 @@ function renderPairs() {
   const q = pairsQuestion;
   document.getElementById('gameContent').innerHTML = `
     <h3>💭 Найди пару</h3>
-    <p class="game-desc">${escapeHtml(q.task || 'Найди подходящую пару')}</p>
+    <p class="game-desc">${escapeHtml(q.task || t('pairs_default'))}</p>
     <div style="text-align:center;margin:20px 0">
       <div style="font-size:1.5rem;font-weight:700;color:var(--rose);margin-bottom:20px">${escapeHtml(q.word)}</div>
       <div style="display:grid;grid-template-columns:1fr;gap:10px">
@@ -2262,16 +2380,16 @@ async function answerPair(idx) {
     await addScore('Найди пару 💭', 7);
     document.getElementById('gameContent').innerHTML += `
       <div style="text-align:center;margin-top:16px">
-        <div style="font-size:1.1rem;font-weight:700;color:var(--rose);margin-bottom:12px">Правильно! +7 очков 🎉</div>
-        <button class="btn btn-primary" onclick="startPairs()">Ещё пару</button>
-        <button class="btn btn-secondary" style="margin-left:8px" onclick="closeGame()">Закрыть</button>
+        <div style="font-size:1.1rem;font-weight:700;color:var(--rose);margin-bottom:12px">${t('pairs_correct')}</div>
+        <button class="btn btn-primary" onclick="startPairs()">${t('pairs_next')}</button>
+        <button class="btn btn-secondary" style="margin-left:8px" onclick="closeGame()">${t('close')}</button>
       </div>`;
   } else {
     document.getElementById('gameContent').innerHTML += `
       <div style="text-align:center;margin-top:16px">
-        <div style="font-size:1rem;color:var(--soft);margin-bottom:12px">Не беда! Правильно: ${escapeHtml(q.pairs[q.correct])} 💕</div>
-        <button class="btn btn-primary" onclick="startPairs()">Попробовать снова</button>
-        <button class="btn btn-secondary" style="margin-left:8px" onclick="closeGame()">Закрыть</button>
+        <div style="font-size:1rem;color:var(--soft);margin-bottom:12px">${t('pairs_wrong')}${escapeHtml(q.pairs[q.correct])} 💕</div>
+        <button class="btn btn-primary" onclick="startPairs()">${t('try_again')}</button>
+        <button class="btn btn-secondary" style="margin-left:8px" onclick="closeGame()">${t('close')}</button>
       </div>`;
   }
 }
@@ -2291,7 +2409,7 @@ function renderTicTacToe() {
 
   document.getElementById('gameContent').innerHTML = `
     <h3>❌⭕ Крестики-нолики</h3>
-    <p class="game-desc">Ты - X, ИИ - O</p>
+    <p class="game-desc">${t('ttt_desc')}</p>
     <div style="display:grid;grid-template-columns:repeat(3,80px);gap:8px;margin:20px auto;width:fit-content">
       ${board.map((cell, idx) => `
         <button onclick="makeMove(${idx})" style="
@@ -2305,10 +2423,10 @@ function renderTicTacToe() {
     ${ticTacToeGameOver ? `
       <div style="text-align:center;margin-top:16px">
         <div style="font-size:1.1rem;font-weight:700;color:var(--rose);margin-bottom:12px">
-          ${ticTacToeWon === 'X' ? '🎉 Ты выиграл!' : ticTacToeWon === 'O' ? '🤖 ИИ выиграла!' : '🤝 Ничья!'}
+          ${ticTacToeWon === 'X' ? t('ttt_win') : ticTacToeWon === 'O' ? t('ttt_lose') : t('ttt_draw')}
         </div>
-        <button class="btn btn-primary" onclick="startTicTacToe()">Ещё раз</button>
-        <button class="btn btn-secondary" style="margin-left:8px" onclick="closeGame()">Закрыть</button>
+        <button class="btn btn-primary" onclick="startTicTacToe()">${t('ttt_again')}</button>
+        <button class="btn btn-secondary" style="margin-left:8px" onclick="closeGame()">${t('close')}</button>
       </div>
     ` : ''}`;
 }
