@@ -1078,6 +1078,26 @@
           <div class="game-name">Мемори</div>
           <div class="game-pts">+10 очков за победу</div>
         </div>
+        <div class="game-card" onclick="openGame('colors')">
+          <span class="game-icon">🌈</span>
+          <div class="game-name">Цветовая игра</div>
+          <div class="game-pts">+4 очка за правильный ответ</div>
+        </div>
+        <div class="game-card" onclick="openGame('anagram')">
+          <span class="game-icon">📝</span>
+          <div class="game-name">Слова из букв</div>
+          <div class="game-pts">+9 очков за слово</div>
+        </div>
+        <div class="game-card" onclick="openGame('pairs')">
+          <span class="game-icon">💭</span>
+          <div class="game-name">Найди пару</div>
+          <div class="game-pts">+7 очков за правильный выбор</div>
+        </div>
+        <div class="game-card" onclick="openGame('tictactoe')">
+          <span class="game-icon">❌⭕</span>
+          <div class="game-name">Крестики-нолики</div>
+          <div class="game-pts">+8 очков за победу</div>
+        </div>
       </div>
     </div>
 
@@ -1637,6 +1657,10 @@ function openGame(game) {
   else if (game === 'word') startWord();
   else if (game === 'clicker') startClicker();
   else if (game === 'memory') startMemory();
+  else if (game === 'colors') startColors();
+  else if (game === 'anagram') startAnagram();
+  else if (game === 'pairs') startPairs();
+  else if (game === 'tictactoe') startTicTacToe();
 }
 
 function closeGame() {
@@ -1726,7 +1750,7 @@ async function answerTrivia(idx) {
       await addScore('Викторина 🧠', 5);
       document.getElementById('gameContent').innerHTML += `
         <div style="text-align:center;margin-top:16px">
-          <div style="font-size:1.1rem;font-weight:700;color:var(--rose);margin-bottom:12px">Правильно! +10 очков 🎉</div>
+          <div style="font-size:1.1rem;font-weight:700;color:var(--rose);margin-bottom:12px">Правильно! +5 очков 🎉</div>
           <button class="btn btn-primary" onclick="startVictoria()">Ещё вопрос</button>
           <button class="btn btn-secondary" style="margin-left:8px" onclick="closeGame()">Закрыть</button>
         </div>`;
@@ -1954,7 +1978,7 @@ async function flipCard(id) {
             <div style="text-align:center;padding:24px 0">
               <div style="font-size:3rem;margin-bottom:12px">🏆</div>
               <div style="font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--rose);margin-bottom:4px">Все пары найдены!</div>
-              <div style="color:var(--soft);margin-bottom:20px">+20 очков 🎉</div>
+              <div style="color:var(--soft);margin-bottom:20px">+10 очков 🎉</div>
               <button class="btn btn-primary" onclick="startMemory()">Играть снова</button>
               <button class="btn btn-secondary" style="margin-left:8px" onclick="closeGame()">Закрыть</button>
             </div>`;
@@ -1968,6 +1992,451 @@ async function flipCard(id) {
       }, 900);
     }
   }
+}
+
+// ---- COLORS (AI generated) ----
+let colorsCurrent = null, colorsAnswered = false;
+
+// ---- ANAGRAM (AI generated) ----
+let anagramState = { word: '', hint: '', userAnswer: '', used: false };
+let anagramAnswered = false;
+
+// ---- PAIRS (AI generated) ----
+let pairsQuestion = null, pairsAnswered = false;
+
+// ---- TIC TAC TOE ----
+let ticTacToeBoard = ['','','','','','','','',''];
+let ticTacToeGameOver = false;
+let ticTacToeWon = null;
+let ticTacToeAITurn = false;
+
+async function startColors() {
+  showGameLoading('🌈 Цветовая игра', 'Придумываю вопрос...');
+  try {
+    const used = await db.from('used_colors').select('question');
+    const usedList = used.data ? used.data.map(r => r.question) : [];
+    const avoidStr = usedList.length > 0 ? `\nУже использованные вопросы (не повторяй): ${usedList.slice(-20).join('; ')}` : '';
+
+    const prompt = `Сгенерируй один оригинальный и интересный вопрос про цвета на русском языке.
+    Вопрос должен быть нетривиальным и познавательным, например:
+    - "Какой цвет получится при смешении красного и жёлтого?"
+    - "Выбери самый тёплый цвет"
+    - "Какой цвет ассоциируется с ревностью?"
+    - "Цвет спелого баклажана — это..."
+    - "Какой цвет называют цветом надежды?"
+    - "Найди цвет осенних листьев"
+    ${avoidStr}
+
+    JSON format: {"question": "текст вопроса?", "colors": ["вариант1", "вариант2", "вариант3", "вариант4"], "correct": 0}
+    correct — индекс (0-3) правильного ответа в массиве colors. ОБЯЗАТЕЛЬНО число от 0 до 3.`;
+
+    const response = await callAI(prompt, true);
+    const q = JSON.parse(response);
+
+    if (!q.colors || q.colors.length !== 4 || typeof q.correct !== 'number' || q.correct < 0 || q.correct > 3) {
+      throw new Error('Invalid AI response structure');
+    }
+
+    colorsCurrent = q;
+    colorsAnswered = false;
+
+    await db.from('used_colors').insert({ question: q.question, user_id: currentUser.id });
+    renderColors();
+  } catch(e) {
+    console.error('Colors game error:', e);
+    showToast('Ошибка при загрузке вопроса');
+  }
+}
+
+function renderColors() {
+  const q = colorsCurrent;
+  document.getElementById('gameContent').innerHTML = `
+    <h3>🌈 Цветовая игра</h3>
+    <p class="game-desc">${escapeHtml(q.question)}</p>
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:20px">
+      ${q.colors.map((c, i) => `<button class="color-opt" onclick="answerColor(${i})" style="
+        padding:20px;border-radius:12px;cursor:pointer;border:2px solid var(--mid);
+        background:var(--white);color:var(--dark);font-size:1rem;font-weight:600;
+        transition:all 0.3s;
+      ">${escapeHtml(c)}</button>`).join('')}
+    </div>`;
+}
+
+async function answerColor(idx) {
+  if (colorsAnswered) return;
+  colorsAnswered = true;
+  const q = colorsCurrent;
+  const btns = document.querySelectorAll('.color-opt');
+
+  btns.forEach(b => b.style.pointerEvents = 'none');
+  btns[q.correct].style.background = '#4caf50';
+  btns[q.correct].style.borderColor = '#4caf50';
+  btns[q.correct].style.color = 'white';
+
+  if (idx !== q.correct) {
+    btns[idx].style.background = '#f44336';
+    btns[idx].style.borderColor = '#f44336';
+    btns[idx].style.color = 'white';
+  }
+
+  await new Promise(r => setTimeout(r, 800));
+
+  if (idx === q.correct) {
+    unlockBadge('first_game');
+    await addScore('Цветовая игра 🌈', 4);
+    document.getElementById('gameContent').innerHTML += `
+      <div style="text-align:center;margin-top:16px">
+        <div style="font-size:1.1rem;font-weight:700;color:var(--rose);margin-bottom:12px">Правильно! +4 очка 🎉</div>
+        <button class="btn btn-primary" onclick="startColors()">Ещё вопрос</button>
+        <button class="btn btn-secondary" style="margin-left:8px" onclick="closeGame()">Закрыть</button>
+      </div>`;
+  } else {
+    document.getElementById('gameContent').innerHTML += `
+      <div style="text-align:center;margin-top:16px">
+        <div style="font-size:1rem;color:var(--soft);margin-bottom:12px">Не беда! Правильный ответ: ${escapeHtml(q.colors[q.correct])} 💕</div>
+        <button class="btn btn-primary" onclick="startColors()">Попробовать снова</button>
+        <button class="btn btn-secondary" style="margin-left:8px" onclick="closeGame()">Закрыть</button>
+      </div>`;
+  }
+}
+
+async function startAnagram() {
+  showGameLoading('📝 Слова из букв', 'Придумываю слово...');
+  try {
+    const used = await db.from('used_anagrams').select('word');
+    const usedWords = used.data ? used.data.map(r => r.word) : [];
+
+    const avoidStr = usedWords.length > 0 ? `\nУже использованные слова (не повторяй): ${usedWords.slice(-20).join(', ')}` : '';
+
+    const prompt = `Сгенерируй одно интересное русское слово (4-9 букв). Условия: только русские буквы, известное слово, нетривиальное.
+    ${avoidStr}
+    JSON format: {"word": "СЛОВО", "hint": "короткая подсказка на русском"}`;
+
+    const response = await callAI(prompt, true);
+    const w = JSON.parse(response);
+
+    if (!/^[А-ЯЁ]+$/.test(w.word)) throw new Error('Invalid word');
+
+    const shuffled = w.word.split('').sort(() => Math.random() - 0.5).join('');
+    anagramState = { word: w.word, hint: w.hint, userAnswer: '', used: false };
+    anagramAnswered = false;
+
+    await db.from('used_anagrams').insert({ word: w.word, user_id: currentUser.id });
+    renderAnagram(shuffled);
+  } catch(e) {
+    console.error('Anagram error:', e);
+    showToast('Ошибка при загрузке слова');
+  }
+}
+
+function renderAnagram(shuffled) {
+  const s = anagramState;
+  document.getElementById('gameContent').innerHTML = `
+    <h3>📝 Слова из букв</h3>
+    <p class="game-desc">Составь слово из букв!</p>
+    <div style="text-align:center;margin-top:16px">
+      <div style="font-size:1.5rem;letter-spacing:4px;font-weight:700;margin-bottom:12px;color:var(--rose);font-family:monospace">${escapeHtml(shuffled)}</div>
+      <div style="color:var(--soft);margin-bottom:16px;font-style:italic">Подсказка: ${escapeHtml(s.hint)}</div>
+      <input type="text" id="anagramInput" placeholder="Введи слово..." maxlength="20" style="
+        padding:12px;font-size:1.1rem;border-radius:8px;border:2px solid var(--rose-light);
+        width:100%;max-width:300px;box-sizing:border-box;margin-bottom:12px;text-transform:uppercase;
+      " onkeypress="if(event.key==='Enter') submitAnagram()">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <button class="btn btn-primary" onclick="submitAnagram()">Ответить</button>
+        <button class="btn btn-secondary" onclick="closeGame()">Закрыть</button>
+      </div>
+    </div>`;
+  document.getElementById('anagramInput').focus();
+}
+
+async function submitAnagram() {
+  if (anagramAnswered) return;
+  const userAnswer = document.getElementById('anagramInput').value.toUpperCase().trim();
+  const s = anagramState;
+
+  if (!userAnswer) {
+    showToast('Введи слово!');
+    return;
+  }
+
+  anagramAnswered = true;
+  if (userAnswer === s.word) {
+    unlockBadge('first_game');
+    await addScore('Слова из букв 📝', 9);
+    document.getElementById('gameContent').innerHTML += `
+      <div style="text-align:center;margin-top:16px">
+        <div style="font-size:1.1rem;font-weight:700;color:var(--rose);margin-bottom:12px">Правильно! +9 очков 🎉</div>
+        <button class="btn btn-primary" onclick="startAnagram()">Ещё слово</button>
+        <button class="btn btn-secondary" style="margin-left:8px" onclick="closeGame()">Закрыть</button>
+      </div>`;
+  } else {
+    document.getElementById('gameContent').innerHTML += `
+      <div style="text-align:center;margin-top:16px">
+        <div style="font-size:1rem;color:var(--soft);margin-bottom:12px">Не беда! Правильное слово: ${escapeHtml(s.word)} 💕</div>
+        <button class="btn btn-primary" onclick="startAnagram()">Попробовать снова</button>
+        <button class="btn btn-secondary" style="margin-left:8px" onclick="closeGame()">Закрыть</button>
+      </div>`;
+  }
+}
+
+async function startPairs() {
+  showGameLoading('💭 Найди пару', 'Придумываю вопрос...');
+  try {
+    const used = await db.from('used_pairs').select('question');
+    const usedQuestions = used.data ? used.data.map(r => r.question) : [];
+
+    const avoidStr = usedQuestions.length > 0 ? `\nУже использованные слова (не повторяй): ${usedQuestions.slice(-20).join(', ')}` : '';
+
+    const prompt = `Придумай интересное русское слово и 4 варианта ассоциаций/синонимов к нему.
+    ${avoidStr}
+    JSON format: {"word": "СЛОВО", "pairs": ["вариант1", "вариант2", "вариант3", "вариант4"], "correct": 0}
+    correct — индекс (0-3) правильного варианта. ОБЯЗАТЕЛЬНО число от 0 до 3.`;
+
+    const response = await callAI(prompt, true);
+    const q = JSON.parse(response);
+
+    if (!q.pairs || q.pairs.length !== 4 || typeof q.correct !== 'number' || q.correct < 0 || q.correct > 3) {
+      throw new Error('Invalid AI response structure');
+    }
+
+    pairsQuestion = q;
+    pairsAnswered = false;
+
+    await db.from('used_pairs').insert({ question: q.word, user_id: currentUser.id });
+    renderPairs();
+  } catch(e) {
+    console.error('Pairs game error:', e);
+    showToast('Ошибка при загрузке вопроса');
+  }
+}
+
+function renderPairs() {
+  const q = pairsQuestion;
+  document.getElementById('gameContent').innerHTML = `
+    <h3>💭 Найди пару</h3>
+    <p class="game-desc">Что это означает?</p>
+    <div style="text-align:center;margin:20px 0">
+      <div style="font-size:1.5rem;font-weight:700;color:var(--rose);margin-bottom:20px">${escapeHtml(q.word)}</div>
+      <div style="display:grid;grid-template-columns:1fr;gap:10px">
+        ${q.pairs.map((p, i) => `<button class="pair-opt" onclick="answerPair(${i})" style="
+          padding:16px;border-radius:8px;cursor:pointer;border:2px solid var(--rose-light);
+          background:var(--white);color:var(--dark);font-size:1rem;font-weight:600;
+          transition:all 0.3s;
+        ">${escapeHtml(p)}</button>`).join('')}
+      </div>
+    </div>`;
+}
+
+async function answerPair(idx) {
+  if (pairsAnswered) return;
+  pairsAnswered = true;
+  const q = pairsQuestion;
+  const btns = document.querySelectorAll('.pair-opt');
+
+  btns.forEach(b => b.style.pointerEvents = 'none');
+  btns[q.correct].style.background = '#4caf50';
+  btns[q.correct].style.borderColor = '#4caf50';
+  btns[q.correct].style.color = 'white';
+
+  if (idx !== q.correct) {
+    btns[idx].style.background = '#f44336';
+    btns[idx].style.borderColor = '#f44336';
+    btns[idx].style.color = 'white';
+  }
+
+  await new Promise(r => setTimeout(r, 800));
+
+  if (idx === q.correct) {
+    unlockBadge('first_game');
+    await addScore('Найди пару 💭', 7);
+    document.getElementById('gameContent').innerHTML += `
+      <div style="text-align:center;margin-top:16px">
+        <div style="font-size:1.1rem;font-weight:700;color:var(--rose);margin-bottom:12px">Правильно! +7 очков 🎉</div>
+        <button class="btn btn-primary" onclick="startPairs()">Ещё пару</button>
+        <button class="btn btn-secondary" style="margin-left:8px" onclick="closeGame()">Закрыть</button>
+      </div>`;
+  } else {
+    document.getElementById('gameContent').innerHTML += `
+      <div style="text-align:center;margin-top:16px">
+        <div style="font-size:1rem;color:var(--soft);margin-bottom:12px">Не беда! Правильно: ${escapeHtml(q.pairs[q.correct])} 💕</div>
+        <button class="btn btn-primary" onclick="startPairs()">Попробовать снова</button>
+        <button class="btn btn-secondary" style="margin-left:8px" onclick="closeGame()">Закрыть</button>
+      </div>`;
+  }
+}
+
+
+function startTicTacToe() {
+  ticTacToeBoard = Array(9).fill('');
+  ticTacToeGameOver = false;
+  ticTacToeWon = null;
+  ticTacToeAITurn = false;
+  renderTicTacToe();
+}
+
+function renderTicTacToe() {
+  const board = ticTacToeBoard;
+
+  document.getElementById('gameContent').innerHTML = `
+    <h3>❌⭕ Крестики-нолики</h3>
+    <p class="game-desc">Ты - X, ИИ - O</p>
+    <div style="display:grid;grid-template-columns:repeat(3,80px);gap:8px;margin:20px auto;width:fit-content">
+      ${board.map((cell, idx) => `
+        <button onclick="makeMove(${idx})" style="
+          width:80px;height:80px;font-size:2rem;border:2px solid var(--rose);
+          background:var(--white);cursor:pointer;border-radius:8px;
+          transition:all 0.3s;${cell ? 'pointer-events:none;' : ''}
+          color:${cell === 'X' ? '#f44336' : '#2196f3'};font-weight:bold;
+        ">${cell}</button>
+      `).join('')}
+    </div>
+    ${ticTacToeGameOver ? `
+      <div style="text-align:center;margin-top:16px">
+        <div style="font-size:1.1rem;font-weight:700;color:var(--rose);margin-bottom:12px">
+          ${ticTacToeWon === 'X' ? '🎉 Ты выиграл!' : ticTacToeWon === 'O' ? '🤖 ИИ выиграла!' : '🤝 Ничья!'}
+        </div>
+        <button class="btn btn-primary" onclick="startTicTacToe()">Ещё раз</button>
+        <button class="btn btn-secondary" style="margin-left:8px" onclick="closeGame()">Закрыть</button>
+      </div>
+    ` : ''}`;
+}
+
+async function makeMove(idx) {
+  if (ticTacToeGameOver || ticTacToeBoard[idx] !== '' || ticTacToeAITurn) return;
+
+  ticTacToeAITurn = true;
+  ticTacToeBoard[idx] = 'X';
+  renderTicTacToe();
+
+  let winner = checkWinner(ticTacToeBoard);
+  if (winner) {
+    ticTacToeWon = winner;
+    ticTacToeGameOver = true;
+    if (winner === 'X') {
+      unlockBadge('first_game');
+      await addScore('Крестики-нолики ❌⭕', 8);
+    }
+    renderTicTacToe();
+    return;
+  }
+
+  if (!ticTacToeBoard.includes('')) {
+    ticTacToeWon = null;
+    ticTacToeGameOver = true;
+    ticTacToeAITurn = false;
+    renderTicTacToe();
+    return;
+  }
+
+  await new Promise(r => setTimeout(r, 500));
+  makeAIMove();
+  renderTicTacToe();
+
+  winner = checkWinner(ticTacToeBoard);
+  if (winner === 'O') {
+    ticTacToeWon = 'O';
+    ticTacToeGameOver = true;
+  } else if (!ticTacToeBoard.includes('')) {
+    ticTacToeWon = null;
+    ticTacToeGameOver = true;
+  }
+  ticTacToeAITurn = false;
+  if (ticTacToeGameOver) renderTicTacToe();
+}
+
+function makeAIMove() {
+  const board = ticTacToeBoard;
+  const empty = board.map((c, i) => c === '' ? i : -1).filter(i => i !== -1);
+
+  if (!empty.length) return;
+
+  // Проверяем может ли ИИ выиграть за один ход
+  let move = empty.find(i => {
+    const test = [...board];
+    test[i] = 'O';
+    return checkWinner(test) === 'O';
+  });
+  // Блокируем выигрыш игрока
+  if (move === undefined) {
+    move = empty.find(i => {
+      const test = [...board];
+      test[i] = 'X';
+      return checkWinner(test) === 'X';
+    });
+  }
+  // Центр, если свободен
+  if (move === undefined && board[4] === '') move = 4;
+  // Случайный ход
+  if (move === undefined) {
+    move = empty[Math.floor(Math.random() * empty.length)];
+  }
+
+  if (move !== undefined) {
+    ticTacToeBoard[move] = 'O';
+  }
+}
+
+function findBestMove(board) {
+  let bestScore = -Infinity;
+  let bestMove = 0;
+  const empty = board.map((c, i) => c === '' ? i : -1).filter(i => i !== -1);
+
+  for (let i of empty) {
+    const test = [...board];
+    test[i] = 'O';
+    const score = minimax(test, 0, false);
+    if (score > bestScore) {
+      bestScore = score;
+      bestMove = i;
+    }
+  }
+  return bestMove;
+}
+
+function minimax(board, depth, isMax) {
+  const winner = checkWinner(board);
+  if (winner === 'O') return 10 - depth;
+  if (winner === 'X') return depth - 10;
+  if (!board.includes('')) return 0;
+
+  if (isMax) {
+    let bestScore = -Infinity;
+    for (let i = 0; i < 9; i++) {
+      if (board[i] === '') {
+        board[i] = 'O';
+        const score = minimax(board, depth + 1, false);
+        board[i] = '';
+        bestScore = Math.max(score, bestScore);
+      }
+    }
+    return bestScore;
+  } else {
+    let bestScore = Infinity;
+    for (let i = 0; i < 9; i++) {
+      if (board[i] === '') {
+        board[i] = 'X';
+        const score = minimax(board, depth + 1, true);
+        board[i] = '';
+        bestScore = Math.min(score, bestScore);
+      }
+    }
+    return bestScore;
+  }
+}
+
+function checkWinner(board) {
+  const lines = [
+    [0, 1, 2], [3, 4, 5], [6, 7, 8],
+    [0, 3, 6], [1, 4, 7], [2, 5, 8],
+    [0, 4, 8], [2, 4, 6]
+  ];
+  for (let line of lines) {
+    const [a, b, c] = line;
+    if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+      return board[a];
+    }
+  }
+  return null;
 }
 
 function showToast(msg) {
