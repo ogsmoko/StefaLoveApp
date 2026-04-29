@@ -995,7 +995,7 @@
       <button class="palette-swatch" data-palette="sunset" style="background:#e8795f" title="Закат" onclick="setPalette('sunset')"></button>
     </div>
   </div>
-  <button class="theme-btn" onclick="toggleLang()" id="langBtn" title="Switch language" style="font-size:0.75rem;font-weight:700;letter-spacing:0.5px">RU</button>
+  <button class="theme-btn" onclick="toggleLang()" id="langBtn" title="Switch language" style="font-size:0.75rem;font-weight:700;letter-spacing:0.5px;background:var(--rose);color:white;border:2px solid var(--rose);min-width:48px">RU</button>
   <button class="logout-btn" onclick="doLogout()" data-i18n="logout">↪ Выйти</button>
   <div class="header-hearts">💖 ✨ 💖</div>
   <h1><span data-i18n="greeting_prefix">Привет, </span><span id="userGreeting">Стефания</span>!</h1>
@@ -1038,10 +1038,10 @@
         <button class="mood-btn" data-mood="игривое" onclick="selectMood(this)" data-i18n="mood_playful">🎉 Игривое</button>
       </div>
       <div class="compliment-box" id="complimentBox">
-        <p class="compliment-text" id="complimentText" data-i18n="compliments_initial">Нажми кнопку ниже, чтобы получить комплимент 💕</p>
+        <p class="compliment-text" id="complimentText">Нажми кнопку ниже, чтобы получить комплимент 💕</p>
       </div>
       <div style="text-align:center">
-        <button class="btn btn-primary" onclick="getCompliment()" id="complimentBtn" data-i18n="compliments_btn">
+        <button class="btn btn-primary" onclick="getCompliment()" id="complimentBtn" data-i18n="compliments_btn" style="white-space:nowrap">
           💖 Получить комплимент
         </button>
       </div>
@@ -1725,7 +1725,7 @@ ${usedList.length ? usedList.map((q, i) => `${i+1}. ${q}`).join('\n') : '(пок
   } catch (e) {
     console.error('Trivia gen failed:', e);
     document.getElementById('gameContent').innerHTML = `
-      <h3>🧠 Викторина</h3>
+      <h3>${t('trivia_title')}</h3>
       <div style="text-align:center;padding:24px 0">
         <div style="font-size:2.5rem;margin-bottom:12px">😢</div>
         <div style="color:var(--soft);margin-bottom:20px">${t('trivia_fail')}</div>
@@ -1738,7 +1738,7 @@ ${usedList.length ? usedList.map((q, i) => `${i+1}. ${q}`).join('\n') : '(пок
 function renderTriviaQ() {
   const q = triviaCurrent;
   document.getElementById('gameContent').innerHTML = `
-    <h3>🧠 Викторина</h3>
+    <h3>${t('trivia_title')}</h3>
     <p class="game-desc">${t('trivia_desc')}</p>
     <div class="trivia-question">${escapeHtml(q.q)}</div>
     <div class="trivia-options">
@@ -1815,7 +1815,7 @@ ${usedList.length ? usedList.join(', ') : '(пока нет)'}
   } catch (e) {
     console.error('Word gen failed:', e);
     document.getElementById('gameContent').innerHTML = `
-      <h3>🔤 Угадай слово</h3>
+      <h3>${t('word_title')}</h3>
       <div style="text-align:center;padding:24px 0">
         <div style="font-size:2.5rem;margin-bottom:12px">😢</div>
         <div style="color:var(--soft);margin-bottom:20px">${t('word_fail')}</div>
@@ -1830,7 +1830,7 @@ function renderWord() {
   const display = word.split('').map(l => guessed.includes(l) ? l : '▢').join(' ');
   const alphabet = 'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ'.split('');
   document.getElementById('gameContent').innerHTML = `
-    <h3>🔤 Угадай слово</h3>
+    <h3>${t('word_title')}</h3>
     <p class="game-desc">${t('word_desc')}</p>
     <div class="hangman-lives">${'❤️'.repeat(lives)}${'🖤'.repeat(6-lives)}</div>
     <div class="word-display">${display}</div>
@@ -1853,7 +1853,7 @@ async function guessLetter(letter) {
     unlockBadge('word_win');
     await addScore('Угадай слово 🔤', 8);
     document.getElementById('gameContent').innerHTML = `
-      <h3>🔤 Угадай слово</h3>
+      <h3>${t('word_title')}</h3>
       <div style="text-align:center;padding:24px 0">
         <div style="font-size:3rem;margin-bottom:12px">🎉</div>
         <div style="font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--rose);letter-spacing:8px;margin-bottom:8px">${word}</div>
@@ -1866,7 +1866,7 @@ async function guessLetter(letter) {
 
   if (wordState.lives === 0) {
     document.getElementById('gameContent').innerHTML = `
-      <h3>🔤 Угадай слово</h3>
+      <h3>${t('word_title')}</h3>
       <div style="text-align:center;padding:24px 0">
         <div style="font-size:3rem;margin-bottom:12px">😢</div>
         <div style="color:var(--soft);margin-bottom:8px">${t('word_was')}</div>
@@ -1899,7 +1899,7 @@ function startClicker() {
 
 function renderClicker() {
   document.getElementById('gameContent').innerHTML = `
-    <h3>💗 Тапалка</h3>
+    <h3>${t('clicker_title')}</h3>
     <p class="game-desc">${t('clicker_desc')}</p>
     <div class="clicker-area" style="position:relative">
       <div class="clicker-heart" id="clickerHeart" onclick="doClick(event)">💗</div>
@@ -1925,7 +1925,7 @@ async function finishClicker() {
   const pts = Math.floor(clickCount / 15);
   if (pts > 0) await addScore('Тапалка 💗', pts);
   document.getElementById('gameContent').innerHTML = `
-    <h3>💗 Тапалка</h3>
+    <h3>${t('clicker_title')}</h3>
     <div style="text-align:center;padding:24px 0">
       <div style="font-size:3rem;margin-bottom:12px">⏰</div>
       <div style="font-family:'Playfair Display',serif;font-size:2rem;color:var(--rose);margin-bottom:4px">${clickCount} ${t('clicker_taps')}</div>
@@ -1948,7 +1948,7 @@ function startMemory() {
 
 function renderMemory() {
   document.getElementById('gameContent').innerHTML = `
-    <h3>🃏 Мемори</h3>
+    <h3>${t('memory_title')}</h3>
     <p class="game-desc">${t('memory_desc')}</p>
     <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px" id="memGrid">
       ${memCards.map(c => `
@@ -2018,6 +2018,8 @@ const T = {
     mood_inspiring:'⭐ Вдохновляющее', mood_playful:'🎉 Игривое',
     compliments_initial:'Нажми кнопку ниже, чтобы получить комплимент 💕',
     compliments_btn:'💖 Получить комплимент',
+    trivia_title:'🧠 Викторина', word_title:'🔤 Угадай слово', clicker_title:'💗 Тапалка', memory_title:'🃏 Мемори',
+    colors_title:'🌈 Цветовая игра', anagram_title:'📝 Слова из букв', pairs_title:'💭 Найди пару', ttt_title:'❌⭕ Крестики-нолики',
     sec_wishes:'✨ Мои хотелки', wishes_placeholder:'Чего ты хочешь? 🌟',
     wishes_add:'+ Добавить', wishes_empty:'Пока нет хотелок.<br>Добавь первую!',
     sec_games:'🎮 Мини-игры', games_desc:'Играй и зарабатывай очки для призов! 🏆',
@@ -2065,6 +2067,8 @@ const T = {
     mood_inspiring:'⭐ Inspiring', mood_playful:'🎉 Playful',
     compliments_initial:'Press the button below to get a compliment 💕',
     compliments_btn:'💖 Get compliment',
+    trivia_title:'🧠 Trivia', word_title:'🔤 Guess the word', clicker_title:'💗 Tapper', memory_title:'🃏 Memory',
+    colors_title:'🌈 Color game', anagram_title:'📝 Word from letters', pairs_title:'💭 Find the pair', ttt_title:'❌⭕ Tic-tac-toe',
     sec_wishes:'✨ My wishlist', wishes_placeholder:'What do you want? 🌟',
     wishes_add:'+ Add', wishes_empty:'No wishes yet.<br>Add the first one!',
     sec_games:'🎮 Mini-games', games_desc:'Play and earn points for prizes! 🏆',
@@ -2108,6 +2112,12 @@ function setLang(lang) { currentLang = lang; localStorage.setItem('lang', lang);
 function applyLang() {
   document.querySelectorAll('[data-i18n]').forEach(el => { el.innerHTML = t(el.dataset.i18n); });
   document.querySelectorAll('[data-i18n-placeholder]').forEach(el => { el.placeholder = t(el.dataset.i18nPlaceholder); });
+  const complimentText = document.getElementById('complimentText');
+  if (complimentText && complimentText.textContent === complimentText.textContent.trim()) {
+    if (complimentText.textContent.includes('Нажми') || complimentText.textContent.includes('Press')) {
+      complimentText.textContent = t('compliments_initial');
+    }
+  }
   const btn = document.getElementById('langBtn');
   if (btn) btn.textContent = currentLang === 'ru' ? 'EN' : 'RU';
 }
@@ -2171,7 +2181,7 @@ async function startColors() {
 function renderColors() {
   const q = colorsCurrent;
   document.getElementById('gameContent').innerHTML = `
-    <h3>🌈 Цветовая игра</h3>
+    <h3>${t('colors_title')}</h3>
     <p class="game-desc">${escapeHtml(q.question)}</p>
     <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:20px">
       ${q.colors.map((c, i) => `<button class="color-opt" onclick="answerColor(${i})" style="
@@ -2255,7 +2265,7 @@ async function startAnagram() {
 function renderAnagram(shuffled) {
   const s = anagramState;
   document.getElementById('gameContent').innerHTML = `
-    <h3>📝 Слова из букв</h3>
+    <h3>${t('anagram_title')}</h3>
     <p class="game-desc">${t('anagram_desc')}</p>
     <div style="text-align:center;margin-top:16px">
       <div style="font-size:1.5rem;letter-spacing:4px;font-weight:700;margin-bottom:12px;color:var(--rose);font-family:monospace">${escapeHtml(shuffled)}</div>
@@ -2342,7 +2352,7 @@ async function startPairs() {
 function renderPairs() {
   const q = pairsQuestion;
   document.getElementById('gameContent').innerHTML = `
-    <h3>💭 Найди пару</h3>
+    <h3>${t('pairs_title')}</h3>
     <p class="game-desc">${escapeHtml(q.task || t('pairs_default'))}</p>
     <div style="text-align:center;margin:20px 0">
       <div style="font-size:1.5rem;font-weight:700;color:var(--rose);margin-bottom:20px">${escapeHtml(q.word)}</div>
@@ -2408,7 +2418,7 @@ function renderTicTacToe() {
   const board = ticTacToeBoard;
 
   document.getElementById('gameContent').innerHTML = `
-    <h3>❌⭕ Крестики-нолики</h3>
+    <h3>${t('ttt_title')}</h3>
     <p class="game-desc">${t('ttt_desc')}</p>
     <div style="display:grid;grid-template-columns:repeat(3,80px);gap:8px;margin:20px auto;width:fit-content">
       ${board.map((cell, idx) => `
