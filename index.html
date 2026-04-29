@@ -2013,9 +2013,10 @@ let ticTacToeAITurn = false;
 async function startColors() {
   showGameLoading('🌈 Цветовая игра', 'Придумываю вопрос...');
   try {
-    const used = await db.from('used_colors').select('question');
-    const usedList = used.data ? used.data.map(r => r.question) : [];
-    const avoidStr = usedList.length > 0 ? `\nУже использованные вопросы (не повторяй): ${usedList.slice(-20).join('; ')}` : '';
+    const { data: usedRows } = await db.from('used_colors').select('question')
+      .eq('user_id', currentUser.id).order('created_at', { ascending: false }).limit(20);
+    const usedList = usedRows ? usedRows.map(r => r.question) : [];
+    const avoidStr = usedList.length > 0 ? `\nУже использованные вопросы (не повторяй): ${usedList.join('; ')}` : '';
 
     const prompt = `Сгенерируй один оригинальный и интересный вопрос про цвета на русском языке.
     Вопрос должен быть нетривиальным и познавательным, например:
@@ -2031,7 +2032,7 @@ async function startColors() {
     correct — индекс (0-3) правильного ответа в массиве colors. ОБЯЗАТЕЛЬНО число от 0 до 3.`;
 
     const response = await callAI(prompt, true);
-    const q = JSON.parse(response);
+    const q = JSON.parse(response.replace(/```json|```/g, '').trim());
 
     if (!q.colors || q.colors.length !== 4 || typeof q.correct !== 'number' || q.correct < 0 || q.correct > 3) {
       throw new Error('Invalid AI response structure');
@@ -2103,17 +2104,20 @@ async function answerColor(idx) {
 async function startAnagram() {
   showGameLoading('📝 Слова из букв', 'Придумываю слово...');
   try {
-    const used = await db.from('used_anagrams').select('word');
-    const usedWords = used.data ? used.data.map(r => r.word) : [];
+    const { data: usedRows } = await db.from('used_anagrams').select('word')
+      .eq('user_id', currentUser.id).order('created_at', { ascending: false }).limit(20);
+    const usedWords = usedRows ? usedRows.map(r => r.word) : [];
+    const avoidStr = usedWords.length > 0 ? `\nУже использованные слова (не повторяй): ${usedWords.join(', ')}` : '';
 
-    const avoidStr = usedWords.length > 0 ? `\nУже использованные слова (не повторяй): ${usedWords.slice(-20).join(', ')}` : '';
-
-    const prompt = `Сгенерируй одно интересное русское слово (4-9 букв). Условия: только русские буквы, известное слово, нетривиальное.
+    const prompt = `Сгенерируй одно интересное русское слово для анаграммы (5-9 букв).
+    Слово должно быть: только русские буквы, общеизвестное, содержательное.
+    Предпочитай необычные, красивые слова: названия явлений природы, эмоций, профессий, предметов искусства.
+    Примеры хороших слов: РАДУГА, МЕЧТА, ЗАКАТ, ТАЙНА, БУРЯ, ПЛАМЯ, ВЕСНА, НЕЖНОСТЬ, ЗВЕЗДА, РАССВЕТ
     ${avoidStr}
-    JSON format: {"word": "СЛОВО", "hint": "короткая подсказка на русском"}`;
+    JSON format: {"word": "СЛОВО", "hint": "короткая поэтичная подсказка что это такое"}`;
 
     const response = await callAI(prompt, true);
-    const w = JSON.parse(response);
+    const w = JSON.parse(response.replace(/```json|```/g, '').trim());
 
     if (!/^[А-ЯЁ]+$/.test(w.word)) throw new Error('Invalid word');
 
@@ -2182,18 +2186,24 @@ async function submitAnagram() {
 async function startPairs() {
   showGameLoading('💭 Найди пару', 'Придумываю вопрос...');
   try {
-    const used = await db.from('used_pairs').select('question');
-    const usedQuestions = used.data ? used.data.map(r => r.question) : [];
+    const { data: usedRows } = await db.from('used_pairs').select('question')
+      .eq('user_id', currentUser.id).order('created_at', { ascending: false }).limit(20);
+    const usedQuestions = usedRows ? usedRows.map(r => r.question) : [];
+    const avoidStr = usedQuestions.length > 0 ? `\nУже использованные слова (не повторяй): ${usedQuestions.join(', ')}` : '';
 
-    const avoidStr = usedQuestions.length > 0 ? `\nУже использованные слова (не повторяй): ${usedQuestions.slice(-20).join(', ')}` : '';
-
-    const prompt = `Придумай интересное русское слово и 4 варианта ассоциаций/синонимов к нему.
+    const prompt = `Придумай интересное задание на ассоциацию. Дай одно слово и 4 варианта, только один из которых правильно к нему подходит.
+    Варианты задания могут быть разными:
+    - Синоним: "ГРУСТЬ" → правильный "ПЕЧАЛЬ", ложные: РАДОСТЬ, СМЕЛОСТЬ, СИЛА
+    - Антоним: "ТЁМНЫЙ" → правильный "СВЕТЛЫЙ", ложные: БОЛЬШОЙ, ТИХИЙ, БЫСТРЫЙ
+    - Ассоциация: "ОСЕНЬ" → правильный "ЛИСТОПАД", ложные: ЦВЕТЫ, СНЕГ, ЗНОЙ
+    - Что из чего: "ПЧЕЛА" → правильный "МЁД", ложные: МОЛОКО, ШЁЛК, ШЕРСТЬ
+    - Где живёт: "БОБЁР" → правильный "ПЛОТИНА", ложные: НОРА, ДУПЛО, ГНЕЗДО
     ${avoidStr}
-    JSON format: {"word": "СЛОВО", "pairs": ["вариант1", "вариант2", "вариант3", "вариант4"], "correct": 0}
+    JSON format: {"word": "СЛОВО", "task": "Найди [синоним/антоним/ассоциацию/...]", "pairs": ["вариант1", "вариант2", "вариант3", "вариант4"], "correct": 0}
     correct — индекс (0-3) правильного варианта. ОБЯЗАТЕЛЬНО число от 0 до 3.`;
 
     const response = await callAI(prompt, true);
-    const q = JSON.parse(response);
+    const q = JSON.parse(response.replace(/```json|```/g, '').trim());
 
     if (!q.pairs || q.pairs.length !== 4 || typeof q.correct !== 'number' || q.correct < 0 || q.correct > 3) {
       throw new Error('Invalid AI response structure');
@@ -2214,7 +2224,7 @@ function renderPairs() {
   const q = pairsQuestion;
   document.getElementById('gameContent').innerHTML = `
     <h3>💭 Найди пару</h3>
-    <p class="game-desc">Что это означает?</p>
+    <p class="game-desc">${escapeHtml(q.task || 'Найди подходящую пару')}</p>
     <div style="text-align:center;margin:20px 0">
       <div style="font-size:1.5rem;font-weight:700;color:var(--rose);margin-bottom:20px">${escapeHtml(q.word)}</div>
       <div style="display:grid;grid-template-columns:1fr;gap:10px">
@@ -2329,6 +2339,7 @@ async function makeMove(idx) {
   }
 
   await new Promise(r => setTimeout(r, 500));
+  if (currentGame !== 'tictactoe' || ticTacToeGameOver) { ticTacToeAITurn = false; return; }
   makeAIMove();
   renderTicTacToe();
 
