@@ -1103,7 +1103,7 @@
 
     <div class="card">
       <h2>📊 История игр</h2>
-      <div id="scoreHistory">
+      <div id="scoreHistory" style="max-height:320px;overflow-y:auto;">
         <div class="empty-state"><span class="empty-icon">🎮</span>Ещё нет игровой истории</div>
       </div>
     </div>
@@ -2009,6 +2009,7 @@ let ticTacToeBoard = ['','','','','','','','',''];
 let ticTacToeGameOver = false;
 let ticTacToeWon = null;
 let ticTacToeAITurn = false;
+let ticTacToeRound = 0;
 
 async function startColors() {
   showGameLoading('🌈 Цветовая игра', 'Придумываю вопрос...');
@@ -2205,7 +2206,7 @@ async function startPairs() {
     const response = await callAI(prompt, true);
     const q = JSON.parse(response.replace(/```json|```/g, '').trim());
 
-    if (!q.pairs || q.pairs.length !== 4 || typeof q.correct !== 'number' || q.correct < 0 || q.correct > 3) {
+    if (!q.word || typeof q.word !== 'string' || !q.pairs || q.pairs.length !== 4 || typeof q.correct !== 'number' || q.correct < 0 || q.correct > 3) {
       throw new Error('Invalid AI response structure');
     }
 
@@ -2281,6 +2282,7 @@ function startTicTacToe() {
   ticTacToeGameOver = false;
   ticTacToeWon = null;
   ticTacToeAITurn = false;
+  ticTacToeRound++;
   renderTicTacToe();
 }
 
@@ -2338,8 +2340,9 @@ async function makeMove(idx) {
     return;
   }
 
+  const round = ticTacToeRound;
   await new Promise(r => setTimeout(r, 500));
-  if (currentGame !== 'tictactoe' || ticTacToeGameOver) { ticTacToeAITurn = false; return; }
+  if (currentGame !== 'tictactoe' || ticTacToeGameOver || ticTacToeRound !== round) { ticTacToeAITurn = false; return; }
   makeAIMove();
   renderTicTacToe();
 
