@@ -1726,7 +1726,7 @@ async function answerTrivia(idx) {
       await addScore('Викторина 🧠', 5);
       document.getElementById('gameContent').innerHTML += `
         <div style="text-align:center;margin-top:16px">
-          <div style="font-size:1.1rem;font-weight:700;color:var(--rose);margin-bottom:12px">Правильно! +10 очков 🎉</div>
+          <div style="font-size:1.1rem;font-weight:700;color:var(--rose);margin-bottom:12px">Правильно! +5 очков 🎉</div>
           <button class="btn btn-primary" onclick="startVictoria()">Ещё вопрос</button>
           <button class="btn btn-secondary" style="margin-left:8px" onclick="closeGame()">Закрыть</button>
         </div>`;
@@ -1954,7 +1954,7 @@ async function flipCard(id) {
             <div style="text-align:center;padding:24px 0">
               <div style="font-size:3rem;margin-bottom:12px">🏆</div>
               <div style="font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--rose);margin-bottom:4px">Все пары найдены!</div>
-              <div style="color:var(--soft);margin-bottom:20px">+20 очков 🎉</div>
+              <div style="color:var(--soft);margin-bottom:20px">+10 очков 🎉</div>
               <button class="btn btn-primary" onclick="startMemory()">Играть снова</button>
               <button class="btn btn-secondary" style="margin-left:8px" onclick="closeGame()">Закрыть</button>
             </div>`;
