@@ -971,12 +971,12 @@
 <div class="login-screen" id="loginScreen">
   <div class="login-card">
     <div class="login-hearts">💖 ✨ 💖</div>
-    <h2>Привет, <span>любимая</span>!</h2>
-    <p>Войди в своё пространство 🌸</p>
-    <input class="login-input" type="email" id="loginEmail" placeholder="Email" autocomplete="email">
-    <input class="login-input" type="password" id="loginPassword" placeholder="Пароль" autocomplete="current-password"
+    <h2 data-i18n="login_title">Привет, <span>любимая</span>!</h2>
+    <p data-i18n="login_sub">Войди в своё пространство 🌸</p>
+    <input class="login-input" type="email" id="loginEmail" data-i18n-placeholder="login_email" placeholder="Email" autocomplete="email">
+    <input class="login-input" type="password" id="loginPassword" data-i18n-placeholder="login_password" placeholder="Пароль" autocomplete="current-password"
       onkeypress="if(event.key==='Enter') doLogin()">
-    <button class="btn btn-primary login-btn" onclick="doLogin()" id="loginBtn">💖 Войти</button>
+    <button class="btn btn-primary login-btn" onclick="doLogin()" id="loginBtn" data-i18n="login_btn">💖 Войти</button>
     <div class="login-error" id="loginError"></div>
   </div>
 </div>
@@ -984,15 +984,15 @@
 <div class="app-content" id="appContent">
 
 <header>
-  <button class="theme-btn" onclick="toggleTheme()" id="themeBtn" title="Сменить тему">🌙</button>
+  <button class="theme-btn" onclick="toggleTheme()" id="themeBtn" data-i18n-title="title_theme" title="Сменить тему">🌙</button>
   <div class="palette-wrap">
-    <button class="palette-btn" id="paletteBtn" onclick="togglePaletteMenu()" title="Сменить цвет приложения">🎨</button>
+    <button class="palette-btn" id="paletteBtn" onclick="togglePaletteMenu()" data-i18n-title="title_palette" title="Сменить цвет приложения">🎨</button>
     <div class="palette-dropdown" id="paletteDropdown">
-      <button class="palette-swatch" data-palette="default" style="background:#e8637a" title="Дефолтный" onclick="setPalette('default')"></button>
-      <button class="palette-swatch" data-palette="ocean" style="background:#4f8fd6" title="Океан" onclick="setPalette('ocean')"></button>
-      <button class="palette-swatch" data-palette="lavender" style="background:#9c6dde" title="Лаванда" onclick="setPalette('lavender')"></button>
-      <button class="palette-swatch" data-palette="mint" style="background:#3fbe9f" title="Мята" onclick="setPalette('mint')"></button>
-      <button class="palette-swatch" data-palette="sunset" style="background:#e8795f" title="Закат" onclick="setPalette('sunset')"></button>
+      <button class="palette-swatch" data-palette="default" style="background:#e8637a" data-i18n-title="palette_default" title="Дефолтный" onclick="setPalette('default')"></button>
+      <button class="palette-swatch" data-palette="ocean" style="background:#4f8fd6" data-i18n-title="palette_ocean" title="Океан" onclick="setPalette('ocean')"></button>
+      <button class="palette-swatch" data-palette="lavender" style="background:#9c6dde" data-i18n-title="palette_lavender" title="Лаванда" onclick="setPalette('lavender')"></button>
+      <button class="palette-swatch" data-palette="mint" style="background:#3fbe9f" data-i18n-title="palette_mint" title="Мята" onclick="setPalette('mint')"></button>
+      <button class="palette-swatch" data-palette="sunset" style="background:#e8795f" data-i18n-title="palette_sunset" title="Закат" onclick="setPalette('sunset')"></button>
     </div>
   </div>
   <button class="theme-btn" onclick="toggleLang()" id="langBtn" title="Switch language" style="font-size:0.75rem;font-weight:700;letter-spacing:0.5px;background:var(--rose);color:white;border:2px solid var(--rose);min-width:48px">RU</button>
@@ -1038,7 +1038,7 @@
         <button class="mood-btn" data-mood="игривое" onclick="selectMood(this)" data-i18n="mood_playful">🎉 Игривое</button>
       </div>
       <div class="compliment-box" id="complimentBox">
-        <p class="compliment-text" id="complimentText">Нажми кнопку ниже, чтобы получить комплимент 💕</p>
+        <p class="compliment-text" id="complimentText" data-i18n="compliments_initial">Нажми кнопку ниже, чтобы получить комплимент 💕</p>
       </div>
       <div style="text-align:center">
         <button class="btn btn-primary" onclick="getCompliment()" id="complimentBtn" data-i18n="compliments_btn" style="white-space:nowrap">
@@ -1069,43 +1069,43 @@
       <div class="games-grid">
         <div class="game-card" onclick="openGame('victoria')">
           <span class="game-icon">🧠</span>
-          <div class="game-name">Викторина</div>
-          <div class="game-pts">+5 очков за ответ</div>
+          <div class="game-name" data-i18n="game_card_trivia_name">Викторина</div>
+          <div class="game-pts" data-i18n="game_card_trivia_pts">+5 очков за ответ</div>
         </div>
         <div class="game-card" onclick="openGame('word')">
           <span class="game-icon">🔤</span>
-          <div class="game-name">Угадай слово</div>
-          <div class="game-pts">+8 очков за слово</div>
+          <div class="game-name" data-i18n="game_card_word_name">Угадай слово</div>
+          <div class="game-pts" data-i18n="game_card_word_pts">+8 очков за слово</div>
         </div>
         <div class="game-card" onclick="openGame('clicker')">
           <span class="game-icon">💗</span>
-          <div class="game-name">Тапалка</div>
-          <div class="game-pts">+1 очко за 15 тапов</div>
+          <div class="game-name" data-i18n="game_card_clicker_name">Тапалка</div>
+          <div class="game-pts" data-i18n="game_card_clicker_pts">+1 очко за 15 тапов</div>
         </div>
         <div class="game-card" onclick="openGame('memory')">
           <span class="game-icon">🃏</span>
-          <div class="game-name">Мемори</div>
-          <div class="game-pts">+10 очков за победу</div>
+          <div class="game-name" data-i18n="game_card_memory_name">Мемори</div>
+          <div class="game-pts" data-i18n="game_card_memory_pts">+10 очков за победу</div>
         </div>
         <div class="game-card" onclick="openGame('colors')">
           <span class="game-icon">🌈</span>
-          <div class="game-name">Цветовая игра</div>
-          <div class="game-pts">+4 очка за правильный ответ</div>
+          <div class="game-name" data-i18n="game_card_colors_name">Цветовая игра</div>
+          <div class="game-pts" data-i18n="game_card_colors_pts">+4 очка за правильный ответ</div>
         </div>
         <div class="game-card" onclick="openGame('anagram')">
           <span class="game-icon">📝</span>
-          <div class="game-name">Слова из букв</div>
-          <div class="game-pts">+9 очков за слово</div>
+          <div class="game-name" data-i18n="game_card_anagram_name">Слова из букв</div>
+          <div class="game-pts" data-i18n="game_card_anagram_pts">+9 очков за слово</div>
         </div>
         <div class="game-card" onclick="openGame('pairs')">
           <span class="game-icon">💭</span>
-          <div class="game-name">Найди пару</div>
-          <div class="game-pts">+7 очков за правильный выбор</div>
+          <div class="game-name" data-i18n="game_card_pairs_name">Найди пару</div>
+          <div class="game-pts" data-i18n="game_card_pairs_pts">+7 очков за правильный выбор</div>
         </div>
         <div class="game-card" onclick="openGame('tictactoe')">
           <span class="game-icon">❌⭕</span>
-          <div class="game-name">Крестики-нолики</div>
-          <div class="game-pts">+8 очков за победу</div>
+          <div class="game-name" data-i18n="game_card_ttt_name">Крестики-нолики</div>
+          <div class="game-pts" data-i18n="game_card_ttt_pts">+8 очков за победу</div>
         </div>
       </div>
     </div>
@@ -1135,18 +1135,18 @@
   <div class="section" id="sec-messages">
     <!-- Admin: create message form -->
     <div class="card" id="msgAdminCard" style="display:none">
-      <h2>💝 Создать сообщение для Стефы</h2>
+      <h2 data-i18n="msg_admin_title">💝 Создать сообщение для Стефы</h2>
       <div class="msg-form">
         <div class="msg-form-row">
-          <input type="text" id="msgEmoji" placeholder="Эмодзи 💌" maxlength="4" style="max-width:80px;text-align:center">
-          <input type="text" id="msgTitle" placeholder="Заголовок" maxlength="100">
+          <input type="text" id="msgEmoji" data-i18n-placeholder="msg_emoji_ph" placeholder="Эмодзи 💌" maxlength="4" style="max-width:80px;text-align:center">
+          <input type="text" id="msgTitle" data-i18n-placeholder="msg_title_ph" placeholder="Заголовок" maxlength="100">
         </div>
-        <textarea id="msgContent" placeholder="Напиши что-то тёплое и красивое..." maxlength="2000"></textarea>
+        <textarea id="msgContent" data-i18n-placeholder="msg_content_ph" placeholder="Напиши что-то тёплое и красивое..." maxlength="2000"></textarea>
         <div class="msg-form-row">
-          <input type="datetime-local" id="msgDate" title="Когда показать">
-          <button class="btn btn-primary" onclick="sendLoveMsg()">💌 Отправить</button>
+          <input type="datetime-local" id="msgDate" data-i18n-title="msg_date_title" title="Когда показать">
+          <button class="btn btn-primary" onclick="sendLoveMsg()" data-i18n="msg_send">💌 Отправить</button>
         </div>
-        <p style="color:var(--soft);font-size:0.78rem">Оставь дату пустой — сообщение появится сразу. Или выбери дату и оно появится в нужный день.</p>
+        <p style="color:var(--soft);font-size:0.78rem" data-i18n="msg_form_help">Оставь дату пустой — сообщение появится сразу. Или выбери дату и оно появится в нужный день.</p>
       </div>
       <div id="adminMsgList"></div>
     </div>
@@ -1264,53 +1264,50 @@ function isAdmin() {
 }
 
 const SHOP_CATEGORIES = [
-  { id: 'kisses',     name: '💋 Нежность' },
-  { id: 'sweets',     name: '🍬 Вкусняшки' },
-  { id: 'activities', name: '🎉 Активности' },
-  { id: 'special',    name: '✨ Особые' },
+  { id: 'kisses',     ru: '💋 Нежность',   en: '💋 Tenderness' },
+  { id: 'sweets',     ru: '🍬 Вкусняшки',  en: '🍬 Treats' },
+  { id: 'activities', ru: '🎉 Активности', en: '🎉 Activities' },
+  { id: 'special',    ru: '✨ Особые',     en: '✨ Special' },
 ];
 
 const SHOP_ITEMS = [
-  // Нежность
-  { id: 'kiss',      cat: 'kisses',     emoji: '💋',  name: 'Поцелуйчик',         desc: 'Один сладкий поцелуй',              pts: 10 },
-  { id: 'hug',       cat: 'kisses',     emoji: '🤗',  name: 'Обнимашки',           desc: 'Долгие крепкие объятия',            pts: 15 },
-  { id: 'walk',      cat: 'kisses',     emoji: '🌙',  name: 'Вечерняя прогулка',   desc: 'Романтическая прогулка за ручку',   pts: 30 },
-  { id: 'massage15', cat: 'kisses',     emoji: '💆',  name: 'Массаж 15 мин',       desc: 'Приятный расслабляющий массаж',     pts: 55 },
-  { id: 'massage30', cat: 'kisses',     emoji: '💆‍♀️', name: 'Массаж 30 мин',       desc: 'Долгий расслабляющий массаж',       pts: 95 },
-  // Вкусняшки
-  { id: 'choco',     cat: 'sweets',     emoji: '🍫',  name: 'Шоколадка',           desc: 'Любимая шоколадка',                 pts: 25 },
-  { id: 'icecream',  cat: 'sweets',     emoji: '🍦',  name: 'Мороженое',           desc: 'Шарик любого вкуса',                pts: 30 },
-  { id: 'cupcake',   cat: 'sweets',     emoji: '🧁',  name: 'Капкейки',            desc: 'Два капкейка из кофейни',           pts: 45 },
-  { id: 'cake',      cat: 'sweets',     emoji: '🎂',  name: 'Торт',                desc: 'Торт на заказ',                     pts: 120 },
-  // Активности
-  { id: 'cafe',      cat: 'activities', emoji: '☕',  name: 'Свидание в кафе',     desc: 'Кофе и вкусняшка вместе',           pts: 90 },
-  { id: 'cinema',    cat: 'activities', emoji: '🎬',  name: 'Кино',                desc: 'Любой фильм по твоему выбору',      pts: 160 },
-  { id: 'bowling',   cat: 'activities', emoji: '🎳',  name: 'Боулинг',             desc: 'Весёлый вечер в боулинге',          pts: 210 },
-  { id: 'shopping',  cat: 'activities', emoji: '🛍️',  name: 'Шоппинг',             desc: 'Мини-шоппинг вместе',               pts: 270 },
-  // Особые
-  { id: 'flowers',   cat: 'special',    emoji: '🌹',  name: 'Букет цветов',        desc: 'Красивый букет от меня',            pts: 85 },
-  { id: 'bigflowers',cat: 'special',    emoji: '💐',  name: 'Большой букет',       desc: 'Шикарный большой букет',            pts: 200 },
-  { id: 'restaurant',cat: 'special',    emoji: '🍽️',  name: 'Ужин в ресторане',   desc: 'Романтический ужин вдвоём',         pts: 370 },
-  { id: 'spa',       cat: 'special',    emoji: '🧖‍♀️', name: 'СПА день',           desc: 'День полного расслабления',         pts: 520 },
-  { id: 'trip',      cat: 'special',    emoji: '✈️',  name: 'Путешествие',         desc: 'Мини-путешествие вдвоём',           pts: 1000 },
+  { id:'kiss',       cat:'kisses',     emoji:'💋',   pts:10,   ru:{name:'Поцелуйчик',       desc:'Один сладкий поцелуй'},          en:{name:'Kiss',           desc:'One sweet kiss'} },
+  { id:'hug',        cat:'kisses',     emoji:'🤗',   pts:15,   ru:{name:'Обнимашки',         desc:'Долгие крепкие объятия'},        en:{name:'Hug',            desc:'A long tight hug'} },
+  { id:'walk',       cat:'kisses',     emoji:'🌙',   pts:30,   ru:{name:'Вечерняя прогулка', desc:'Романтическая прогулка за ручку'}, en:{name:'Evening walk',   desc:'Romantic hand-in-hand walk'} },
+  { id:'massage15',  cat:'kisses',     emoji:'💆',   pts:55,   ru:{name:'Массаж 15 мин',     desc:'Приятный расслабляющий массаж'}, en:{name:'15-min massage', desc:'A nice relaxing massage'} },
+  { id:'massage30',  cat:'kisses',     emoji:'💆‍♀️',  pts:95,   ru:{name:'Массаж 30 мин',     desc:'Долгий расслабляющий массаж'},   en:{name:'30-min massage', desc:'A long relaxing massage'} },
+  { id:'choco',      cat:'sweets',     emoji:'🍫',   pts:25,   ru:{name:'Шоколадка',         desc:'Любимая шоколадка'},             en:{name:'Chocolate bar',  desc:'Your favourite chocolate'} },
+  { id:'icecream',   cat:'sweets',     emoji:'🍦',   pts:30,   ru:{name:'Мороженое',         desc:'Шарик любого вкуса'},            en:{name:'Ice cream',      desc:'A scoop of any flavour'} },
+  { id:'cupcake',    cat:'sweets',     emoji:'🧁',   pts:45,   ru:{name:'Капкейки',          desc:'Два капкейка из кофейни'},       en:{name:'Cupcakes',       desc:'Two cupcakes from the cafe'} },
+  { id:'cake',       cat:'sweets',     emoji:'🎂',   pts:120,  ru:{name:'Торт',              desc:'Торт на заказ'},                 en:{name:'Cake',           desc:'A custom cake'} },
+  { id:'cafe',       cat:'activities', emoji:'☕',   pts:90,   ru:{name:'Свидание в кафе',   desc:'Кофе и вкусняшка вместе'},       en:{name:'Cafe date',      desc:'Coffee and a treat together'} },
+  { id:'cinema',     cat:'activities', emoji:'🎬',   pts:160,  ru:{name:'Кино',              desc:'Любой фильм по твоему выбору'},  en:{name:'Cinema',         desc:'Any movie of your choice'} },
+  { id:'bowling',    cat:'activities', emoji:'🎳',   pts:210,  ru:{name:'Боулинг',           desc:'Весёлый вечер в боулинге'},      en:{name:'Bowling',        desc:'A fun bowling night'} },
+  { id:'shopping',   cat:'activities', emoji:'🛍️',   pts:270,  ru:{name:'Шоппинг',           desc:'Мини-шоппинг вместе'},           en:{name:'Shopping',       desc:'Mini shopping together'} },
+  { id:'flowers',    cat:'special',    emoji:'🌹',   pts:85,   ru:{name:'Букет цветов',      desc:'Красивый букет от меня'},        en:{name:'Bouquet',        desc:'A beautiful bouquet from me'} },
+  { id:'bigflowers', cat:'special',    emoji:'💐',   pts:200,  ru:{name:'Большой букет',     desc:'Шикарный большой букет'},        en:{name:'Big bouquet',    desc:'A gorgeous big bouquet'} },
+  { id:'restaurant', cat:'special',    emoji:'🍽️',   pts:370,  ru:{name:'Ужин в ресторане',  desc:'Романтический ужин вдвоём'},     en:{name:'Restaurant dinner', desc:'A romantic dinner for two'} },
+  { id:'spa',        cat:'special',    emoji:'🧖‍♀️',  pts:520,  ru:{name:'СПА день',          desc:'День полного расслабления'},     en:{name:'Spa day',        desc:'A full day of relaxation'} },
+  { id:'trip',       cat:'special',    emoji:'✈️',   pts:1000, ru:{name:'Путешествие',       desc:'Мини-путешествие вдвоём'},       en:{name:'Trip',           desc:'A mini trip together'} },
 ];
+function L(obj) { return obj[currentLang] || obj.ru; }
 
 let shopCategory = 'kisses';
 
 const BADGES = [
-  { key: 'first_compliment', emoji: '💌', name: 'Первый комплимент', desc: 'Получила первый комплимент' },
-  { key: 'all_moods',        emoji: '🌈', name: 'Все настроения',    desc: 'Попробовала все 5 настроений' },
-  { key: 'first_wish',       emoji: '✨', name: 'Первая хотелка',    desc: 'Добавила первую хотелку' },
-  { key: 'wish_done',        emoji: '✅', name: 'Мечта сбылась',     desc: 'Отметила хотелку выполненной' },
-  { key: 'first_game',       emoji: '🎮', name: 'Первая игра',       desc: 'Сыграла в первую мини-игру' },
-  { key: 'trivia_correct',   emoji: '🧠', name: 'Умница',            desc: 'Правильно ответила в викторине' },
-  { key: 'word_win',         emoji: '🔤', name: 'Словоплёт',         desc: 'Угадала слово в игре' },
-  { key: 'memory_win',       emoji: '🃏', name: 'Острая память',     desc: 'Нашла все пары в мемори' },
-  { key: 'clicker_master',   emoji: '💗', name: 'Тап-мастер',        desc: '50+ тапов за одну игру' },
-  { key: 'pts_100',          emoji: '⭐', name: '100 очков',          desc: 'Набрала 100 очков' },
-  { key: 'pts_500',          emoji: '🌟', name: '500 очков',          desc: 'Набрала 500 очков' },
-  { key: 'pts_1000',         emoji: '🏆', name: '1000 очков',         desc: 'Набрала 1000 очков' },
-  { key: 'first_letter',     emoji: '💝', name: 'Любимое письмо',    desc: 'Прочитала письмо от любимого' },
+  { key:'first_compliment', emoji:'💌', ru:{name:'Первый комплимент', desc:'Получила первый комплимент'},   en:{name:'First compliment', desc:'Got your first compliment'} },
+  { key:'all_moods',        emoji:'🌈', ru:{name:'Все настроения',    desc:'Попробовала все 5 настроений'}, en:{name:'All moods',        desc:'Tried all 5 moods'} },
+  { key:'first_wish',       emoji:'✨', ru:{name:'Первая хотелка',    desc:'Добавила первую хотелку'},      en:{name:'First wish',       desc:'Added your first wish'} },
+  { key:'wish_done',        emoji:'✅', ru:{name:'Мечта сбылась',     desc:'Отметила хотелку выполненной'}, en:{name:'Wish came true',   desc:'Marked a wish as done'} },
+  { key:'first_game',       emoji:'🎮', ru:{name:'Первая игра',       desc:'Сыграла в первую мини-игру'},   en:{name:'First game',       desc:'Played your first mini-game'} },
+  { key:'trivia_correct',   emoji:'🧠', ru:{name:'Умница',            desc:'Правильно ответила в викторине'}, en:{name:'Smart cookie',   desc:'Got a trivia answer right'} },
+  { key:'word_win',         emoji:'🔤', ru:{name:'Словоплёт',         desc:'Угадала слово в игре'},         en:{name:'Wordsmith',        desc:'Guessed the word in the game'} },
+  { key:'memory_win',       emoji:'🃏', ru:{name:'Острая память',     desc:'Нашла все пары в мемори'},      en:{name:'Sharp memory',     desc:'Found all pairs in Memory'} },
+  { key:'clicker_master',   emoji:'💗', ru:{name:'Тап-мастер',        desc:'50+ тапов за одну игру'},       en:{name:'Tap master',       desc:'50+ taps in one game'} },
+  { key:'pts_100',          emoji:'⭐', ru:{name:'100 очков',          desc:'Набрала 100 очков'},            en:{name:'100 points',       desc:'Reached 100 points'} },
+  { key:'pts_500',          emoji:'🌟', ru:{name:'500 очков',          desc:'Набрала 500 очков'},            en:{name:'500 points',       desc:'Reached 500 points'} },
+  { key:'pts_1000',         emoji:'🏆', ru:{name:'1000 очков',         desc:'Набрала 1000 очков'},           en:{name:'1000 points',      desc:'Reached 1000 points'} },
+  { key:'first_letter',     emoji:'💝', ru:{name:'Любимое письмо',    desc:'Прочитала письмо от любимого'}, en:{name:'Beloved letter',   desc:'Read a letter from your love'} },
 ];
 
 let unlockedBadges = new Set();
@@ -1336,13 +1333,14 @@ function renderAchievements() {
   const stats = document.getElementById('achievementStats');
   if (!grid) return;
   const unlocked = BADGES.filter(b => unlockedBadges.has(b.key)).length;
-  if (stats) stats.textContent = `Открыто ${unlocked} из ${BADGES.length} достижений`;
+  if (stats) stats.textContent = tf('achievement_stats', unlocked, BADGES.length);
   grid.innerHTML = BADGES.map(b => {
     const isUnlocked = unlockedBadges.has(b.key);
+    const loc = L(b);
     return `<div class="achievement-item ${isUnlocked ? 'unlocked' : 'locked'}">
       <span class="achievement-emoji">${b.emoji}</span>
-      <div class="achievement-name">${b.name}</div>
-      <div class="achievement-desc">${isUnlocked ? b.desc : '???'}</div>
+      <div class="achievement-name">${loc.name}</div>
+      <div class="achievement-desc">${isUnlocked ? loc.desc : '???'}</div>
     </div>`;
   }).join('');
 }
@@ -1351,7 +1349,7 @@ let achievementToastTimer = null;
 function showAchievementToast(badge) {
   const el = document.getElementById('achievementToast');
   const content = document.getElementById('achievementToastContent');
-  content.innerHTML = `<div style="font-size:1.5rem;margin-bottom:4px">${badge.emoji}</div><div style="font-size:0.75rem;opacity:0.9">Достижение открыто!</div><div style="font-weight:700;margin-top:2px">${badge.name}</div>`;
+  content.innerHTML = `<div style="font-size:1.5rem;margin-bottom:4px">${badge.emoji}</div><div style="font-size:0.75rem;opacity:0.9">${t('achievement_unlocked')}</div><div style="font-weight:700;margin-top:2px">${L(badge).name}</div>`;
   el.classList.add('show');
   if (achievementToastTimer) clearTimeout(achievementToastTimer);
   achievementToastTimer = setTimeout(() => el.classList.remove('show'), 3500);
@@ -1383,9 +1381,9 @@ function showApp() {
   const email = currentUser.email || '';
   let name;
   if (isAdmin()) {
-    name = 'любимый';
+    name = t('name_admin');
   } else if (email.toLowerCase().includes('stef')) {
-    name = 'Стефания';
+    name = t('name_stefa');
   } else {
     name = email.split('@')[0];
   }
@@ -1404,20 +1402,20 @@ async function doLogin() {
   const btn = document.getElementById('loginBtn');
 
   if (!email || !password) {
-    errEl.textContent = 'Введи email и пароль';
+    errEl.textContent = t('login_err_empty');
     return;
   }
 
   btn.disabled = true;
-  btn.textContent = '⏳ Вход...';
+  btn.textContent = t('login_progress');
   errEl.textContent = '';
 
   const { data, error } = await db.auth.signInWithPassword({ email, password });
 
   if (error) {
-    errEl.textContent = 'Неверный email или пароль 💔';
+    errEl.textContent = t('login_err_wrong');
     btn.disabled = false;
-    btn.textContent = '💖 Войти';
+    btn.textContent = t('login_btn');
     return;
   }
 
@@ -1487,14 +1485,14 @@ async function addScore(game, pts) {
   if (totalScore >= 1000) unlockBadge('pts_1000');
   updateScoreUI();
   await loadScoreHistory();
-  showToast(`+${pts} очков! 🌟`);
+  showToast(tf('pts_toast', pts));
 }
 
 function updateScoreUI() {
   document.getElementById('totalScore').textContent = totalScore;
   const affordable = SHOP_ITEMS.filter(i => totalScore >= i.pts).sort((a, b) => b.pts - a.pts);
   const best = affordable[0];
-  document.getElementById('nextPrizeLabel').textContent = best ? `${best.emoji} ${best.name}` : '🎮 Играй!';
+  document.getElementById('nextPrizeLabel').textContent = best ? `${best.emoji} ${L(best).name}` : t('next_prize_default');
   renderShopItems();
 }
 
@@ -1505,13 +1503,13 @@ async function loadScoreHistory() {
     .order('created_at', { ascending: false }).limit(10);
   const el = document.getElementById('scoreHistory');
   if (!data || !data.length) {
-    el.innerHTML = '<div class="empty-state"><span class="empty-icon">🎮</span>Ещё нет игровой истории</div>';
+    el.innerHTML = `<div class="empty-state"><span class="empty-icon">🎮</span>${t('games_history_empty')}</div>`;
     return;
   }
   el.innerHTML = data.map(r => `
     <div class="history-item">
-      <span class="history-game">${r.game}</span>
-      <span class="history-date">${new Date(r.created_at).toLocaleDateString('ru')}</span>
+      <span class="history-game">${displayGameName(r.game)}</span>
+      <span class="history-date">${new Date(r.created_at).toLocaleDateString(t('date_locale'))}</span>
       <span class="history-pts">+${r.points} ★</span>
     </div>`).join('');
 }
@@ -1520,7 +1518,7 @@ function initShop() {
   const cats = document.getElementById('shopCats');
   if (!cats) return;
   cats.innerHTML = SHOP_CATEGORIES.map(c =>
-    `<button class="shop-cat-btn ${c.id === shopCategory ? 'active' : ''}" onclick="selectShopCat('${c.id}')">${c.name}</button>`
+    `<button class="shop-cat-btn ${c.id === shopCategory ? 'active' : ''}" onclick="selectShopCat('${c.id}')">${c[currentLang] || c.ru}</button>`
   ).join('');
   renderShopItems();
 }
@@ -1536,13 +1534,14 @@ function renderShopItems() {
   const items = SHOP_ITEMS.filter(i => i.cat === shopCategory);
   grid.innerHTML = items.map(item => {
     const canAfford = totalScore >= item.pts;
+    const loc = L(item);
     return `<div class="shop-item ${canAfford ? 'can-afford' : 'cant-afford'}">
       <span class="shop-emoji">${item.emoji}</span>
-      <div class="shop-name">${item.name}</div>
-      <div class="shop-desc">${item.desc}</div>
-      <div class="shop-cost">💰 ${item.pts} очков</div>
+      <div class="shop-name">${loc.name}</div>
+      <div class="shop-desc">${loc.desc}</div>
+      <div class="shop-cost">💰 ${item.pts} ${t('shop_pts')}</div>
       <button class="shop-btn" ${canAfford ? '' : 'disabled'} onclick="buyItem('${item.id}')">
-        ${canAfford ? '🎁 Получить' : '🔒 Мало очков'}
+        ${canAfford ? t('shop_get') : t('shop_lock')}
       </button>
     </div>`;
   }).join('');
@@ -1551,10 +1550,10 @@ function renderShopItems() {
 async function buyItem(itemId) {
   const item = SHOP_ITEMS.find(i => i.id === itemId);
   if (!item || totalScore < item.pts) return;
-  await db.from('scores').insert({ game: `Магазин: ${item.name}`, points: -item.pts, user_id: currentUser.id });
+  await db.from('scores').insert({ game: `Магазин: ${item.ru.name}`, points: -item.pts, user_id: currentUser.id });
   totalScore -= item.pts;
   updateScoreUI();
-  showToast(`${item.emoji} ${item.name} — наслаждайся! 💕`);
+  showToast(`${item.emoji} ${L(item).name}${t('shop_enjoy')}`);
   await loadShopHistory();
 }
 
@@ -1569,12 +1568,17 @@ async function loadShopHistory() {
   if (!el) return;
   if (!data || !data.length) { if (card) card.style.display = 'none'; return; }
   if (card) card.style.display = 'block';
-  el.innerHTML = data.map(r => `
+  el.innerHTML = data.map(r => {
+    const ruName = r.game.replace('Магазин: ', '');
+    const item = SHOP_ITEMS.find(i => i.ru.name === ruName);
+    const display = item ? L(item).name : ruName;
+    return `
     <div class="history-item">
-      <span class="history-game">${r.game.replace('Магазин: ', '')}</span>
-      <span class="history-date">${new Date(r.created_at).toLocaleDateString('ru')}</span>
+      <span class="history-game">${display}</span>
+      <span class="history-date">${new Date(r.created_at).toLocaleDateString(t('date_locale'))}</span>
       <span class="history-pts" style="color:var(--gold)">${r.points} ★</span>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 }
 
 function selectMood(btn) {
@@ -1588,11 +1592,13 @@ async function getCompliment() {
   const txt = document.getElementById('complimentText');
 
   btn.disabled = true;
-  btn.textContent = '✨ Генерирую...';
+  btn.textContent = t('compliments_loading_btn');
   txt.className = 'compliment-loading';
-  txt.textContent = 'Создаю что-то особенное для тебя...';
+  txt.textContent = t('compliments_loading_text');
 
-  const prompt = `Ты — любящий парень, который пишет искренний персональный комплимент своей девушке Стефании (Стефе). Настроение комплимента: ${selectedMood}. Напиши один красивый, тёплый, очень персональный комплимент на русском языке. Длина: 2-3 предложения. Только текст комплимента, без кавычек и лишних слов.`;
+  const prompt = currentLang === 'en'
+    ? `You are a loving boyfriend writing a sincere, personal compliment to your girlfriend Stefania (Stefa). Mood of the compliment: ${MOOD_EN[selectedMood] || selectedMood}. Write one beautiful, warm, very personal compliment in English. Length: 2-3 sentences. Only the compliment text, no quotes or extra words.`
+    : `Ты — любящий парень, который пишет искренний персональный комплимент своей девушке Стефании (Стефе). Настроение комплимента: ${selectedMood}. Напиши один красивый, тёплый, очень персональный комплимент на русском языке. Длина: 2-3 предложения. Только текст комплимента, без кавычек и лишних слов.`;
 
   try {
     const text = await callAI(prompt);
@@ -1604,11 +1610,11 @@ async function getCompliment() {
     if (triedMoods.size >= 5) unlockBadge('all_moods');
   } catch {
     txt.className = 'compliment-text';
-    txt.textContent = 'Стефа, ты — самое лучшее, что со мной случилось 💕';
+    txt.textContent = t('compliments_fallback');
   }
 
   btn.disabled = false;
-  btn.innerHTML = '💖 Ещё один!';
+  btn.innerHTML = t('compliments_again');
 }
 
 async function loadWishes() {
@@ -1621,7 +1627,7 @@ async function loadWishes() {
 function renderWishes(wishes) {
   const el = document.getElementById('wishesList');
   if (!wishes.length) {
-    el.innerHTML = '<div class="empty-state"><span class="empty-icon">🌸</span>Пока нет хотелок.<br>Добавь первую!</div>';
+    el.innerHTML = `<div class="empty-state"><span class="empty-icon">🌸</span>${t('wishes_empty')}</div>`;
     return;
   }
   el.innerHTML = wishes.map(w => `
@@ -1644,7 +1650,7 @@ async function addWish() {
   input.value = '';
   await loadWishes();
   unlockBadge('first_wish');
-  showToast('Хотелка добавлена! ✨');
+  showToast(t('wishes_added_toast'));
 }
 
 async function toggleWish(id, isDone) {
@@ -1692,7 +1698,7 @@ function showGameLoading(title, msg) {
 let triviaCurrent = null, triviaAnswered = false;
 
 async function startVictoria() {
-  showGameLoading('🧠 Викторина', 'Придумываю интересный вопрос...');
+  showGameLoading(t('trivia_title'), t('trivia_loading'));
   triviaAnswered = false;
 
   const { data: used } = await db.from('used_trivia').select('question')
@@ -1700,7 +1706,17 @@ async function startVictoria() {
     .order('created_at', { ascending: false }).limit(50);
   const usedList = (used || []).map(r => r.question).slice(0, 30);
 
-  const prompt = `Сгенерируй один интересный познавательный вопрос с 4 вариантами ответа на русском языке. Тема случайная (наука, история, география, природа, культура, кино, музыка, спорт). Вопрос должен быть средней сложности.
+  const prompt = currentLang === 'en'
+    ? `Generate one interesting trivia question with 4 answer options in English. Random topic (science, history, geography, nature, culture, movies, music, sports). Medium difficulty.
+
+Already used questions (DO NOT repeat or make similar):
+${usedList.length ? usedList.map((q, i) => `${i+1}. ${q}`).join('\n') : '(none yet)'}
+
+Reply ONLY with valid JSON in this format:
+{"q": "question text?", "opts": ["option1", "option2", "option3", "option4"], "ans": 2}
+
+Where ans is the index of the correct answer (0, 1, 2 or 3). No other text, only JSON.`
+    : `Сгенерируй один интересный познавательный вопрос с 4 вариантами ответа на русском языке. Тема случайная (наука, история, география, природа, культура, кино, музыка, спорт). Вопрос должен быть средней сложности.
 
 Уже использованные вопросы (НЕ повторяй и не делай похожие):
 ${usedList.length ? usedList.map((q, i) => `${i+1}. ${q}`).join('\n') : '(пока нет)'}
@@ -1779,14 +1795,28 @@ async function answerTrivia(idx) {
 let wordState = { word:'', hint:'', guessed:[], lives:6 };
 
 async function startWord() {
-  showGameLoading('🔤 Угадай слово', 'Придумываю слово для тебя...');
+  showGameLoading(t('word_title'), t('word_loading'));
 
   const { data: used } = await db.from('used_words').select('word')
     .eq('user_id', currentUser.id)
     .order('created_at', { ascending: false }).limit(50);
   const usedList = (used || []).map(r => r.word).slice(0, 30);
 
-  const prompt = `Придумай одно интересное русское существительное для игры в "Виселицу" (угадай слово). Слово должно быть:
+  const prompt = currentLang === 'en'
+    ? `Generate one interesting English noun for a "Hangman" game (guess the word). The word must be:
+- 4 to 9 letters
+- only English letters (no digits, hyphens, spaces)
+- familiar to an average person
+- best: objects, natural phenomena, emotions, animals, food
+
+Already used words (DO NOT repeat):
+${usedList.length ? usedList.join(', ') : '(none yet)'}
+
+Reply ONLY with valid JSON:
+{"word": "WORD", "hint": "short hint in one sentence"}
+
+The word ALWAYS in uppercase. Only JSON, no other text.`
+    : `Придумай одно интересное русское существительное для игры в "Виселицу" (угадай слово). Слово должно быть:
 - от 4 до 9 букв
 - только русские буквы (без цифр, дефисов, пробелов)
 - известное обычному человеку
@@ -1805,7 +1835,8 @@ ${usedList.length ? usedList.join(', ') : '(пока нет)'}
     const cleaned = text.replace(/```json|```/g, '').trim();
     const w = JSON.parse(cleaned);
 
-    if (!w.word || !w.hint || !/^[А-ЯЁ]+$/.test(w.word)) {
+    const wordRegex = currentLang === 'en' ? /^[A-Z]+$/ : /^[А-ЯЁ]+$/;
+    if (!w.word || !w.hint || !wordRegex.test(w.word)) {
       throw new Error('Invalid word format');
     }
 
@@ -1828,7 +1859,7 @@ ${usedList.length ? usedList.join(', ') : '(пока нет)'}
 function renderWord() {
   const { word, hint, guessed, lives } = wordState;
   const display = word.split('').map(l => guessed.includes(l) ? l : '▢').join(' ');
-  const alphabet = 'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ'.split('');
+  const alphabet = (currentLang === 'en' ? 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' : 'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ').split('');
   document.getElementById('gameContent').innerHTML = `
     <h3>${t('word_title')}</h3>
     <p class="game-desc">${t('word_desc')}</p>
@@ -1889,7 +1920,7 @@ function startClicker() {
   clickerInterval = setInterval(() => {
     clickerTime--;
     const el = document.getElementById('clickerTimer');
-    if (el) el.textContent = clickerTime + 'с';
+    if (el) el.textContent = clickerTime + t('clicker_sec');
     if (clickerTime <= 0) {
       clearInterval(clickerInterval);
       finishClicker();
@@ -1904,7 +1935,7 @@ function renderClicker() {
     <div class="clicker-area" style="position:relative">
       <div class="clicker-heart" id="clickerHeart" onclick="doClick(event)">💗</div>
       <div class="clicker-count" id="clickerCount">0</div>
-      <div class="clicker-sub">${t('clicker_sub')}<span id="clickerTimer">15с</span>${t('clicker_sub2')}</div>
+      <div class="clicker-sub">${t('clicker_sub')}<span id="clickerTimer">15${t('clicker_sec')}</span>${t('clicker_sub2')}</div>
     </div>`;
 }
 
@@ -1984,10 +2015,10 @@ async function flipCard(id) {
         await addScore('Мемори 🃏', 10);
         setTimeout(() => {
           document.getElementById('gameContent').innerHTML = `
-            <h3>🃏 Мемори</h3>
+            <h3>${t('memory_title')}</h3>
             <div style="text-align:center;padding:24px 0">
               <div style="font-size:3rem;margin-bottom:12px">🏆</div>
-              <div style="font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--rose);margin-bottom:4px">Все пары найдены!</div>
+              <div style="font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--rose);margin-bottom:4px">${t('memory_all_found')}</div>
               <div style="color:var(--soft);margin-bottom:20px">${t('memory_win')}</div>
               <button class="btn btn-primary" onclick="startMemory()">${t('memory_again')}</button>
               <button class="btn btn-secondary" style="margin-left:8px" onclick="closeGame()">${t('close')}</button>
@@ -2008,118 +2039,280 @@ async function flipCard(id) {
 let currentLang = localStorage.getItem('lang') || 'ru';
 const T = {
   ru: {
+    // Header / nav
+    title_theme:'Сменить тему', title_palette:'Сменить цвет приложения', title_lang:'Switch language',
+    palette_default:'Дефолтный', palette_ocean:'Океан', palette_lavender:'Лаванда', palette_mint:'Мята', palette_sunset:'Закат',
     logout:'↪ Выйти', greeting_prefix:'Привет, ', header_sub:'Твоё личное пространство с любовью 🌸',
     nav_compliments:'💬 Комплименты', nav_wishes:'✨ Хотелки', nav_games:'🎮 Игры',
     nav_shop:'🛍️ Магазин', nav_letters:'💌 Письма', nav_achievements:'🏅 Достижения',
     score_collected:'очков собрано', score_next:'следующий приз',
+    next_prize_default:'🎮 Играй!',
+    // Login
+    login_title:'Привет, <span>любимая</span>!', login_sub:'Войди в своё пространство 🌸',
+    login_email:'Email', login_password:'Пароль', login_btn:'💖 Войти',
+    login_progress:'⏳ Вход...',
+    login_err_empty:'Введи email и пароль',
+    login_err_wrong:'Неверный email или пароль 💔',
+    // Greeting names
+    name_admin:'любимый', name_stefa:'Стефания',
+    // Compliments
     sec_compliments:'💌 Комплимент для тебя',
     compliments_desc:'Выбери настроение и получи персональный комплимент',
     mood_tender:'🌸 Нежное', mood_fun:'😄 Весёлое', mood_passionate:'🔥 Страстное',
     mood_inspiring:'⭐ Вдохновляющее', mood_playful:'🎉 Игривое',
     compliments_initial:'Нажми кнопку ниже, чтобы получить комплимент 💕',
     compliments_btn:'💖 Получить комплимент',
-    trivia_title:'🧠 Викторина', word_title:'🔤 Угадай слово', clicker_title:'💗 Тапалка', memory_title:'🃏 Мемори',
-    colors_title:'🌈 Цветовая игра', anagram_title:'📝 Слова из букв', pairs_title:'💭 Найди пару', ttt_title:'❌⭕ Крестики-нолики',
+    compliments_again:'💖 Ещё один!',
+    compliments_loading_btn:'✨ Генерирую...',
+    compliments_loading_text:'Создаю что-то особенное для тебя...',
+    compliments_fallback:'Стефа, ты — самое лучшее, что со мной случилось 💕',
+    // Wishes
     sec_wishes:'✨ Мои хотелки', wishes_placeholder:'Чего ты хочешь? 🌟',
     wishes_add:'+ Добавить', wishes_empty:'Пока нет хотелок.<br>Добавь первую!',
+    wishes_added_toast:'Хотелка добавлена! ✨',
+    // Games section + cards
     sec_games:'🎮 Мини-игры', games_desc:'Играй и зарабатывай очки для призов! 🏆',
     games_history:'📊 История игр', games_history_empty:'Ещё нет игровой истории',
+    game_card_trivia_name:'Викторина', game_card_trivia_pts:'+5 очков за ответ',
+    game_card_word_name:'Угадай слово', game_card_word_pts:'+8 очков за слово',
+    game_card_clicker_name:'Тапалка', game_card_clicker_pts:'+1 очко за 15 тапов',
+    game_card_memory_name:'Мемори', game_card_memory_pts:'+10 очков за победу',
+    game_card_colors_name:'Цветовая игра', game_card_colors_pts:'+4 очка за правильный ответ',
+    game_card_anagram_name:'Слова из букв', game_card_anagram_pts:'+9 очков за слово',
+    game_card_pairs_name:'Найди пару', game_card_pairs_pts:'+7 очков за правильный выбор',
+    game_card_ttt_name:'Крестики-нолики', game_card_ttt_pts:'+8 очков за победу',
+    // Shop
     sec_shop:'🛍️ Магазин подарков', shop_desc:'Трать очки на то, что хочешь — ты заслужила! 💕',
-    shop_history:'🧾 История покупок',
+    shop_history:'🧾 История покупок', shop_history_prefix:'Магазин: ',
+    shop_pts:'очков', shop_get:'🎁 Получить', shop_lock:'🔒 Мало очков',
+    shop_enjoy:' — наслаждайся! 💕',
+    // Letters
     sec_letters:'💌 Письма от любимого',
     letters_desc:'Здесь появляются сообщения специально для тебя 💕',
     letters_empty:'Пока нет писем.<br>Но они обязательно появятся!',
+    msg_admin_title:'💝 Создать сообщение для Стефы',
+    msg_emoji_ph:'Эмодзи 💌', msg_title_ph:'Заголовок',
+    msg_content_ph:'Напиши что-то тёплое и красивое...',
+    msg_date_title:'Когда показать', msg_send:'💌 Отправить',
+    msg_form_help:'Оставь дату пустой — сообщение появится сразу. Или выбери дату и оно появится в нужный день.',
+    msg_err_empty:'Заполни заголовок и текст 💔',
+    msg_sent:'Сообщение отправлено! 💌', msg_deleted:'Сообщение удалено',
+    msg_admin_empty:'Ещё нет отправленных сообщений',
+    msg_sent_header:'📋 Отправленные',
+    msg_waiting:'⏰ Ждёт', msg_read:'✓ Прочитано', msg_unread:'Не прочитано',
+    msg_will_show:'📅 Покажется: ', msg_at:'📅 ',
+    msg_delete:'🗑 Удалить', msg_new:'Новое!',
+    nav_letters_short:'💌 Письма',
+    // Achievements
     sec_achievements:'🏅 Достижения',
     achievements_desc:'Открывай бейджи — они отражают всё лучшее в тебе! ✨',
+    achievement_unlocked:'Достижение открыто!',
+    achievement_stats:'Открыто {0} из {1} достижений',
+    // Common
     close:'Закрыть', try_again:'Попробовать снова', retry:'🔄 Попробовать снова',
+    pts_toast:'+{0} очков! 🌟',
+    // Trivia
+    trivia_loading:'Придумываю интересный вопрос...',
     trivia_desc:'Ответь правильно и получи очки!',
     trivia_correct:'Правильно! +5 очков 🎉', trivia_wrong:'Не беда! Правильный ответ выделен 💕',
     trivia_next:'Ещё вопрос', trivia_new:'Новый вопрос',
     trivia_fail:'Не удалось придумать вопрос. Попробуй ещё раз!',
+    // Word
+    word_loading:'Придумываю слово для тебя...',
     word_desc:'Угадывай буквы и открой слово!', word_hint:'Подсказка: ',
     word_win_msg:'Молодец! +8 очков', word_new:'Новое слово', word_was:'Слово было:',
     word_fail:'Не удалось придумать слово. Попробуй ещё раз!',
+    // Clicker
     clicker_desc:'Тапай по сердечку 15 секунд!',
-    clicker_sub:'тапов | ', clicker_sub2:' осталось', clicker_taps:'тапов!',
+    clicker_sub:'тапов | ', clicker_sub2:' осталось', clicker_sec:'с',
+    clicker_taps:'тапов!',
     clicker_pts:'очков заработано', clicker_again:'Ещё раз!',
+    // Memory
     memory_desc:'Найди все пары!', memory_win:'+10 очков 🎉', memory_again:'Играть снова',
+    memory_all_found:'Все пары найдены!',
+    // Colors
+    colors_loading:'Придумываю вопрос...',
     colors_correct:'Правильно! +4 очка 🎉', colors_next:'Ещё вопрос',
     colors_wrong:'Не беда! Правильный ответ: ',
+    colors_fail:'Ошибка при загрузке вопроса',
+    // Anagram
+    anagram_loading:'Придумываю слово...',
     anagram_desc:'Составь слово из букв!', anagram_hint:'Подсказка: ',
     anagram_placeholder:'Введи слово...', anagram_submit:'Ответить',
     anagram_correct:'Правильно! +9 очков 🎉', anagram_next:'Ещё слово',
     anagram_wrong:'Не беда! Правильное слово: ',
     anagram_fail:'Ошибка при загрузке слова',
+    anagram_empty:'Введи слово!',
+    // Pairs
+    pairs_loading:'Придумываю вопрос...',
     pairs_default:'Найди подходящую пару',
     pairs_correct:'Правильно! +7 очков 🎉', pairs_next:'Ещё пару',
     pairs_wrong:'Не беда! Правильно: ', pairs_fail:'Ошибка при загрузке вопроса',
+    // TicTacToe
     ttt_desc:'Ты - X, ИИ - O', ttt_win:'🎉 Ты выиграл!', ttt_lose:'🤖 ИИ выиграла!',
     ttt_draw:'🤝 Ничья!', ttt_again:'Ещё раз',
+    // Game titles
+    trivia_title:'🧠 Викторина', word_title:'🔤 Угадай слово',
+    clicker_title:'💗 Тапалка', memory_title:'🃏 Мемори',
+    colors_title:'🌈 Цветовая игра', anagram_title:'📝 Слова из букв',
+    pairs_title:'💭 Найди пару', ttt_title:'❌⭕ Крестики-нолики',
+    // Locale
+    date_locale:'ru',
   },
   en: {
+    title_theme:'Toggle theme', title_palette:'Change app color', title_lang:'Switch language',
+    palette_default:'Default', palette_ocean:'Ocean', palette_lavender:'Lavender', palette_mint:'Mint', palette_sunset:'Sunset',
     logout:'↪ Logout', greeting_prefix:'Hi, ', header_sub:'Your personal space with love 🌸',
     nav_compliments:'💬 Compliments', nav_wishes:'✨ Wishlist', nav_games:'🎮 Games',
     nav_shop:'🛍️ Shop', nav_letters:'💌 Letters', nav_achievements:'🏅 Achievements',
     score_collected:'points collected', score_next:'next prize',
+    next_prize_default:'🎮 Play!',
+    login_title:'Hi, <span>my love</span>!', login_sub:'Sign in to your space 🌸',
+    login_email:'Email', login_password:'Password', login_btn:'💖 Sign in',
+    login_progress:'⏳ Signing in...',
+    login_err_empty:'Enter email and password',
+    login_err_wrong:'Wrong email or password 💔',
+    name_admin:'my love', name_stefa:'Stefania',
     sec_compliments:'💌 A compliment for you',
     compliments_desc:'Choose a mood and get a personal compliment',
     mood_tender:'🌸 Tender', mood_fun:'😄 Fun', mood_passionate:'🔥 Passionate',
     mood_inspiring:'⭐ Inspiring', mood_playful:'🎉 Playful',
     compliments_initial:'Press the button below to get a compliment 💕',
     compliments_btn:'💖 Get compliment',
-    trivia_title:'🧠 Trivia', word_title:'🔤 Guess the word', clicker_title:'💗 Tapper', memory_title:'🃏 Memory',
-    colors_title:'🌈 Color game', anagram_title:'📝 Word from letters', pairs_title:'💭 Find the pair', ttt_title:'❌⭕ Tic-tac-toe',
+    compliments_again:'💖 Another one!',
+    compliments_loading_btn:'✨ Generating...',
+    compliments_loading_text:'Creating something special for you...',
+    compliments_fallback:'You are the best thing that ever happened to me 💕',
     sec_wishes:'✨ My wishlist', wishes_placeholder:'What do you want? 🌟',
     wishes_add:'+ Add', wishes_empty:'No wishes yet.<br>Add the first one!',
+    wishes_added_toast:'Wish added! ✨',
     sec_games:'🎮 Mini-games', games_desc:'Play and earn points for prizes! 🏆',
     games_history:'📊 Game history', games_history_empty:'No game history yet',
+    game_card_trivia_name:'Trivia', game_card_trivia_pts:'+5 points per answer',
+    game_card_word_name:'Guess the word', game_card_word_pts:'+8 points per word',
+    game_card_clicker_name:'Tapper', game_card_clicker_pts:'+1 point per 15 taps',
+    game_card_memory_name:'Memory', game_card_memory_pts:'+10 points per win',
+    game_card_colors_name:'Color game', game_card_colors_pts:'+4 points per correct answer',
+    game_card_anagram_name:'Word from letters', game_card_anagram_pts:'+9 points per word',
+    game_card_pairs_name:'Find the pair', game_card_pairs_pts:'+7 points per correct choice',
+    game_card_ttt_name:'Tic-tac-toe', game_card_ttt_pts:'+8 points per win',
     sec_shop:'🛍️ Gift shop', shop_desc:'Spend points on what you want — you deserve it! 💕',
-    shop_history:'🧾 Purchase history',
+    shop_history:'🧾 Purchase history', shop_history_prefix:'Shop: ',
+    shop_pts:'pts', shop_get:'🎁 Get', shop_lock:'🔒 Not enough',
+    shop_enjoy:' — enjoy! 💕',
     sec_letters:'💌 Letters from your love',
     letters_desc:'Messages just for you appear here 💕',
     letters_empty:'No letters yet.<br>But they will come!',
+    msg_admin_title:'💝 Create a message for Stefa',
+    msg_emoji_ph:'Emoji 💌', msg_title_ph:'Title',
+    msg_content_ph:'Write something warm and beautiful...',
+    msg_date_title:'When to show', msg_send:'💌 Send',
+    msg_form_help:'Leave date empty — message appears immediately. Or pick a date and it will appear that day.',
+    msg_err_empty:'Fill in title and text 💔',
+    msg_sent:'Message sent! 💌', msg_deleted:'Message deleted',
+    msg_admin_empty:'No sent messages yet',
+    msg_sent_header:'📋 Sent',
+    msg_waiting:'⏰ Waiting', msg_read:'✓ Read', msg_unread:'Unread',
+    msg_will_show:'📅 Will show: ', msg_at:'📅 ',
+    msg_delete:'🗑 Delete', msg_new:'New!',
+    nav_letters_short:'💌 Letters',
     sec_achievements:'🏅 Achievements',
     achievements_desc:'Unlock badges — they reflect the best in you! ✨',
+    achievement_unlocked:'Achievement unlocked!',
+    achievement_stats:'Unlocked {0} of {1} achievements',
     close:'Close', try_again:'Try again', retry:'🔄 Try again',
+    pts_toast:'+{0} points! 🌟',
+    trivia_loading:'Generating an interesting question...',
     trivia_desc:'Answer correctly and earn points!',
     trivia_correct:'Correct! +5 points 🎉', trivia_wrong:'No worries! Correct answer is highlighted 💕',
     trivia_next:'Next question', trivia_new:'New question',
     trivia_fail:'Failed to generate question. Try again!',
+    word_loading:'Generating a word for you...',
     word_desc:'Guess letters to reveal the word!', word_hint:'Hint: ',
     word_win_msg:'Great job! +8 points', word_new:'New word', word_was:'The word was:',
     word_fail:'Failed to generate word. Try again!',
     clicker_desc:'Tap the heart for 15 seconds!',
-    clicker_sub:'taps | ', clicker_sub2:' left', clicker_taps:'taps!',
+    clicker_sub:'taps | ', clicker_sub2:' left', clicker_sec:'s',
+    clicker_taps:'taps!',
     clicker_pts:'points earned', clicker_again:'Again!',
     memory_desc:'Find all the pairs!', memory_win:'+10 points 🎉', memory_again:'Play again',
+    memory_all_found:'All pairs found!',
+    colors_loading:'Generating a question...',
     colors_correct:'Correct! +4 points 🎉', colors_next:'Next question',
     colors_wrong:'No worries! Correct answer: ',
+    colors_fail:'Failed to load question',
+    anagram_loading:'Generating a word...',
     anagram_desc:'Form a word from the letters!', anagram_hint:'Hint: ',
     anagram_placeholder:'Type the word...', anagram_submit:'Submit',
     anagram_correct:'Correct! +9 points 🎉', anagram_next:'Another word',
     anagram_wrong:'No worries! The word was: ',
     anagram_fail:'Failed to load word',
+    anagram_empty:'Type a word!',
+    pairs_loading:'Generating a question...',
     pairs_default:'Find the right match',
     pairs_correct:'Correct! +7 points 🎉', pairs_next:'Another pair',
     pairs_wrong:'No worries! Correct: ', pairs_fail:'Failed to load question',
     ttt_desc:'You - X, AI - O', ttt_win:'🎉 You won!', ttt_lose:'🤖 AI won!',
     ttt_draw:'🤝 Draw!', ttt_again:'Play again',
+    trivia_title:'🧠 Trivia', word_title:'🔤 Guess the word',
+    clicker_title:'💗 Tapper', memory_title:'🃏 Memory',
+    colors_title:'🌈 Color game', anagram_title:'📝 Word from letters',
+    pairs_title:'💭 Find the pair', ttt_title:'❌⭕ Tic-tac-toe',
+    date_locale:'en',
   }
 };
 function t(key) { return (T[currentLang] || T.ru)[key] || T.ru[key] || key; }
+function tf(key, ...args) { return args.reduce((s, v, i) => s.replace(new RegExp('\\{' + i + '\\}', 'g'), v), t(key)); }
+// Mood (data-mood) → English equivalent for AI prompt
+const MOOD_EN = { 'нежное':'tender', 'весёлое':'cheerful', 'страстное':'passionate', 'вдохновляющее':'inspiring', 'игривое':'playful' };
+// Map stored game name (Russian, in DB) to display name in current language
+const GAME_NAME_MAP = {
+  'Викторина 🧠':'🧠 Trivia',
+  'Угадай слово 🔤':'🔤 Guess the word',
+  'Тапалка 💗':'💗 Tapper',
+  'Мемори 🃏':'🃏 Memory',
+  'Цветовая игра 🌈':'🌈 Color game',
+  'Слова из букв 📝':'📝 Anagram',
+  'Найди пару 💭':'💭 Find the pair',
+  'Крестики-нолики ❌⭕':'❌⭕ Tic-tac-toe'
+};
+function displayGameName(stored) {
+  if (currentLang === 'ru') return stored;
+  if (stored && stored.startsWith('Магазин: ')) {
+    const ruName = stored.slice('Магазин: '.length);
+    const item = SHOP_ITEMS.find(i => i.ru.name === ruName);
+    return t('shop_history_prefix') + (item ? item.en.name : ruName);
+  }
+  return GAME_NAME_MAP[stored] || stored;
+}
 function toggleLang() { setLang(currentLang === 'ru' ? 'en' : 'ru'); }
-function setLang(lang) { currentLang = lang; localStorage.setItem('lang', lang); applyLang(); }
+function setLang(lang) {
+  currentLang = lang;
+  localStorage.setItem('lang', lang);
+  applyLang();
+  // Re-render dynamic content
+  if (currentUser) {
+    updateScoreUI();
+    loadScoreHistory();
+    initShop();
+    loadShopHistory();
+    renderAchievements();
+    if (typeof renderWishesCached === 'function') renderWishesCached();
+    loadMessages();
+    updateMsgBadge(parseInt(document.querySelector('.nav-badge')?.textContent || '0'));
+  }
+}
 function applyLang() {
   document.querySelectorAll('[data-i18n]').forEach(el => { el.innerHTML = t(el.dataset.i18n); });
   document.querySelectorAll('[data-i18n-placeholder]').forEach(el => { el.placeholder = t(el.dataset.i18nPlaceholder); });
+  document.querySelectorAll('[data-i18n-title]').forEach(el => { el.title = t(el.dataset.i18nTitle); });
   const complimentText = document.getElementById('complimentText');
-  if (complimentText && complimentText.textContent === complimentText.textContent.trim()) {
-    if (complimentText.textContent.includes('Нажми') || complimentText.textContent.includes('Press')) {
-      complimentText.textContent = t('compliments_initial');
-    }
+  if (complimentText && (complimentText.textContent.includes('Нажми') || complimentText.textContent.includes('Press'))) {
+    complimentText.textContent = t('compliments_initial');
   }
   const btn = document.getElementById('langBtn');
   if (btn) btn.textContent = currentLang === 'ru' ? 'EN' : 'RU';
+  document.documentElement.lang = currentLang;
 }
 
 // ---- COLORS (AI generated) ----
@@ -2140,14 +2333,29 @@ let ticTacToeAITurn = false;
 let ticTacToeRound = 0;
 
 async function startColors() {
-  showGameLoading('🌈 Цветовая игра', 'Придумываю вопрос...');
+  showGameLoading(t('colors_title'), t('colors_loading'));
   try {
     const { data: usedRows } = await db.from('used_colors').select('question')
       .eq('user_id', currentUser.id).order('created_at', { ascending: false }).limit(20);
     const usedList = usedRows ? usedRows.map(r => r.question) : [];
-    const avoidStr = usedList.length > 0 ? `\nУже использованные вопросы (не повторяй): ${usedList.join('; ')}` : '';
+    const avoidStr = currentLang === 'en'
+      ? (usedList.length > 0 ? `\nAlready used questions (do not repeat): ${usedList.join('; ')}` : '')
+      : (usedList.length > 0 ? `\nУже использованные вопросы (не повторяй): ${usedList.join('; ')}` : '');
 
-    const prompt = `Сгенерируй один оригинальный и интересный вопрос про цвета на русском языке.
+    const prompt = currentLang === 'en'
+      ? `Generate one original and interesting question about colors in English.
+    The question should be non-trivial and educational, for example:
+    - "What color do you get when you mix red and yellow?"
+    - "Pick the warmest color"
+    - "Which color is associated with jealousy?"
+    - "The color of a ripe eggplant is..."
+    - "Which color is called the color of hope?"
+    - "Find the color of autumn leaves"
+    ${avoidStr}
+
+    JSON format: {"question": "question text?", "colors": ["option1", "option2", "option3", "option4"], "correct": 0}
+    correct — index (0-3) of the correct answer in the colors array. MUST be a number 0-3.`
+      : `Сгенерируй один оригинальный и интересный вопрос про цвета на русском языке.
     Вопрос должен быть нетривиальным и познавательным, например:
     - "Какой цвет получится при смешении красного и жёлтого?"
     - "Выбери самый тёплый цвет"
@@ -2174,7 +2382,7 @@ async function startColors() {
     renderColors();
   } catch(e) {
     console.error('Colors game error:', e);
-    showToast('Ошибка при загрузке вопроса');
+    showToast(t('colors_fail'));
   }
 }
 
@@ -2231,14 +2439,23 @@ async function answerColor(idx) {
 }
 
 async function startAnagram() {
-  showGameLoading('📝 Слова из букв', 'Придумываю слово...');
+  showGameLoading(t('anagram_title'), t('anagram_loading'));
   try {
     const { data: usedRows } = await db.from('used_anagrams').select('word')
       .eq('user_id', currentUser.id).order('created_at', { ascending: false }).limit(20);
     const usedWords = usedRows ? usedRows.map(r => r.word) : [];
-    const avoidStr = usedWords.length > 0 ? `\nУже использованные слова (не повторяй): ${usedWords.join(', ')}` : '';
+    const avoidStr = currentLang === 'en'
+      ? (usedWords.length > 0 ? `\nAlready used words (do not repeat): ${usedWords.join(', ')}` : '')
+      : (usedWords.length > 0 ? `\nУже использованные слова (не повторяй): ${usedWords.join(', ')}` : '');
 
-    const prompt = `Сгенерируй одно интересное русское слово для анаграммы (5-9 букв).
+    const prompt = currentLang === 'en'
+      ? `Generate one interesting English word for an anagram (5-9 letters).
+    The word must be: only English letters, common, meaningful.
+    Prefer unusual, beautiful words: names of natural phenomena, emotions, professions, art objects.
+    Examples of good words: RAINBOW, DREAM, SUNSET, MYSTERY, STORM, FLAME, SPRING, TENDERNESS, STAR, DAWN
+    ${avoidStr}
+    JSON format: {"word": "WORD", "hint": "short poetic hint about what it is"}`
+      : `Сгенерируй одно интересное русское слово для анаграммы (5-9 букв).
     Слово должно быть: только русские буквы, общеизвестное, содержательное.
     Предпочитай необычные, красивые слова: названия явлений природы, эмоций, профессий, предметов искусства.
     Примеры хороших слов: РАДУГА, МЕЧТА, ЗАКАТ, ТАЙНА, БУРЯ, ПЛАМЯ, ВЕСНА, НЕЖНОСТЬ, ЗВЕЗДА, РАССВЕТ
@@ -2248,7 +2465,8 @@ async function startAnagram() {
     const response = await callAI(prompt, true);
     const w = JSON.parse(response.replace(/```json|```/g, '').trim());
 
-    if (!/^[А-ЯЁ]+$/.test(w.word)) throw new Error('Invalid word');
+    const wordRegex = currentLang === 'en' ? /^[A-Z]+$/ : /^[А-ЯЁ]+$/;
+    if (!wordRegex.test(w.word)) throw new Error('Invalid word');
 
     const shuffled = w.word.split('').sort(() => Math.random() - 0.5).join('');
     anagramState = { word: w.word, hint: w.hint, userAnswer: '', used: false };
@@ -2288,7 +2506,7 @@ async function submitAnagram() {
   const s = anagramState;
 
   if (!userAnswer) {
-    showToast('Введи слово!');
+    showToast(t('anagram_empty'));
     return;
   }
 
@@ -2313,14 +2531,27 @@ async function submitAnagram() {
 }
 
 async function startPairs() {
-  showGameLoading('💭 Найди пару', 'Придумываю вопрос...');
+  showGameLoading(t('pairs_title'), t('pairs_loading'));
   try {
     const { data: usedRows } = await db.from('used_pairs').select('question')
       .eq('user_id', currentUser.id).order('created_at', { ascending: false }).limit(20);
     const usedQuestions = usedRows ? usedRows.map(r => r.question) : [];
-    const avoidStr = usedQuestions.length > 0 ? `\nУже использованные слова (не повторяй): ${usedQuestions.join(', ')}` : '';
+    const avoidStr = currentLang === 'en'
+      ? (usedQuestions.length > 0 ? `\nAlready used words (do not repeat): ${usedQuestions.join(', ')}` : '')
+      : (usedQuestions.length > 0 ? `\nУже использованные слова (не повторяй): ${usedQuestions.join(', ')}` : '');
 
-    const prompt = `Придумай интересное задание на ассоциацию. Дай одно слово и 4 варианта, только один из которых правильно к нему подходит.
+    const prompt = currentLang === 'en'
+      ? `Make an interesting association task in English. Give one word and 4 options, only one of which fits correctly.
+    Task variants may differ:
+    - Synonym: "SADNESS" → correct "SORROW", wrong: JOY, COURAGE, STRENGTH
+    - Antonym: "DARK" → correct "LIGHT", wrong: BIG, QUIET, FAST
+    - Association: "AUTUMN" → correct "LEAF FALL", wrong: FLOWERS, SNOW, HEAT
+    - Made from: "BEE" → correct "HONEY", wrong: MILK, SILK, WOOL
+    - Where it lives: "BEAVER" → correct "DAM", wrong: BURROW, HOLLOW, NEST
+    ${avoidStr}
+    JSON format: {"word": "WORD", "task": "Find the [synonym/antonym/association/...]", "pairs": ["option1", "option2", "option3", "option4"], "correct": 0}
+    correct — index (0-3) of the correct option. MUST be a number 0-3.`
+      : `Придумай интересное задание на ассоциацию. Дай одно слово и 4 варианта, только один из которых правильно к нему подходит.
     Варианты задания могут быть разными:
     - Синоним: "ГРУСТЬ" → правильный "ПЕЧАЛЬ", ложные: РАДОСТЬ, СМЕЛОСТЬ, СИЛА
     - Антоним: "ТЁМНЫЙ" → правильный "СВЕТЛЫЙ", ложные: БОЛЬШОЙ, ТИХИЙ, БЫСТРЫЙ
@@ -2608,7 +2839,7 @@ async function sendLoveMsg() {
   const dateVal = document.getElementById('msgDate').value;
 
   if (!title || !content) {
-    showToast('Заполни заголовок и текст 💔');
+    showToast(t('msg_err_empty'));
     return;
   }
 
@@ -2638,7 +2869,7 @@ async function sendLoveMsg() {
   document.getElementById('msgContent').value = '';
   document.getElementById('msgDate').value = '';
 
-  showToast('Сообщение отправлено! 💌');
+  showToast(t('msg_sent'));
   await loadAdminMessages();
 }
 
@@ -2647,10 +2878,10 @@ async function loadAdminMessages() {
     .order('show_after', { ascending: false });
   const el = document.getElementById('adminMsgList');
   if (!data || !data.length) {
-    el.innerHTML = '<div class="empty-state"><span class="empty-icon">📝</span>Ещё нет отправленных сообщений</div>';
+    el.innerHTML = `<div class="empty-state"><span class="empty-icon">📝</span>${t('msg_admin_empty')}</div>`;
     return;
   }
-  el.innerHTML = '<h3 style="font-family:Playfair Display,serif;font-size:1.1rem;color:var(--dark);margin:20px 0 12px">📋 Отправленные</h3>' +
+  el.innerHTML = `<h3 style="font-family:Playfair Display,serif;font-size:1.1rem;color:var(--dark);margin:20px 0 12px">${t('msg_sent_header')}</h3>` +
     data.map(m => {
       const showDate = new Date(m.show_after);
       const isFuture = showDate > new Date();
@@ -2658,12 +2889,12 @@ async function loadAdminMessages() {
       return `<div class="love-msg" style="opacity:${isFuture?'0.6':'1'}">
         <span class="love-msg-emoji">${m.emoji}</span>
         <div class="love-msg-title">${escapeHtml(m.title)}
-          ${isFuture ? '<span class="love-msg-new" style="background:var(--gold)">⏰ Ждёт</span>' : ''}
-          ${isRead ? '<span class="love-msg-new" style="background:#4caf50">✓ Прочитано</span>' : (!isFuture ? '<span class="love-msg-new">Не прочитано</span>' : '')}
+          ${isFuture ? `<span class="love-msg-new" style="background:var(--gold)">${t('msg_waiting')}</span>` : ''}
+          ${isRead ? `<span class="love-msg-new" style="background:#4caf50">${t('msg_read')}</span>` : (!isFuture ? `<span class="love-msg-new">${t('msg_unread')}</span>` : '')}
         </div>
         <div class="love-msg-text">${escapeHtml(m.content)}</div>
-        <div class="love-msg-date">${isFuture ? '📅 Покажется: ' : '📅 '}${showDate.toLocaleDateString('ru', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
-          <span style="float:right;cursor:pointer;color:var(--rose-light)" onclick="deleteLoveMsg('${m.id}')">🗑 Удалить</span>
+        <div class="love-msg-date">${isFuture ? t('msg_will_show') : t('msg_at')}${showDate.toLocaleDateString(t('date_locale'), { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+          <span style="float:right;cursor:pointer;color:var(--rose-light)" onclick="deleteLoveMsg('${m.id}')">${t('msg_delete')}</span>
         </div>
       </div>`;
     }).join('');
@@ -2671,7 +2902,7 @@ async function loadAdminMessages() {
 
 async function deleteLoveMsg(id) {
   await db.from('love_messages').delete().eq('id', id);
-  showToast('Сообщение удалено');
+  showToast(t('msg_deleted'));
   await loadAdminMessages();
 }
 
@@ -2684,7 +2915,7 @@ async function loadStefaMessages() {
 
   const el = document.getElementById('msgList');
   if (!data || !data.length) {
-    el.innerHTML = '<div class="empty-state"><span class="empty-icon">💌</span>Пока нет писем.<br>Но они обязательно появятся!</div>';
+    el.innerHTML = `<div class="empty-state"><span class="empty-icon">💌</span>${t('letters_empty')}</div>`;
     updateMsgBadge(0);
     return;
   }
@@ -2695,9 +2926,9 @@ async function loadStefaMessages() {
   el.innerHTML = data.map(m => `
     <div class="love-msg ${m.is_read ? '' : 'unread'}" onclick="markMsgRead('${m.id}', this)">
       <span class="love-msg-emoji">${m.emoji}</span>
-      <div class="love-msg-title">${escapeHtml(m.title)} ${m.is_read ? '' : '<span class="love-msg-new">Новое!</span>'}</div>
+      <div class="love-msg-title">${escapeHtml(m.title)} ${m.is_read ? '' : `<span class="love-msg-new">${t('msg_new')}</span>`}</div>
       <div class="love-msg-text">${escapeHtml(m.content)}</div>
-      <div class="love-msg-date">💕 ${new Date(m.show_after).toLocaleDateString('ru', { day: 'numeric', month: 'long', year: 'numeric' })}</div>
+      <div class="love-msg-date">💕 ${new Date(m.show_after).toLocaleDateString(t('date_locale'), { day: 'numeric', month: 'long', year: 'numeric' })}</div>
     </div>`).join('');
 }
 
@@ -2722,12 +2953,13 @@ function updateMsgBadge(count) {
   if (old) old.remove();
 
   if (count > 0) {
-    navBtn.innerHTML = `💌 Письма <span class="nav-badge">${count}</span>`;
+    navBtn.innerHTML = `${t('nav_letters_short')} <span class="nav-badge">${count}</span>`;
   } else {
-    navBtn.textContent = '💌 Письма';
+    navBtn.textContent = t('nav_letters_short');
   }
 }
 
+applyLang();
 checkAuth();
 </script>
 </body>
