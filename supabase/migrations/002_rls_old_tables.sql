@@ -23,23 +23,56 @@ create policy "achievements_select_own"  on public.achievements for select using
 create policy "achievements_insert_own"  on public.achievements for insert with check (user_id = auth.uid());
 
 -- ─── love_messages ────────────────────────────────────────────────────────────
+-- Recipient reads their own letters; partner (boyfriend/admin in same couple)
+-- can read/insert/delete letters addressed to recipient.
+
 alter table public.love_messages enable row level security;
 
-create policy "love_messages_select"  on public.love_messages for select
-  using (recipient_id = auth.uid() or
-         exists (select 1 from public.love_messages lm2
-                 where lm2.id = love_messages.id));
+create policy "love_messages_select" on public.love_messages for select
+  using (
+    recipient_id = auth.uid()
+    or exists (
+      select 1
+      from public.couple_members me
+      join public.couple_members partner on partner.couple_id = me.couple_id
+      where me.user_id = auth.uid()
+        and me.is_active = true
+        and partner.user_id = love_messages.recipient_id
+        and partner.is_active = true
+    )
+  );
 
--- Sender can insert (no user_id col — admin writes freely, recipient reads)
-create policy "love_messages_insert_admin" on public.love_messages for insert
-  with check (true);
+create policy "love_messages_insert_partner" on public.love_messages for insert
+  with check (
+    exists (
+      select 1
+      from public.couple_members me
+      join public.couple_members partner on partner.couple_id = me.couple_id
+      where me.user_id = auth.uid()
+        and me.role in ('boyfriend', 'admin')
+        and me.is_active = true
+        and partner.user_id = love_messages.recipient_id
+        and partner.is_active = true
+    )
+  );
 
 create policy "love_messages_update_recipient" on public.love_messages for update
   using (recipient_id = auth.uid())
   with check (recipient_id = auth.uid());
 
-create policy "love_messages_delete_admin" on public.love_messages for delete
-  using (true);
+create policy "love_messages_delete_partner" on public.love_messages for delete
+  using (
+    exists (
+      select 1
+      from public.couple_members me
+      join public.couple_members partner on partner.couple_id = me.couple_id
+      where me.user_id = auth.uid()
+        and me.role in ('boyfriend', 'admin')
+        and me.is_active = true
+        and partner.user_id = love_messages.recipient_id
+        and partner.is_active = true
+    )
+  );
 
 -- ─── used_trivia ──────────────────────────────────────────────────────────────
 alter table public.used_trivia enable row level security;
