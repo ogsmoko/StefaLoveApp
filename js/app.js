@@ -445,9 +445,17 @@ async function doRegister() {
     currentUser = data.user;
   }
 
-  // Authenticated — go to onboarding
+  // Same gate as doLogin/checkAuth: existing profile → app, else → onboarding.
+  // Protects against an already-confirmed user mistakenly using the register
+  // form and getting their profile/couple overwritten.
   document.getElementById('loginScreen').style.display = 'none';
-  showOnboarding();
+  const profile = await loadCurrentProfile();
+  if (profile) {
+    await loadCoupleContext();
+    showApp();
+  } else {
+    showOnboarding();
+  }
 }
 
 function showApp() {
