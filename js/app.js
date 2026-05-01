@@ -292,10 +292,10 @@ async function obCreateCouple() {
 
     const row = Array.isArray(data) ? data[0] : data;
     currentProfile = { id: currentUser.id, display_name: bfName };
-    currentCouple  = { id: row.couple_id };
+    currentCouple  = { id: row.out_couple_id };
     currentRole    = 'boyfriend';
 
-    document.getElementById('obInviteCode').textContent = row.invite_code;
+    document.getElementById('obInviteCode').textContent = row.out_invite_code;
     obShowStep('obStepInvite');
   } catch (err) {
     errEl.textContent = 'Ошибка: ' + (err.message || err);
