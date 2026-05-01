@@ -1620,50 +1620,20 @@ async function obCreateCouple() {
   btn.disabled = true; btn.textContent = '⏳ Создаём...';
 
   try {
-    // 1. Create boyfriend profile
-    const { error: pe } = await db.from('profiles').upsert({
-      id: currentUser.id,
-      display_name: bfName,
+    const { data, error } = await db.rpc('create_couple', {
+      p_bf_name:    bfName,
+      p_gf_name:    gfName,
+      p_gf_nickname: gfNickname || null,
+      p_started_on:  startedOn,
     });
-    if (pe) throw pe;
+    if (error) throw error;
 
-    // 2. Create couple
-    const { data: couple, error: ce } = await db.from('couples').insert({
-      created_by: currentUser.id,
-      started_on: startedOn,
-      girlfriend_label: gfNickname || gfName,
-    }).select().single();
-    if (ce) throw ce;
-
-    // 3. Add boyfriend as member
-    const { error: me } = await db.from('couple_members').insert({
-      couple_id: couple.id,
-      user_id: currentUser.id,
-      role: 'boyfriend',
-    });
-    if (me) throw me;
-
-    // 4. Generate invite code
-    const { data: codeData, error: ie } = await db.rpc('create_invite_code');
-    if (ie) throw ie;
-    const inviteCode = codeData;
-
-    // 5. Insert invite with girlfriend's pre-filled data
-    const { error: inve } = await db.from('couple_invites').insert({
-      couple_id: couple.id,
-      created_by: currentUser.id,
-      invite_code: inviteCode,
-      intended_role: 'girlfriend',
-      intended_display_name: gfName,
-      intended_nickname: gfNickname || null,
-    });
-    if (inve) throw inve;
-
+    const row = Array.isArray(data) ? data[0] : data;
     currentProfile = { id: currentUser.id, display_name: bfName };
-    currentCouple = couple;
-    currentRole = 'boyfriend';
+    currentCouple  = { id: row.couple_id };
+    currentRole    = 'boyfriend';
 
-    document.getElementById('obInviteCode').textContent = inviteCode;
+    document.getElementById('obInviteCode').textContent = row.invite_code;
     obShowStep('obStepInvite');
   } catch (err) {
     errEl.textContent = 'Ошибка: ' + (err.message || err);
