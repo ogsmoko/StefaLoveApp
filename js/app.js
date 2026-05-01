@@ -1,330 +1,3 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>💖 Стефания</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<link rel="stylesheet" href="css/styles.css">
-</head>
-<body>
-
-<!-- ── Onboarding Screen ── -->
-<div class="onboarding-screen" id="onboardingScreen">
-  <div class="onboarding-card">
-
-    <!-- Step 0: choose role -->
-    <div id="obStep0">
-      <div class="login-hearts">💑</div>
-      <h2>Добро пожаловать!</h2>
-      <p>Кто ты в этой паре?</p>
-      <div class="role-buttons">
-        <button class="role-btn" id="roleBtnBoyfriend" onclick="obSelectRole('boyfriend')">
-          <span class="role-icon">👨</span>Парень
-        </button>
-        <button class="role-btn" id="roleBtnGirlfriend" onclick="obSelectRole('girlfriend')">
-          <span class="role-icon">👩</span>Девушка
-        </button>
-      </div>
-    </div>
-
-    <!-- Step 1b: boyfriend — setup couple -->
-    <div id="obStepBoyfriend" class="onboarding-steps">
-      <div class="step-label">Шаг 1 из 2 · Создание пары</div>
-      <h2>Расскажи о вас 💕</h2>
-      <p>Введи данные о себе и своей девушке</p>
-      <input class="login-input" id="obBfName" placeholder="Твоё имя" autocomplete="off">
-      <input class="login-input" id="obGfName" placeholder="Имя девушки" autocomplete="off">
-      <input class="login-input" id="obGfNickname" placeholder="Как ты её называешь (ласково)" autocomplete="off">
-      <input class="login-input" id="obStartedOn" type="date" placeholder="Дата начала отношений">
-      <button class="btn btn-primary login-btn" onclick="obCreateCouple()">Создать пару →</button>
-      <div class="login-error" id="obBfError"></div>
-      <button class="onboarding-back" onclick="obGoBack(0)">← Назад</button>
-    </div>
-
-    <!-- Step 2b: boyfriend — show invite code -->
-    <div id="obStepInvite" class="onboarding-steps">
-      <div class="step-label">Шаг 2 из 2 · Код для девушки</div>
-      <h2>Пара создана! 🎉</h2>
-      <p>Отправь этот код своей девушке — она введёт его при входе</p>
-      <div class="invite-code-box" id="obInviteCode" onclick="obCopyCode()">——</div>
-      <p class="invite-code-hint">Нажми на код чтобы скопировать · Действует 14 дней</p>
-      <button class="btn btn-primary login-btn" onclick="obFinish()">Войти в приложение →</button>
-    </div>
-
-    <!-- Step 1g: girlfriend — enter invite code -->
-    <div id="obStepGirlfriend" class="onboarding-steps">
-      <div class="step-label">Шаг 1 из 2 · Вход по коду</div>
-      <h2>Введи код 💌</h2>
-      <p>Попроси парня прислать код приглашения</p>
-      <input class="login-input" id="obGfCode" placeholder="Код (например: A1B2C3D4)"
-        style="text-align:center;letter-spacing:4px;font-size:1.1rem;text-transform:uppercase"
-        oninput="this.value=this.value.toUpperCase()" autocomplete="off">
-      <button class="btn btn-primary login-btn" onclick="obAcceptInvite()">Войти в пару →</button>
-      <div class="login-error" id="obGfError"></div>
-      <button class="onboarding-back" onclick="obGoBack(0)">← Назад</button>
-    </div>
-
-    <!-- Step 2g: girlfriend — confirm her profile -->
-    <div id="obStepGfProfile" class="onboarding-steps">
-      <div class="step-label">Шаг 2 из 2 · Твой профиль</div>
-      <h2>Привет, <span id="obGfWelcomeName" style="color:var(--rose);font-style:italic">красавица</span>! 🌸</h2>
-      <p>Проверь свои данные — парень уже заполнил кое-что</p>
-      <input class="login-input" id="obGfProfileName" placeholder="Твоё имя" autocomplete="off">
-      <input class="login-input" id="obGfEyeColor" placeholder="Цвет глаз (необязательно)" autocomplete="off">
-      <input class="login-input" id="obGfHairColor" placeholder="Цвет волос (необязательно)" autocomplete="off">
-      <button class="btn btn-primary login-btn" onclick="obFinishGf()">Всё верно, войти →</button>
-      <div class="login-error" id="obGfProfileError"></div>
-    </div>
-
-  </div>
-</div>
-
-<!-- ── Login / Register Screen ── -->
-<div class="login-screen" id="loginScreen">
-  <div class="login-card">
-    <div class="login-hearts">💖 ✨ 💖</div>
-
-    <!-- Login form -->
-    <div id="loginForm">
-      <h2 data-i18n="login_title">Привет, <span>любимая</span>!</h2>
-      <p data-i18n="login_sub">Войди в своё пространство 🌸</p>
-      <input class="login-input" type="email" id="loginEmail" data-i18n-placeholder="login_email" placeholder="Email" autocomplete="email">
-      <input class="login-input" type="password" id="loginPassword" data-i18n-placeholder="login_password" placeholder="Пароль" autocomplete="current-password"
-        onkeypress="if(event.key==='Enter') doLogin()">
-      <button class="btn btn-primary login-btn" onclick="doLogin()" id="loginBtn" data-i18n="login_btn">💖 Войти</button>
-      <div class="login-error" id="loginError"></div>
-      <p style="margin-top:16px;font-size:0.85rem;color:var(--soft)">
-        Впервые здесь?
-        <button onclick="showRegister()" style="background:none;border:none;color:var(--rose);cursor:pointer;font-weight:700;text-decoration:underline;font-size:0.85rem">Создать аккаунт</button>
-      </p>
-    </div>
-
-    <!-- Register form -->
-    <div id="registerForm" style="display:none">
-      <h2>Создать аккаунт 🌸</h2>
-      <p style="color:var(--soft);font-size:0.9rem;margin-bottom:20px">Введи email и придумай пароль</p>
-      <input class="login-input" type="email" id="regEmail" placeholder="Email" autocomplete="email">
-      <input class="login-input" type="password" id="regPassword" placeholder="Пароль (мин. 6 символов)" autocomplete="new-password">
-      <input class="login-input" type="password" id="regPasswordConfirm" placeholder="Повтори пароль" autocomplete="new-password"
-        onkeypress="if(event.key==='Enter') doRegister()">
-      <button class="btn btn-primary login-btn" onclick="doRegister()" id="regBtn">Зарегистрироваться →</button>
-      <div class="login-error" id="regError"></div>
-      <p style="margin-top:16px;font-size:0.85rem;color:var(--soft)">
-        Уже есть аккаунт?
-        <button onclick="showLogin()" style="background:none;border:none;color:var(--rose);cursor:pointer;font-weight:700;text-decoration:underline;font-size:0.85rem">Войти</button>
-      </p>
-    </div>
-  </div>
-</div>
-
-<div class="app-content" id="appContent">
-
-<header>
-  <button class="theme-btn" onclick="toggleTheme()" id="themeBtn" data-i18n-title="title_theme" title="Сменить тему">🌙</button>
-  <div class="palette-wrap">
-    <button class="palette-btn" id="paletteBtn" onclick="togglePaletteMenu()" data-i18n-title="title_palette" title="Сменить цвет приложения">🎨</button>
-    <div class="palette-dropdown" id="paletteDropdown">
-      <button class="palette-swatch" data-palette="default" style="background:#e8637a" data-i18n-title="palette_default" title="Дефолтный" onclick="setPalette('default')"></button>
-      <button class="palette-swatch" data-palette="ocean" style="background:#4f8fd6" data-i18n-title="palette_ocean" title="Океан" onclick="setPalette('ocean')"></button>
-      <button class="palette-swatch" data-palette="lavender" style="background:#9c6dde" data-i18n-title="palette_lavender" title="Лаванда" onclick="setPalette('lavender')"></button>
-      <button class="palette-swatch" data-palette="mint" style="background:#3fbe9f" data-i18n-title="palette_mint" title="Мята" onclick="setPalette('mint')"></button>
-      <button class="palette-swatch" data-palette="sunset" style="background:#e8795f" data-i18n-title="palette_sunset" title="Закат" onclick="setPalette('sunset')"></button>
-    </div>
-  </div>
-  <button class="theme-btn" onclick="toggleLang()" id="langBtn" title="Switch language" style="font-size:0.75rem;font-weight:700;letter-spacing:0.5px;background:var(--rose);color:white;border:2px solid var(--rose);min-width:48px">RU</button>
-  <button class="logout-btn" onclick="doLogout()" data-i18n="logout">↪ Выйти</button>
-  <div class="header-hearts">💖 ✨ 💖</div>
-  <h1><span data-i18n="greeting_prefix">Привет, </span><span id="userGreeting">Стефания</span>!</h1>
-  <p data-i18n="header_sub">Твоё личное пространство с любовью 🌸</p>
-</header>
-
-<div class="score-bar">
-  <span class="trophy">🏆</span>
-  <div>
-    <div class="score-num" id="totalScore">0</div>
-    <div class="score-label" data-i18n="score_collected">очков собрано</div>
-  </div>
-  <div style="width:1px;height:36px;background:var(--rose-pale)"></div>
-  <div>
-    <div style="font-size:1rem;font-weight:700;color:var(--gold)" id="nextPrizeLabel">🎁 —</div>
-    <div class="score-label" data-i18n="score_next">следующий приз</div>
-  </div>
-</div>
-
-<nav>
-  <button class="active" onclick="showSection('compliments', this)" data-i18n="nav_compliments">💬 Комплименты</button>
-  <button onclick="showSection('wishes', this)" data-i18n="nav_wishes">✨ Хотелки</button>
-  <button onclick="showSection('games', this)" data-i18n="nav_games">🎮 Игры</button>
-  <button onclick="showSection('prizes', this)" data-i18n="nav_shop">🛍️ Магазин</button>
-  <button onclick="showSection('messages', this)" id="navMessages" data-i18n="nav_letters">💌 Письма</button>
-  <button onclick="showSection('achievements', this)" id="navAchievements" data-i18n="nav_achievements">🏅 Достижения</button>
-</nav>
-
-<main>
-
-  <div class="section active" id="sec-compliments">
-    <div class="card">
-      <h2 data-i18n="sec_compliments">💌 Комплимент для тебя</h2>
-      <p style="color:var(--soft);font-size:0.88rem;margin-bottom:14px;" data-i18n="compliments_desc">Выбери настроение и получи персональный комплимент</p>
-      <div class="mood-row" id="moodRow">
-        <button class="mood-btn selected" data-mood="нежное" onclick="selectMood(this)" data-i18n="mood_tender">🌸 Нежное</button>
-        <button class="mood-btn" data-mood="весёлое" onclick="selectMood(this)" data-i18n="mood_fun">😄 Весёлое</button>
-        <button class="mood-btn" data-mood="страстное" onclick="selectMood(this)" data-i18n="mood_passionate">🔥 Страстное</button>
-        <button class="mood-btn" data-mood="вдохновляющее" onclick="selectMood(this)" data-i18n="mood_inspiring">⭐ Вдохновляющее</button>
-        <button class="mood-btn" data-mood="игривое" onclick="selectMood(this)" data-i18n="mood_playful">🎉 Игривое</button>
-      </div>
-      <div class="compliment-box" id="complimentBox">
-        <p class="compliment-text" id="complimentText" data-i18n="compliments_initial">Нажми кнопку ниже, чтобы получить комплимент 💕</p>
-      </div>
-      <div style="text-align:center">
-        <button class="btn btn-primary" onclick="getCompliment()" id="complimentBtn" data-i18n="compliments_btn" style="white-space:nowrap">
-          💖 Получить комплимент
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <div class="section" id="sec-wishes">
-    <div class="card">
-      <h2 data-i18n="sec_wishes">✨ Мои хотелки</h2>
-      <div class="wish-input-row">
-        <input type="text" id="wishInput" data-i18n-placeholder="wishes_placeholder" placeholder="Чего ты хочешь? 🌟" maxlength="200"
-          onkeypress="if(event.key==='Enter') addWish()">
-        <button class="btn btn-primary" onclick="addWish()" data-i18n="wishes_add">+ Добавить</button>
-      </div>
-      <div id="wishesList" class="scroll-styled" style="max-height:360px;overflow-y:auto;">
-        <div class="empty-state"><span class="empty-icon">🌸</span><span data-i18n="wishes_empty">Пока нет хотелок.<br>Добавь первую!</span></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="section" id="sec-games">
-    <div class="card">
-      <h2 data-i18n="sec_games">🎮 Мини-игры</h2>
-      <p style="color:var(--soft);font-size:0.88rem;margin-bottom:18px;" data-i18n="games_desc">Играй и зарабатывай очки для призов! 🏆</p>
-      <div class="games-grid">
-        <div class="game-card" onclick="openGame('victoria')">
-          <span class="game-icon">🧠</span>
-          <div class="game-name" data-i18n="game_card_trivia_name">Викторина</div>
-          <div class="game-pts" data-i18n="game_card_trivia_pts">+5 очков за ответ</div>
-        </div>
-        <div class="game-card" onclick="openGame('word')">
-          <span class="game-icon">🔤</span>
-          <div class="game-name" data-i18n="game_card_word_name">Угадай слово</div>
-          <div class="game-pts" data-i18n="game_card_word_pts">+8 очков за слово</div>
-        </div>
-        <div class="game-card" onclick="openGame('clicker')">
-          <span class="game-icon">💗</span>
-          <div class="game-name" data-i18n="game_card_clicker_name">Тапалка</div>
-          <div class="game-pts" data-i18n="game_card_clicker_pts">+1 очко за 15 тапов</div>
-        </div>
-        <div class="game-card" onclick="openGame('memory')">
-          <span class="game-icon">🃏</span>
-          <div class="game-name" data-i18n="game_card_memory_name">Мемори</div>
-          <div class="game-pts" data-i18n="game_card_memory_pts">+10 очков за победу</div>
-        </div>
-        <div class="game-card" onclick="openGame('colors')">
-          <span class="game-icon">🌈</span>
-          <div class="game-name" data-i18n="game_card_colors_name">Цветовая игра</div>
-          <div class="game-pts" data-i18n="game_card_colors_pts">+4 очка за правильный ответ</div>
-        </div>
-        <div class="game-card" onclick="openGame('anagram')">
-          <span class="game-icon">📝</span>
-          <div class="game-name" data-i18n="game_card_anagram_name">Слова из букв</div>
-          <div class="game-pts" data-i18n="game_card_anagram_pts">+9 очков за слово</div>
-        </div>
-        <div class="game-card" onclick="openGame('pairs')">
-          <span class="game-icon">💭</span>
-          <div class="game-name" data-i18n="game_card_pairs_name">Найди пару</div>
-          <div class="game-pts" data-i18n="game_card_pairs_pts">+7 очков за правильный выбор</div>
-        </div>
-        <div class="game-card" onclick="openGame('tictactoe')">
-          <span class="game-icon">❌⭕</span>
-          <div class="game-name" data-i18n="game_card_ttt_name">Крестики-нолики</div>
-          <div class="game-pts" data-i18n="game_card_ttt_pts">+8 очков за победу</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="card">
-      <h2 data-i18n="games_history">📊 История игр</h2>
-      <div id="scoreHistory" class="scroll-styled" style="max-height:320px;overflow-y:auto;">
-        <div class="empty-state"><span class="empty-icon">🎮</span><span data-i18n="games_history_empty">Ещё нет игровой истории</span></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="section" id="sec-prizes">
-    <div class="card">
-      <h2 data-i18n="sec_shop">🛍️ Магазин подарков</h2>
-      <p style="color:var(--soft);font-size:0.88rem;margin-bottom:16px;" data-i18n="shop_desc">Трать очки на то, что хочешь — ты заслужила! 💕</p>
-      <div class="shop-cats" id="shopCats"></div>
-      <div class="shop-grid" id="shopGrid"></div>
-    </div>
-    <div class="card" id="shopHistoryCard" style="display:none">
-      <h2 data-i18n="shop_history">🧾 История покупок</h2>
-      <div id="shopHistory" class="scroll-styled" style="max-height:300px;overflow-y:auto;"></div>
-    </div>
-  </div>
-
-  <!-- MESSAGES -->
-  <div class="section" id="sec-messages">
-    <div class="card" id="msgAdminCard" style="display:none">
-      <h2 data-i18n="msg_admin_title">💝 Создать сообщение для Стефы</h2>
-      <div class="msg-form">
-        <div class="msg-form-row">
-          <input type="text" id="msgEmoji" data-i18n-placeholder="msg_emoji_ph" placeholder="Эмодзи 💌" maxlength="4" style="max-width:80px;text-align:center">
-          <input type="text" id="msgTitle" data-i18n-placeholder="msg_title_ph" placeholder="Заголовок" maxlength="100">
-        </div>
-        <textarea id="msgContent" data-i18n-placeholder="msg_content_ph" placeholder="Напиши что-то тёплое и красивое..." maxlength="2000"></textarea>
-        <div class="msg-form-row">
-          <input type="datetime-local" id="msgDate" data-i18n-title="msg_date_title" title="Когда показать">
-          <button class="btn btn-primary" onclick="sendLoveMsg()" data-i18n="msg_send">💌 Отправить</button>
-        </div>
-        <p style="color:var(--soft);font-size:0.78rem" data-i18n="msg_form_help">Оставь дату пустой — сообщение появится сразу. Или выбери дату и оно появится в нужный день.</p>
-      </div>
-      <div id="adminMsgList"></div>
-    </div>
-
-    <div class="card" id="msgStefaCard">
-      <h2 data-i18n="sec_letters">💌 Письма от любимого</h2>
-      <p style="color:var(--soft);font-size:0.88rem;margin-bottom:16px;" data-i18n="letters_desc">Здесь появляются сообщения специально для тебя 💕</p>
-      <div id="msgList" class="scroll-styled" style="max-height:500px;overflow-y:auto;">
-        <div class="empty-state"><span class="empty-icon">💌</span><span data-i18n="letters_empty">Пока нет писем.<br>Но они обязательно появятся!</span></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ACHIEVEMENTS -->
-  <div class="section" id="sec-achievements">
-    <div class="card">
-      <h2 data-i18n="sec_achievements">🏅 Достижения</h2>
-      <p style="color:var(--soft);font-size:0.88rem;margin-bottom:12px;" data-i18n="achievements_desc">Открывай бейджи — они отражают всё лучшее в тебе! ✨</p>
-      <div id="achievementStats" style="text-align:center;margin-bottom:16px;font-size:0.88rem;color:var(--soft)"></div>
-      <div class="achievement-grid" id="achievementGrid"></div>
-    </div>
-  </div>
-
-</main>
-
-</div>
-
-<div class="achievement-toast" id="achievementToast">
-  <div id="achievementToastContent"></div>
-</div>
-
-<div class="game-modal" id="modalGame">
-  <div class="game-inner" id="gameInner">
-    <button class="close-game" onclick="closeGame()">✕</button>
-    <div id="gameContent"></div>
-  </div>
-</div>
-
-<div class="toast" id="toast"></div>
-
-<script>
 const SUPABASE_URL = 'https://bzeublyracwozknwwzfi.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ6ZXVibHlyYWN3b3prbnd3emZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyNjE2NDksImV4cCI6MjA5MjgzNzY0OX0.OJmzdGlD5la0voQHHZtYOqoxJXscwmQo0vUP7QLPXRU';
 
@@ -718,6 +391,44 @@ function showLogin() {
   document.getElementById('loginScreen').style.display = 'flex';
   document.getElementById('appContent').classList.remove('show');
   document.getElementById('onboardingScreen').classList.remove('show');
+  document.getElementById('loginForm').style.display = 'block';
+  document.getElementById('registerForm').style.display = 'none';
+}
+
+function showRegister() {
+  document.getElementById('loginForm').style.display = 'none';
+  document.getElementById('registerForm').style.display = 'block';
+  document.getElementById('regError').textContent = '';
+}
+
+async function doRegister() {
+  const email    = document.getElementById('regEmail').value.trim();
+  const password = document.getElementById('regPassword').value;
+  const confirm  = document.getElementById('regPasswordConfirm').value;
+  const errEl    = document.getElementById('regError');
+  const btn      = document.getElementById('regBtn');
+
+  if (!email || !password) { errEl.textContent = 'Введи email и пароль 💔'; return; }
+  if (password.length < 6) { errEl.textContent = 'Пароль должен быть минимум 6 символов'; return; }
+  if (password !== confirm) { errEl.textContent = 'Пароли не совпадают 💔'; return; }
+
+  btn.disabled = true;
+  btn.textContent = '⏳ Создаём...';
+  errEl.textContent = '';
+
+  const { data, error } = await db.auth.signUp({ email, password });
+
+  if (error) {
+    errEl.textContent = error.message || 'Ошибка регистрации';
+    btn.disabled = false;
+    btn.textContent = 'Зарегистрироваться →';
+    return;
+  }
+
+  currentUser = data.user;
+  // New user — no profile yet, go to onboarding
+  document.getElementById('loginScreen').style.display = 'none';
+  showOnboarding();
 }
 
 function showApp() {
@@ -2312,6 +2023,3 @@ function updateMsgBadge(count) {
 
 applyLang();
 checkAuth();
-</script>
-</body>
-</html>
