@@ -4,8 +4,12 @@
 -- "column reference 'couple_id' is ambiguous". Rename OUT columns.
 --
 -- Run once in Supabase SQL Editor.
+-- Postgres does not allow CREATE OR REPLACE to change OUT column names,
+-- so we drop the existing function first.
 
-create or replace function public.create_couple(
+drop function if exists public.create_couple(text, text, text, date);
+
+create function public.create_couple(
   p_bf_name    text,
   p_gf_name    text,
   p_gf_nickname text default null,
