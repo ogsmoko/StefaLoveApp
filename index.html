@@ -250,6 +250,82 @@
   .app-content { display: none; }
   .app-content.show { display: block; }
 
+  /* ── Onboarding ── */
+  .onboarding-screen {
+    position: fixed; inset: 0;
+    background: var(--cream);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 1000;
+  }
+  .onboarding-screen.show { display: flex; }
+  .onboarding-card {
+    background: var(--white);
+    border-radius: 28px;
+    padding: 40px 32px;
+    max-width: 420px;
+    width: 100%;
+    box-shadow: var(--shadow-lg);
+    text-align: center;
+  }
+  .onboarding-card h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.7rem;
+    color: var(--dark);
+    margin-bottom: 8px;
+  }
+  .onboarding-card p {
+    color: var(--soft);
+    font-size: 0.9rem;
+    margin-bottom: 24px;
+  }
+  .role-buttons { display: flex; gap: 16px; justify-content: center; margin-bottom: 8px; }
+  .role-btn {
+    flex: 1; padding: 18px 12px;
+    border: 2px solid var(--rose-pale);
+    border-radius: 20px;
+    background: var(--cream);
+    cursor: pointer;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.95rem;
+    color: var(--dark);
+    transition: all 0.2s;
+  }
+  .role-btn:hover, .role-btn.selected {
+    border-color: var(--rose);
+    background: var(--rose-pale);
+  }
+  .role-btn .role-icon { font-size: 2rem; display: block; margin-bottom: 6px; }
+  .onboarding-steps { display: none; }
+  .onboarding-steps.show { display: block; }
+  .step-label {
+    font-size: 0.75rem;
+    color: var(--soft);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+  }
+  .invite-code-box {
+    background: var(--rose-pale);
+    border-radius: 16px;
+    padding: 20px;
+    margin: 16px 0;
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    letter-spacing: 8px;
+    color: var(--rose);
+    cursor: pointer;
+    user-select: all;
+  }
+  .invite-code-hint { font-size: 0.8rem; color: var(--soft); margin-bottom: 16px; }
+  .onboarding-back {
+    background: none; border: none; color: var(--soft);
+    font-size: 0.85rem; cursor: pointer; margin-top: 12px;
+    text-decoration: underline;
+  }
+
   header {
     text-align: center;
     padding: 48px 20px 32px;
@@ -968,6 +1044,77 @@
 </head>
 <body>
 
+<!-- ── Onboarding Screen ── -->
+<div class="onboarding-screen" id="onboardingScreen">
+  <div class="onboarding-card">
+
+    <!-- Step 0: choose role -->
+    <div id="obStep0">
+      <div class="login-hearts">💑</div>
+      <h2>Добро пожаловать!</h2>
+      <p>Кто ты в этой паре?</p>
+      <div class="role-buttons">
+        <button class="role-btn" id="roleBtnBoyfriend" onclick="obSelectRole('boyfriend')">
+          <span class="role-icon">👨</span>Парень
+        </button>
+        <button class="role-btn" id="roleBtnGirlfriend" onclick="obSelectRole('girlfriend')">
+          <span class="role-icon">👩</span>Девушка
+        </button>
+      </div>
+    </div>
+
+    <!-- Step 1b: boyfriend — setup couple -->
+    <div id="obStepBoyfriend" class="onboarding-steps">
+      <div class="step-label">Шаг 1 из 2 · Создание пары</div>
+      <h2>Расскажи о вас 💕</h2>
+      <p>Введи данные о себе и своей девушке</p>
+      <input class="login-input" id="obBfName" placeholder="Твоё имя" autocomplete="off">
+      <input class="login-input" id="obGfName" placeholder="Имя девушки" autocomplete="off">
+      <input class="login-input" id="obGfNickname" placeholder="Как ты её называешь (ласково)" autocomplete="off">
+      <input class="login-input" id="obStartedOn" type="date" placeholder="Дата начала отношений">
+      <button class="btn btn-primary login-btn" onclick="obCreateCouple()">Создать пару →</button>
+      <div class="login-error" id="obBfError"></div>
+      <button class="onboarding-back" onclick="obGoBack(0)">← Назад</button>
+    </div>
+
+    <!-- Step 2b: boyfriend — show invite code -->
+    <div id="obStepInvite" class="onboarding-steps">
+      <div class="step-label">Шаг 2 из 2 · Код для девушки</div>
+      <h2>Пара создана! 🎉</h2>
+      <p>Отправь этот код своей девушке — она введёт его при входе</p>
+      <div class="invite-code-box" id="obInviteCode" onclick="obCopyCode()">——</div>
+      <p class="invite-code-hint">Нажми на код чтобы скопировать · Действует 14 дней</p>
+      <button class="btn btn-primary login-btn" onclick="obFinish()">Войти в приложение →</button>
+    </div>
+
+    <!-- Step 1g: girlfriend — enter invite code -->
+    <div id="obStepGirlfriend" class="onboarding-steps">
+      <div class="step-label">Шаг 1 из 2 · Вход по коду</div>
+      <h2>Введи код 💌</h2>
+      <p>Попроси парня прислать код приглашения</p>
+      <input class="login-input" id="obGfCode" placeholder="Код (например: A1B2C3D4)"
+        style="text-align:center;letter-spacing:4px;font-size:1.1rem;text-transform:uppercase"
+        oninput="this.value=this.value.toUpperCase()" autocomplete="off">
+      <button class="btn btn-primary login-btn" onclick="obAcceptInvite()">Войти в пару →</button>
+      <div class="login-error" id="obGfError"></div>
+      <button class="onboarding-back" onclick="obGoBack(0)">← Назад</button>
+    </div>
+
+    <!-- Step 2g: girlfriend — confirm her profile -->
+    <div id="obStepGfProfile" class="onboarding-steps">
+      <div class="step-label">Шаг 2 из 2 · Твой профиль</div>
+      <h2>Привет, <span id="obGfWelcomeName" style="color:var(--rose);font-style:italic">красавица</span>! 🌸</h2>
+      <p>Проверь свои данные — парень уже заполнил кое-что</p>
+      <input class="login-input" id="obGfProfileName" placeholder="Твоё имя" autocomplete="off">
+      <input class="login-input" id="obGfEyeColor" placeholder="Цвет глаз (необязательно)" autocomplete="off">
+      <input class="login-input" id="obGfHairColor" placeholder="Цвет волос (необязательно)" autocomplete="off">
+      <button class="btn btn-primary login-btn" onclick="obFinishGf()">Всё верно, войти →</button>
+      <div class="login-error" id="obGfProfileError"></div>
+    </div>
+
+  </div>
+</div>
+
 <div class="login-screen" id="loginScreen">
   <div class="login-card">
     <div class="login-hearts">💖 ✨ 💖</div>
@@ -1194,9 +1341,6 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 
 // API ключи НЕ хранятся в коде — они в Supabase Edge Function Secrets
 
-// Email админа — он(а) видит специальные функции
-const ADMIN_EMAIL = 'vasakrasava13@gmail.com';
-
 const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // ========== THEME ==========
@@ -1258,9 +1402,8 @@ document.addEventListener('click', (event) => {
   }
 });
 
-// Helper to check if current user is admin
 function isAdmin() {
-  return currentUser && currentUser.email && currentUser.email.toLowerCase() === ADMIN_EMAIL.toLowerCase();
+  return currentRole === 'boyfriend' || currentRole === 'admin';
 }
 
 const SHOP_CATEGORIES = [
@@ -1360,35 +1503,271 @@ function showAchievementToast(badge) {
 let totalScore = 0;
 let selectedMood = 'нежное';
 let currentUser = null;
+let currentProfile = null;   // row from public.profiles
+let currentCouple  = null;   // row from public.couples
+let currentRole    = null;   // 'boyfriend' | 'girlfriend'
+let partnerProfile = null;   // partner's profile row
 
 // ========== AUTH ==========
 async function checkAuth() {
   const { data: { session } } = await db.auth.getSession();
-  if (session) {
-    currentUser = session.user;
+  if (!session) { showLogin(); return; }
+  currentUser = session.user;
+
+  // Load profile + couple membership
+  const profile = await loadCurrentProfile();
+  if (!profile) {
+    // New user — run onboarding
+    showOnboarding();
+    return;
+  }
+
+  await loadCoupleContext();
+  showApp();
+}
+
+async function loadCurrentProfile() {
+  const { data } = await db.from('profiles').select('*').eq('id', currentUser.id).maybeSingle();
+  currentProfile = data;
+  return data;
+}
+
+async function loadCoupleContext() {
+  // Load couple membership
+  const { data: member } = await db
+    .from('couple_members')
+    .select('couple_id, role')
+    .eq('user_id', currentUser.id)
+    .eq('is_active', true)
+    .maybeSingle();
+
+  if (!member) return;
+
+  currentRole = member.role;
+
+  const { data: couple } = await db
+    .from('couples')
+    .select('*')
+    .eq('id', member.couple_id)
+    .maybeSingle();
+  currentCouple = couple;
+
+  // Load partner profile
+  const { data: partnerMember } = await db
+    .from('couple_members')
+    .select('user_id')
+    .eq('couple_id', member.couple_id)
+    .neq('user_id', currentUser.id)
+    .eq('is_active', true)
+    .maybeSingle();
+
+  if (partnerMember) {
+    const { data: partner } = await db
+      .from('profiles')
+      .select('*')
+      .eq('id', partnerMember.user_id)
+      .maybeSingle();
+    partnerProfile = partner;
+  }
+}
+
+// ========== ONBOARDING ==========
+let obSelectedRole = null;
+let obPendingInvite = null;  // invite row after accepting code
+
+function showOnboarding() {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('appContent').classList.remove('show');
+  document.getElementById('onboardingScreen').classList.add('show');
+  obShowStep('obStep0');
+}
+
+function obShowStep(stepId) {
+  ['obStep0','obStepBoyfriend','obStepInvite','obStepGirlfriend','obStepGfProfile']
+    .forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.classList.toggle('show', id === stepId);
+      if (el) el.style.display = (id === stepId) ? 'block' : 'none';
+    });
+  // Always show step 0 without extra class manipulation
+  if (stepId === 'obStep0') {
+    document.getElementById('obStep0').style.display = 'block';
+  }
+}
+
+function obSelectRole(role) {
+  obSelectedRole = role;
+  document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('selected'));
+  document.getElementById(role === 'boyfriend' ? 'roleBtnBoyfriend' : 'roleBtnGirlfriend').classList.add('selected');
+  setTimeout(() => {
+    obShowStep(role === 'boyfriend' ? 'obStepBoyfriend' : 'obStepGirlfriend');
+  }, 200);
+}
+
+function obGoBack(stepIndex) {
+  if (stepIndex === 0) obShowStep('obStep0');
+}
+
+async function obCreateCouple() {
+  const bfName = document.getElementById('obBfName').value.trim();
+  const gfName = document.getElementById('obGfName').value.trim();
+  const gfNickname = document.getElementById('obGfNickname').value.trim();
+  const startedOn = document.getElementById('obStartedOn').value || null;
+  const errEl = document.getElementById('obBfError');
+
+  if (!bfName || !gfName) { errEl.textContent = 'Введи имена обоих 💔'; return; }
+  errEl.textContent = '';
+
+  const btn = document.querySelector('#obStepBoyfriend .login-btn');
+  btn.disabled = true; btn.textContent = '⏳ Создаём...';
+
+  try {
+    // 1. Create boyfriend profile
+    const { error: pe } = await db.from('profiles').upsert({
+      id: currentUser.id,
+      display_name: bfName,
+    });
+    if (pe) throw pe;
+
+    // 2. Create couple
+    const { data: couple, error: ce } = await db.from('couples').insert({
+      created_by: currentUser.id,
+      started_on: startedOn,
+      girlfriend_label: gfNickname || gfName,
+    }).select().single();
+    if (ce) throw ce;
+
+    // 3. Add boyfriend as member
+    const { error: me } = await db.from('couple_members').insert({
+      couple_id: couple.id,
+      user_id: currentUser.id,
+      role: 'boyfriend',
+    });
+    if (me) throw me;
+
+    // 4. Generate invite code
+    const { data: codeData, error: ie } = await db.rpc('create_invite_code');
+    if (ie) throw ie;
+    const inviteCode = codeData;
+
+    // 5. Insert invite with girlfriend's pre-filled data
+    const { error: inve } = await db.from('couple_invites').insert({
+      couple_id: couple.id,
+      created_by: currentUser.id,
+      invite_code: inviteCode,
+      intended_role: 'girlfriend',
+      intended_display_name: gfName,
+      intended_nickname: gfNickname || null,
+    });
+    if (inve) throw inve;
+
+    currentProfile = { id: currentUser.id, display_name: bfName };
+    currentCouple = couple;
+    currentRole = 'boyfriend';
+
+    document.getElementById('obInviteCode').textContent = inviteCode;
+    obShowStep('obStepInvite');
+  } catch (err) {
+    errEl.textContent = 'Ошибка: ' + (err.message || err);
+  } finally {
+    btn.disabled = false; btn.textContent = 'Создать пару →';
+  }
+}
+
+function obCopyCode() {
+  const code = document.getElementById('obInviteCode').textContent;
+  navigator.clipboard.writeText(code).then(() => showToast('Код скопирован!'));
+}
+
+async function obFinish() {
+  document.getElementById('onboardingScreen').classList.remove('show');
+  await loadCoupleContext();
+  showApp();
+}
+
+async function obAcceptInvite() {
+  const code = document.getElementById('obGfCode').value.trim().toUpperCase();
+  const errEl = document.getElementById('obGfError');
+  if (!code) { errEl.textContent = 'Введи код 💔'; return; }
+  errEl.textContent = '';
+
+  const btn = document.querySelector('#obStepGirlfriend .login-btn');
+  btn.disabled = true; btn.textContent = '⏳ Проверяем...';
+
+  try {
+    // Validate invite without accepting yet — peek at invite data
+    const { data: invite, error } = await db
+      .from('couple_invites')
+      .select('*')
+      .eq('invite_code', code)
+      .eq('status', 'pending')
+      .maybeSingle();
+
+    if (error || !invite) throw new Error('Код не найден или уже использован');
+
+    obPendingInvite = invite;
+
+    // Pre-fill girlfriend profile form
+    document.getElementById('obGfWelcomeName').textContent = invite.intended_display_name || 'красавица';
+    document.getElementById('obGfProfileName').value = invite.intended_display_name || '';
+    obShowStep('obStepGfProfile');
+  } catch (err) {
+    errEl.textContent = err.message || 'Ошибка';
+  } finally {
+    btn.disabled = false; btn.textContent = 'Войти в пару →';
+  }
+}
+
+async function obFinishGf() {
+  const name = document.getElementById('obGfProfileName').value.trim();
+  const eyeColor = document.getElementById('obGfEyeColor').value.trim() || null;
+  const hairColor = document.getElementById('obGfHairColor').value.trim() || null;
+  const errEl = document.getElementById('obGfProfileError');
+
+  if (!name) { errEl.textContent = 'Введи своё имя 💔'; return; }
+  errEl.textContent = '';
+
+  const btn = document.querySelector('#obStepGfProfile .login-btn');
+  btn.disabled = true; btn.textContent = '⏳ Входим...';
+
+  try {
+    // 1. Create girlfriend profile
+    const { error: pe } = await db.from('profiles').upsert({
+      id: currentUser.id,
+      display_name: name,
+      eye_color: eyeColor,
+      hair_color: hairColor,
+    });
+    if (pe) throw pe;
+
+    // 2. Accept the invite (adds to couple_members)
+    const { error: ae } = await db.rpc('accept_couple_invite', { p_invite_code: obPendingInvite.invite_code });
+    if (ae) throw ae;
+
+    currentProfile = { id: currentUser.id, display_name: name };
+    currentRole = 'girlfriend';
+
+    document.getElementById('onboardingScreen').classList.remove('show');
+    await loadCoupleContext();
     showApp();
-  } else {
-    showLogin();
+  } catch (err) {
+    errEl.textContent = err.message || 'Ошибка';
+  } finally {
+    btn.disabled = false; btn.textContent = 'Всё верно, войти →';
   }
 }
 
 function showLogin() {
   document.getElementById('loginScreen').style.display = 'flex';
   document.getElementById('appContent').classList.remove('show');
+  document.getElementById('onboardingScreen').classList.remove('show');
 }
 
 function showApp() {
   document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('onboardingScreen').classList.remove('show');
   document.getElementById('appContent').classList.add('show');
-  const email = currentUser.email || '';
-  let name;
-  if (isAdmin()) {
-    name = 'любимый';
-  } else if (email.toLowerCase().includes('stef')) {
-    name = 'Стефания';
-  } else {
-    name = email.split('@')[0];
-  }
+  const name = currentProfile?.display_name || currentUser.email.split('@')[0];
   document.getElementById('userGreeting').textContent = name.charAt(0).toUpperCase() + name.slice(1);
   // Sync theme button icon
   document.getElementById('themeBtn').textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
@@ -1428,6 +1807,12 @@ async function doLogin() {
 async function doLogout() {
   await db.auth.signOut();
   currentUser = null;
+  currentProfile = null;
+  currentCouple = null;
+  currentRole = null;
+  partnerProfile = null;
+  obSelectedRole = null;
+  obPendingInvite = null;
   totalScore = 0;
   document.getElementById('loginEmail').value = '';
   document.getElementById('loginPassword').value = '';
