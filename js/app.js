@@ -425,8 +425,27 @@ async function doRegister() {
     return;
   }
 
-  currentUser = data.user;
-  // New user — no profile yet, go to onboarding
+  // If email confirmation is enabled, signUp returns no session — we cannot
+  // proceed to onboarding because RPCs would run unauthenticated.
+  // Try an immediate password sign-in (works when confirmation is disabled
+  // OR when the project is configured to auto-confirm). If that still fails,
+  // tell the user to confirm their email and come back.
+  if (!data.session) {
+    const { data: signin, error: signinErr } = await db.auth.signInWithPassword({ email, password });
+    if (signinErr || !signin.session) {
+      errEl.textContent = 'Аккаунт создан. Проверь email и подтверди регистрацию, потом войди.';
+      btn.disabled = false;
+      btn.textContent = 'Зарегистрироваться →';
+      // Switch back to the login form for clarity
+      setTimeout(() => showLogin(), 2500);
+      return;
+    }
+    currentUser = signin.user;
+  } else {
+    currentUser = data.user;
+  }
+
+  // Authenticated — go to onboarding
   document.getElementById('loginScreen').style.display = 'none';
   showOnboarding();
 }
