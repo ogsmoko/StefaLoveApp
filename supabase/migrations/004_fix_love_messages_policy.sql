@@ -3,10 +3,15 @@
 -- authenticated user to read every row. Drop the old policies and recreate
 -- them as couple-scoped.
 
+-- Drop both old (admin) and new (partner) policy names so this script is
+-- idempotent on environments that already ran the buggy 002 *and* on fresh
+-- ones where 002 already created the partner policies.
 drop policy if exists "love_messages_select"            on public.love_messages;
 drop policy if exists "love_messages_insert_admin"      on public.love_messages;
+drop policy if exists "love_messages_insert_partner"    on public.love_messages;
 drop policy if exists "love_messages_update_recipient"  on public.love_messages;
 drop policy if exists "love_messages_delete_admin"      on public.love_messages;
+drop policy if exists "love_messages_delete_partner"    on public.love_messages;
 
 create policy "love_messages_select" on public.love_messages for select
   using (
