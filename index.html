@@ -1769,7 +1769,14 @@ async function doLogin() {
   }
 
   currentUser = data.user;
-  showApp();
+  const profile = await loadCurrentProfile();
+  if (!profile) {
+    document.getElementById('loginScreen').style.display = 'none';
+    showOnboarding();
+  } else {
+    await loadCoupleContext();
+    showApp();
+  }
 }
 
 async function doLogout() {
